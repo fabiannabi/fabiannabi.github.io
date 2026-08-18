@@ -1,0 +1,96 @@
+.wrap {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1080px;
+  width: 100%;
+  margin-inline: auto;
+  padding: var(--s6) var(--s5);
+}
+
+/* ---------- identity ---------- */
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s5);
+  flex-wrap: wrap;
+}
+
+.ident {
+  margin-inline-end: auto;
+}
+
+.name {
+  font-family: var(--display);
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 28px);
+  letter-spacing: -0.03em;
+  line-height: var(--lh-tight);
+}
+
+.role {
+  margin: var(--s1) 0 0;
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.05em;
+  color: var(--dim);
+}
+
+/* ---------- centre ---------- */
+.mid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: var(--s8) var(--s7);
+}
+
+.sub {
+  margin: var(--s6) 0 0;
+  font-size: clamp(15px, 1.7vw, 18px);
+  max-width: 46ch;
+  line-height: 1.6;
+}
+
+.sub b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.stats {
+  display: flex;
+  gap: var(--s7);
+  flex-wrap: wrap;
+  margin: var(--s7) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat b {
+  display: block;
+  font-family: var(--display);
+  font-weight: 800;
+  color: var(--ink);
+  font-size: clamp(20px, 2.4vw, 28px);
+  letter-spacing: -0.025em;
+  line-height: var(--lh-tight);
+}
+
+.stat span {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.cta {
+  display: flex;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  margin-top: var(--s7);
+}

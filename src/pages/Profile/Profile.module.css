@@ -1,0 +1,176 @@
+.skip {
+  position: absolute;
+  inset-inline-start: var(--s4);
+  inset-block-start: -80px;
+  background: var(--ink);
+  color: var(--bg);
+  padding: var(--s2) var(--s4);
+  border-radius: var(--radius);
+  z-index: 99;
+  transition: inset-block-start var(--dur-fast) var(--ease);
+}
+
+.skip:focus {
+  inset-block-start: var(--s4);
+}
+
+/* ---------- shell ---------- */
+.wrap {
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: var(--s5);
+}
+
+@media (min-width: 1024px) {
+  .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 44%) minmax(0, 56%);
+    gap: var(--s7);
+  }
+
+  .left {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-block: var(--s9) var(--s7);
+  }
+
+  .right {
+    padding-block: var(--s9) var(--s8);
+  }
+}
+
+@media (max-width: 1023px) {
+  .left {
+    padding-block: var(--s8) var(--s6);
+  }
+
+  .right {
+    padding-bottom: var(--s8);
+  }
+}
+
+/* ---------- left ---------- */
+.back {
+  font-family: var(--mono);
+  font-size: var(--fs-mono);
+  letter-spacing: 0.08em;
+  color: var(--dimmer);
+  margin-bottom: var(--s4);
+}
+
+.back a {
+  color: var(--dimmer);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+}
+
+.name {
+  font-size: clamp(38px, 5.4vw, 50px);
+  font-weight: 800;
+  letter-spacing: var(--ls-tighter);
+}
+
+.role {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: var(--s3);
+  font-family: var(--display);
+}
+
+.tagline {
+  margin-top: var(--s4);
+  max-width: 31ch;
+  font-size: var(--fs-lead);
+  margin-bottom: var(--s5);
+}
+
+.social {
+  display: flex;
+  gap: var(--s5);
+  margin-top: var(--s6);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.socialLink {
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  color: var(--dim);
+  letter-spacing: var(--ls-wide);
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+  /* Padding, not line-height: the target has to be 24px tall, not look it. */
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+}
+
+.socialLink:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- right ---------- */
+.right section {
+  margin-bottom: var(--s9);
+}
+
+.right section:last-of-type {
+  margin-bottom: var(--s7);
+}
+
+.sectionHead {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding-block: var(--s4);
+  margin-bottom: var(--s5);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  font-family: var(--mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* Next to a sticky sidebar the heading no longer needs to follow the scroll. */
+@media (min-width: 1024px) {
+  .sectionHead {
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    padding-block: 0;
+    margin-bottom: var(--s5);
+  }
+}
+
+.about p + p {
+  margin-top: var(--s4);
+}
+
+.about strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.colophon {
+  font-size: 13px;
+  color: var(--dimmer);
+  max-width: 56ch;
+  line-height: var(--lh-loose);
+}
+
+.todo {
+  border-bottom: 1px dashed var(--accent);
+  cursor: help;
+}

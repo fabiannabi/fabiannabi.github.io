@@ -1,0 +1,54 @@
+.nav {
+  margin-top: var(--s8);
+  display: none;
+}
+
+/* The marker tracks scroll position, which only exists next to a scrolling
+   column. Below the two-column breakpoint the sticky sidebar collapses and the
+   nav would point at nothing. */
+@media (min-width: 1024px) {
+  .nav {
+    display: block;
+  }
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  /* 8px padding on 12px text clears the 24px target floor. */
+  padding: var(--s2) 0;
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--dimmer);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.marker {
+  display: block;
+  height: 1px;
+  width: 28px;
+  background: var(--dimmer);
+  transition:
+    width var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.link:hover,
+.active {
+  color: var(--ink);
+}
+
+.link:hover .marker,
+.active .marker {
+  width: 56px;
+  background: var(--ink);
+}

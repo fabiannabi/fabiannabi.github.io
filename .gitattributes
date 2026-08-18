@@ -1,0 +1,7 @@
+# Normalize to LF in the repository; check out native. Keeps the diff clean
+# between a Windows checkout and Linux CI.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.woff2 binary

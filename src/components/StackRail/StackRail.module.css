@@ -1,0 +1,62 @@
+.rail {
+  border-top: 1px solid var(--line);
+  padding-top: var(--s5);
+  overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--mask-opaque) 6%,
+    var(--mask-opaque) 94%,
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  gap: var(--s7);
+  width: max-content;
+  will-change: transform;
+}
+
+.item {
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: var(--fs-lead);
+  color: var(--dim);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  transition:
+    color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+.item::before {
+  content: "\25C6";
+  color: var(--accent);
+  font-size: 9px;
+  transition:
+    transform var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+
+/* Opacity is a contrast change.
+   Hovering lights the item under the cursor rather than dimming the rest:
+   fading the others enough to read as "receding" put them at 1.8:1. 0.85 is the
+   lowest value that still clears 4.5:1, and the audit re-checks it. */
+.rail:hover .item {
+  opacity: 0.85;
+}
+
+.rail .item:hover {
+  opacity: 1;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+}
+
+.rail .item:hover::before {
+  transform: scale(1.6);
+  color: var(--ink);
+}

@@ -1,0 +1,21 @@
+/* Overscanned by 30% on every side.
+   At inset:0 the drift transform walked the layer's own left edge into the
+   viewport and left a hard vertical seam where the wash stopped. The gradient
+   origin is expressed against this oversized box, not the viewport — changing
+   `inset` means recomputing `at 32.5% 30%`.
+   If you change the drift, re-check that the layer still covers 0..100vw and
+   0..100vh at both ends of the animation. */
+.glow {
+  position: fixed;
+  inset: -30%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(46vw 46vw at 32.5% 30%, var(--wash), transparent 68%);
+  animation: drift 30s var(--ease) infinite alternate;
+}
+
+@keyframes drift {
+  to {
+    transform: translate3d(14vw, 10vh, 0) scale(1.18);
+  }
+}

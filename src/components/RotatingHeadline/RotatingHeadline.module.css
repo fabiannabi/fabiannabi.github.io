@@ -1,0 +1,54 @@
+.headline {
+  font-family: var(--display);
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0;
+  font-size: clamp(38px, 7.4vw, 88px);
+  line-height: 1.02;
+  letter-spacing: -0.042em;
+  max-width: 15ch;
+}
+
+.slot {
+  display: block;
+  color: var(--accent);
+  position: relative;
+  white-space: nowrap;
+}
+
+/* No width transition. The rule is resized during the fade, while it is
+   invisible. Animating width in view read as a bar growing and shrinking, not
+   as an underline. */
+.slot::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  bottom: -0.06em;
+  height: 3px;
+  width: var(--w, 0);
+  background: var(--accent-line);
+}
+
+.word {
+  display: inline-block;
+  animation: enter var(--dur) var(--ease) both;
+  transition:
+    opacity var(--dur) ease,
+    transform var(--dur) ease;
+}
+
+.leaving {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

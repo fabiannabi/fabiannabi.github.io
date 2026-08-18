@@ -1,0 +1,13 @@
+/* Page-level layout for the cover. The wrap needs to grow into the viewport, so
+   the React root is the flex column rather than the body — no `display: contents`
+   sleight of hand between them. */
+body {
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}

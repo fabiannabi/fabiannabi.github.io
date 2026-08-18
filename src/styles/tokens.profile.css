@@ -1,0 +1,29 @@
+/* Profile palette — two themes, same seven colour tokens.
+   Both are verified by scripts/audit-contrast.mjs. A theme that fails
+   contrast is not a theme. */
+:root {
+  --bg: #0f1113;
+  --bg-2: #15181b;
+  --ink: #e8eae6;
+  --dim: #8c948e;
+  /* Lifted from #768077: the entry rows swap to --bg-2 on hover, and the old
+     value measured 4.35:1 against that surface. A hover state is not exempt. */
+  --dimmer: #7a847b;
+  --line: #22262a;
+  --accent: #7bd1a6;
+  --accent-line: #3e7a5e;
+  --wash: rgba(123, 209, 166, 0.09);
+}
+
+[data-theme="light"] {
+  --bg: #fbfaf8;
+  --bg-2: #f2f1ed;
+  --ink: #16181a;
+  --dim: #575e59;
+  /* Darkened from #6d746e for the same reason. */
+  --dimmer: #686f69;
+  --line: #e2e1dc;
+  --accent: #0f6045;
+  --accent-line: #0f6045;
+  --wash: rgba(15, 96, 69, 0.07);
+}

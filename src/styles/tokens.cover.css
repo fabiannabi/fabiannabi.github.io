@@ -1,0 +1,12 @@
+/* Cover palette — synthwave. Six colour tokens; the page reads nothing else.
+   Verified by scripts/audit-contrast.mjs, which parses this file. */
+:root {
+  --bg: #140b24;
+  --bg-2: #1e1033;
+  --ink: #f0e6ff;
+  --dim: #ac9ccb;
+  --line: #2c1d45;
+  --accent: #ff5ca8;
+  --accent-line: #8e2a5c;
+  --wash: rgba(255, 92, 168, 0.11);
+}

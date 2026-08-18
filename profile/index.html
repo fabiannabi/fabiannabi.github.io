@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fabián Alcalá — User Interface Engineer</title>
+    <meta
+      name="description"
+      content="Frontend engineer working on design systems, accessibility, and the platform layer product teams build on."
+    />
+    <meta property="og:title" content="Fabián Alcalá — User Interface Engineer" />
+    <meta
+      property="og:description"
+      content="Design systems, accessibility, and the platform layer product teams build on."
+    />
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://fabiannabi.github.io/profile/" />
+    <link rel="canonical" href="https://fabiannabi.github.io/profile/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      /* Set the theme before first paint. Doing this in React means a frame of
+         the wrong theme on every load — the flash is the bug, not the toggle. */
+      (() => {
+        try {
+          const saved = localStorage.getItem("theme");
+          const system = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.dataset.theme = saved === "light" || saved === "dark" ? saved : system;
+        } catch {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/entries/profile.tsx"></script>
+  </body>
+</html>

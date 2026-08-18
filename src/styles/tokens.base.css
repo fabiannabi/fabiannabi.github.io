@@ -1,0 +1,75 @@
+/* ===========================================================
+   BASE TOKENS — shared by both pages.
+   Palettes live in tokens.cover.css / tokens.profile.css, and each
+   is the same six colour tokens. Swapping the whole mood is a data
+   attribute, not a rebuild.
+   =========================================================== */
+:root {
+  /* space */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 72px;
+  --s9: 104px;
+
+  /* type */
+  --display: "Archivo", sans-serif;
+  --body: "Inter", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", monospace;
+
+  --fs-micro: 11px;
+  --fs-mono: 11.5px;
+  --fs-small: 12px;
+  --fs-body: 15px;
+  --fs-lead: 16px;
+
+  --lh-tight: 1.1;
+  --lh-body: 1.62;
+  --lh-loose: 1.75;
+
+  --ls-tight: -0.02em;
+  --ls-tighter: -0.035em;
+  --ls-wide: 0.04em;
+  --ls-wider: 0.13em;
+  --ls-widest: 0.16em;
+
+  /* shape */
+  --radius-sm: 3px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 100px;
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-fast: 0.2s;
+  --dur: 0.3s;
+
+  /* Stencil colour for mask-image. Not a palette entry — a mask reads alpha, so
+     the hue is irrelevant. It is a token anyway so that "no raw colour in a
+     rule" can be enforced absolutely instead of with an exception list. */
+  --mask-opaque: #000;
+
+  /* focus */
+  --focus-width: 2px;
+  --focus-offset: 3px;
+
+  /* WCAG 2.2 SC 2.5.8 — no interactive target below this. */
+  --target-min: 24px;
+}
+
+/* Every animation on both pages is decorative. JS-driven motion checks the
+   same flag through usePrefersReducedMotion; this covers the CSS half. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
