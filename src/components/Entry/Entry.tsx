@@ -1,4 +1,5 @@
 import type { Entry as EntryData } from "../../data/content";
+import { xray } from "../../ds/xray/instrument";
 import styles from "./Entry.module.css";
 
 type Props = { entry: EntryData };
@@ -12,7 +13,10 @@ export function Entry({ entry }: Props) {
   const { when, title, org, note, description, tags, badge } = entry;
 
   return (
-    <div className={styles.entry}>
+    <div
+      className={styles.entry}
+      {...xray("Entry", { ...(tags ? { tags: tags.length } : {}), ...(badge ? { badge } : {}) })}
+    >
       <span className={styles.when}>{when}</span>
       <div>
         <h3 className={styles.title}>

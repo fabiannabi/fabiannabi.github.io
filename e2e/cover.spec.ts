@@ -17,12 +17,13 @@ test.describe("Cover", () => {
   });
 
   test("reaches every action by keyboard, in reading order", async ({ page }) => {
-    const expected = ["Read the full profile →", "Email", "LinkedIn", "GitHub"];
+    // The x-ray toggle sits with the identity block, so it comes first — DOM
+    // order is tab order, and this test exists to notice when that changes.
+    const expected = ["X-ray", "Read the full profile", "Design system", "Email", "LinkedIn", "GitHub"];
 
     for (const name of expected) {
       await page.keyboard.press("Tab");
-      const focused = page.locator(":focus");
-      await expect(focused).toHaveText(new RegExp(name.replace("→", "").trim()));
+      await expect(page.locator(":focus")).toContainText(name);
     }
   });
 

@@ -25,6 +25,7 @@ export const links = {
   linkedin: "https://www.linkedin.com/in/fabianalcala/",
   github: "https://github.com/fabiannabi",
   profile: "/profile/",
+  design: "/design/",
   cover: "/",
 } as const;
 

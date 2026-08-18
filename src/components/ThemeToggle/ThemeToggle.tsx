@@ -1,3 +1,4 @@
+import { xray } from "../../ds/xray/instrument";
 import type { Theme } from "../../hooks/useTheme";
 import styles from "./ThemeToggle.module.css";
 
@@ -20,6 +21,7 @@ export function ThemeToggle({ theme, onToggle }: Props) {
       className={styles.toggle}
       onClick={onToggle}
       aria-label={`Switch to ${next} theme`}
+      {...xray("ThemeToggle", { theme })}
     >
       <span aria-hidden="true">{theme === "dark" ? "◐" : "◑"}</span>
     </button>

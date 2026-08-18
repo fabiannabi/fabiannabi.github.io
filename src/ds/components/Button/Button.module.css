@@ -1,0 +1,136 @@
+/* Component tokens first: the rest of the file reads these, and these read the
+   semantic layer. A variant is then a remap of four values, not a new ruleset. */
+.button {
+  --button-bg: transparent;
+  --button-fg: var(--ds-text);
+  --button-border: transparent;
+  --button-bg-hover: var(--ds-surface-overlay);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-3);
+  min-height: var(--ds-control-md);
+  /* SC 2.5.8 floor, independent of whatever padding a size variant sets. */
+  min-width: var(--ds-target-min);
+  padding-inline: var(--ds-space-5);
+  border: 1px solid var(--button-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--button-bg);
+  color: var(--button-fg);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-bold);
+  line-height: var(--ds-leading-tight);
+  cursor: pointer;
+  transition:
+    background var(--ds-duration-fast) var(--ds-ease),
+    border-color var(--ds-duration-fast) var(--ds-ease),
+    color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.button:hover {
+  background: var(--button-bg-hover);
+}
+
+.button:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+/* aria-disabled, not [disabled] — see the note in Button.tsx. Cursor and
+   opacity communicate it visually; the attribute communicates it to AT. */
+.button[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.button[aria-disabled="true"]:hover {
+  background: var(--button-bg);
+}
+
+/* ---------- variants ---------- */
+
+.solid {
+  --button-bg: var(--ds-accent);
+  --button-fg: var(--ds-accent-contrast);
+  --button-bg-hover: var(--ds-accent-hover);
+}
+
+.outline {
+  --button-border: var(--ds-border-strong);
+  --button-fg: var(--ds-text);
+  --button-bg-hover: var(--ds-surface-raised);
+}
+
+.ghost {
+  --button-fg: var(--ds-text-muted);
+  --button-bg-hover: var(--ds-surface-raised);
+}
+
+.danger {
+  --button-bg: var(--ds-danger);
+  --button-fg: var(--ds-danger-contrast);
+  --button-bg-hover: var(--ds-danger);
+  --button-border: var(--ds-danger);
+}
+
+/* ---------- sizes ---------- */
+
+.sm {
+  min-height: var(--ds-control-sm);
+  padding-inline: var(--ds-space-4);
+  font-size: var(--ds-text-xs);
+}
+
+.md {
+  min-height: var(--ds-control-md);
+}
+
+.lg {
+  min-height: var(--ds-control-lg);
+  padding-inline: var(--ds-space-6);
+  font-size: var(--ds-text-md);
+}
+
+/* ---------- shape ---------- */
+
+.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+.iconOnly {
+  padding-inline: var(--ds-space-3);
+  aspect-ratio: 1;
+}
+
+.label {
+  display: inline-block;
+}
+
+.spinner {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: button-spin 700ms linear infinite;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A spinner that keeps spinning is the clearest case of motion that ignores the
+   preference. Held still; aria-busy still announces the state. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-block-start-color: currentColor;
+    opacity: 0.5;
+  }
+}

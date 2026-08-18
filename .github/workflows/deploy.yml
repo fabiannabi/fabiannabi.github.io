@@ -45,14 +45,21 @@ jobs:
       - name: Unit and accessibility tests
         run: pnpm test
 
-      - name: Build
-        run: pnpm exec vite build
-
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
+      # Playwright's webServer builds and previews the real thing, so this
+      # covers the build as well as the behaviour.
       - name: End-to-end tests
         run: pnpm exec playwright test --project=chromium --project=reduced-motion
+
+      # Order matters: vite build empties dist, so Storybook has to be written
+      # into it afterwards or it gets wiped by the next build.
+      - name: Build site
+        run: pnpm exec vite build
+
+      - name: Build Storybook
+        run: pnpm build:storybook
 
       - name: Upload Playwright report on failure
         if: failure()

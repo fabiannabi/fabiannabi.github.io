@@ -1,0 +1,74 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-5);
+}
+
+.list {
+  display: flex;
+  gap: var(--ds-space-2);
+  border-block-end: 1px solid var(--ds-border);
+  overflow-x: auto;
+}
+
+.tab {
+  --tab-fg: var(--ds-text-muted);
+
+  position: relative;
+  flex: none;
+  min-height: var(--ds-control-md);
+  padding-inline: var(--ds-space-4);
+  border: none;
+  background: none;
+  color: var(--tab-fg);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-bold);
+  cursor: pointer;
+  transition: color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.tab:hover {
+  --tab-fg: var(--ds-text);
+}
+
+.tab:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  /* Negative offset: a tab sits flush against the list's bottom rule, and a
+     positive offset would clip the ring against the scroll container. */
+  outline-offset: -2px;
+  border-radius: var(--ds-radius-sm);
+}
+
+.tab[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.selected {
+  --tab-fg: var(--ds-text);
+}
+
+/* The indicator is a separate layer from the text colour, because colour alone
+   must not be what distinguishes the selected tab (1.4.1). aria-selected does
+   the announcing; this bar does the showing. */
+.selected::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--ds-space-3);
+  inset-block-end: -1px;
+  height: 2px;
+  background: var(--ds-accent);
+}
+
+.panel {
+  color: var(--ds-text-muted);
+  font-size: var(--ds-text-md);
+  line-height: var(--ds-leading-normal);
+}
+
+.panel:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+  border-radius: var(--ds-radius-sm);
+}

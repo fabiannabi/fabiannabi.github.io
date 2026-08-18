@@ -1,0 +1,113 @@
+.section {
+  padding-block: var(--ds-space-8);
+  border-block-start: 1px solid var(--ds-border);
+  scroll-margin-block-start: var(--ds-space-6);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+  margin-block-end: var(--ds-space-6);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+  flex-wrap: wrap;
+}
+
+/* The live demo sits on the raised surface so the components are seen against
+   something other than the page — a component that only works on one background
+   is a component that has not been tested. */
+.demo {
+  padding: var(--ds-space-6);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
+}
+
+.sub {
+  margin-block-start: var(--ds-space-7);
+}
+
+.subHead {
+  margin: 0 0 var(--ds-space-4);
+  color: var(--ds-text-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  font-weight: var(--ds-weight-medium);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.anatomy,
+.notes {
+  margin: 0;
+  padding-inline-start: var(--ds-space-6);
+  color: var(--ds-text-muted);
+  font-size: var(--ds-text-sm);
+  line-height: var(--ds-leading-normal);
+  max-width: 72ch;
+}
+
+.anatomy li,
+.notes li {
+  margin-block-end: var(--ds-space-3);
+}
+
+.guidance {
+  display: grid;
+  gap: var(--ds-space-5);
+}
+
+@media (min-width: 720px) {
+  .guidance {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.do,
+.dont {
+  padding: var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
+}
+
+.do {
+  border-color: var(--ds-success-border);
+}
+
+.dont {
+  border-color: var(--ds-danger-border);
+}
+
+.guidanceHead {
+  margin: 0 0 var(--ds-space-3);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.do .guidanceHead {
+  color: var(--ds-success);
+}
+
+.dont .guidanceHead {
+  color: var(--ds-danger);
+}
+
+.guidance ul {
+  margin: 0;
+  padding-inline-start: var(--ds-space-5);
+  color: var(--ds-text-muted);
+  font-size: var(--ds-text-sm);
+  line-height: var(--ds-leading-normal);
+}
+
+.guidance li {
+  margin-block-end: var(--ds-space-2);
+}

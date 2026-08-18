@@ -1,0 +1,28 @@
+.heading {
+  margin: 0;
+  color: var(--ds-text);
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-black);
+  line-height: var(--ds-leading-tight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.xl {
+  font-size: var(--ds-text-3xl);
+  letter-spacing: -0.035em;
+}
+
+.lg {
+  font-size: var(--ds-text-2xl);
+  letter-spacing: -0.03em;
+}
+
+.md {
+  font-size: var(--ds-text-xl);
+}
+
+.sm {
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-bold);
+}

@@ -13,6 +13,7 @@ import {
   work,
   writing,
 } from "../../data/content";
+import { XRayToggle } from "../../ds/xray/XRayToggle";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useTheme } from "../../hooks/useTheme";
 import styles from "./Profile.module.css";
@@ -64,6 +65,10 @@ export function Profile() {
             <a className={styles.socialLink} href={links.email}>
               Email
             </a>
+            <a className={styles.socialLink} href="/design/">
+              Design system
+            </a>
+            <XRayToggle />
             <ThemeToggle theme={theme} onToggle={toggle} />
           </div>
         </header>

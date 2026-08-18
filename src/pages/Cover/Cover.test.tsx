@@ -53,9 +53,16 @@ describe("Cover", () => {
   it("keeps the cover to one screen's worth of claims", () => {
     render(<Cover />);
 
-    // Three stats and four actions. Adding a fourth stat is a design decision,
-    // not a content edit, so it should break a test.
+    // Three stats and five actions. Adding a fourth stat or a sixth link is a
+    // design decision, not a content edit, so it should break a test. The fifth
+    // link — the design system — was added deliberately when that page shipped.
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
-    expect(screen.getAllByRole("link")).toHaveLength(4);
+    expect(screen.getAllByRole("link")).toHaveLength(5);
+  });
+
+  it("offers the x-ray without spending a link on it", () => {
+    render(<Cover />);
+
+    expect(screen.getByRole("button", { name: /x-ray/i })).toHaveAttribute("aria-pressed", "false");
   });
 });

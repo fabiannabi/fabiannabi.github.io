@@ -1,0 +1,92 @@
+/* ===========================================================
+   SEMANTIC TOKENS — layer 2 of 3.
+
+   Primitives say what a colour IS (--ds-violet-400). These say what it is FOR
+   (--ds-accent). Components may only read this layer, and component-level
+   tokens inside each module read these.
+
+     primitive  ->  semantic  ->  component
+     violet-400     accent        --button-bg
+
+   That indirection is the whole point: a theme is a remap of this file, and no
+   component changes. Skipping it — a component reaching for --ds-violet-400
+   directly — is what makes a design system impossible to re-theme later.
+   =========================================================== */
+
+[data-ds-theme="dark"] {
+  --ds-surface: var(--ds-slate-950);
+  --ds-surface-raised: var(--ds-slate-900);
+  --ds-surface-overlay: var(--ds-slate-800);
+
+  --ds-text: var(--ds-slate-50);
+  --ds-text-muted: var(--ds-slate-400);
+  --ds-text-subtle: var(--ds-slate-500);
+
+  /* Decorative separator. Never the only thing identifying a component — see
+     the note on 1.4.11 in scripts/audit-contrast.mjs. */
+  --ds-border: var(--ds-slate-800);
+  /* The edge of an interactive control, where it IS the affordance. Gated at
+     3:1. Lifted from slate-700, which cleared it by 0.09. */
+  --ds-border-strong: var(--ds-slate-600);
+
+  --ds-accent: var(--ds-violet-400);
+  --ds-accent-hover: var(--ds-violet-300);
+  --ds-accent-surface: var(--ds-violet-950);
+  --ds-accent-border: var(--ds-violet-800);
+  /* Text painted on top of an --ds-accent fill. */
+  --ds-accent-contrast: var(--ds-slate-950);
+
+  --ds-info: var(--ds-sky-400);
+  --ds-info-surface: var(--ds-sky-950);
+  --ds-info-border: var(--ds-sky-800);
+
+  --ds-success: var(--ds-emerald-400);
+  --ds-success-surface: var(--ds-emerald-950);
+  --ds-success-border: var(--ds-emerald-800);
+
+  --ds-warning: var(--ds-amber-400);
+  --ds-warning-surface: var(--ds-amber-950);
+  --ds-warning-border: var(--ds-amber-800);
+
+  --ds-danger: var(--ds-rose-400);
+  --ds-danger-surface: var(--ds-rose-950);
+  --ds-danger-border: var(--ds-rose-800);
+  --ds-danger-contrast: var(--ds-rose-950);
+}
+
+[data-ds-theme="light"] {
+  --ds-surface: var(--ds-slate-50);
+  --ds-surface-raised: var(--ds-slate-100);
+  --ds-surface-overlay: var(--ds-slate-200);
+
+  --ds-text: var(--ds-slate-950);
+  --ds-text-muted: var(--ds-slate-700);
+  --ds-text-subtle: var(--ds-slate-700);
+
+  --ds-border: var(--ds-slate-300);
+  /* slate-500 measured 2.75:1 here — below the floor for a control edge. */
+  --ds-border-strong: var(--ds-slate-600);
+
+  --ds-accent: var(--ds-violet-700);
+  --ds-accent-hover: var(--ds-violet-800);
+  --ds-accent-surface: var(--ds-violet-50);
+  --ds-accent-border: var(--ds-violet-300);
+  --ds-accent-contrast: var(--ds-slate-50);
+
+  --ds-info: var(--ds-sky-800);
+  --ds-info-surface: var(--ds-sky-50);
+  --ds-info-border: var(--ds-sky-300);
+
+  --ds-success: var(--ds-emerald-800);
+  --ds-success-surface: var(--ds-emerald-50);
+  --ds-success-border: var(--ds-emerald-300);
+
+  --ds-warning: var(--ds-amber-800);
+  --ds-warning-surface: var(--ds-amber-50);
+  --ds-warning-border: var(--ds-amber-300);
+
+  --ds-danger: var(--ds-rose-800);
+  --ds-danger-surface: var(--ds-rose-50);
+  --ds-danger-border: var(--ds-rose-300);
+  --ds-danger-contrast: var(--ds-slate-50);
+}

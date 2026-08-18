@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { xray } from "../../ds/xray/instrument";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { VisuallyHidden } from "../VisuallyHidden/VisuallyHidden";
 import styles from "./RotatingHeadline.module.css";
@@ -60,7 +61,7 @@ export function RotatingHeadline({ before, after, words, sentence }: Props) {
   }, [leaving, words.length]);
 
   return (
-    <h1 className={styles.headline}>
+    <h1 className={styles.headline} {...xray("RotatingHeadline", { words: words.length, rotating: !reduced })}>
       <VisuallyHidden>{sentence}</VisuallyHidden>
       <span aria-hidden="true">
         {before}{" "}

@@ -18,7 +18,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build -o dist/storybook",
     "audit:contrast": "node scripts/audit-contrast.mjs",
+    "palette": "node scripts/generate-palette.mjs > src/ds/tokens/primitives.css",
     "verify": "pnpm typecheck && pnpm audit:contrast && pnpm test && pnpm build"
   },
   "dependencies": {
@@ -27,6 +30,9 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
+    "@storybook/addon-a11y": "^10.5.9",
+    "@storybook/addon-docs": "^10.5.9",
+    "@storybook/react-vite": "^10.5.9",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
@@ -36,6 +42,7 @@
     "@vitejs/plugin-react": "^6.0.5",
     "axe-core": "^4.13.0",
     "jsdom": "^30.0.1",
+    "storybook": "^10.5.9",
     "typescript": "^5.9.3",
     "vite": "^8.2.1",
     "vitest": "^4.1.10"

@@ -1,0 +1,200 @@
+.skip {
+  position: absolute;
+  inset-inline-start: var(--ds-space-5);
+  inset-block-start: -80px;
+  z-index: 99;
+  padding: var(--ds-space-3) var(--ds-space-5);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-accent);
+  color: var(--ds-accent-contrast);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-bold);
+  transition: inset-block-start var(--ds-duration-fast) var(--ds-ease);
+}
+
+.skip:focus {
+  inset-block-start: var(--ds-space-5);
+}
+
+.shell {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--ds-space-6);
+}
+
+@media (min-width: 1024px) {
+  .shell {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: var(--ds-space-8);
+  }
+
+  .sidebar {
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 100vh;
+    block-size: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-6);
+    padding-block: var(--ds-space-8);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sidebar {
+    padding-block: var(--ds-space-7) var(--ds-space-5);
+    border-block-end: 1px solid var(--ds-border);
+  }
+
+  /* The marker follows scroll next to a sticky column that does not exist here. */
+  .nav {
+    display: none;
+  }
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--ds-target-min);
+  color: var(--ds-text-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  transition: color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.back:hover {
+  color: var(--ds-accent);
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  overflow-y: auto;
+}
+
+.navGroup {
+  margin-block-start: var(--ds-space-5);
+}
+
+.navHead {
+  margin: 0 0 var(--ds-space-2);
+  color: var(--ds-text-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--ds-target-min);
+  padding-inline: var(--ds-space-3);
+  border-inline-start: 2px solid transparent;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text-muted);
+  font-size: var(--ds-text-sm);
+  text-decoration: none;
+  transition:
+    color var(--ds-duration-fast) var(--ds-ease),
+    border-color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.navLink:hover {
+  color: var(--ds-text);
+}
+
+.navActive {
+  border-inline-start-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.navLink:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+  flex-wrap: wrap;
+}
+
+.themeBtn {
+  inline-size: 34px;
+  block-size: 34px;
+  border: 1px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-md);
+  background: none;
+  color: var(--ds-text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color var(--ds-duration-fast) var(--ds-ease),
+    border-color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.themeBtn:hover {
+  border-color: var(--ds-accent);
+  color: var(--ds-accent);
+}
+
+.themeBtn:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+/* ---------- main ---------- */
+
+.main {
+  padding-block: var(--ds-space-8);
+  min-width: 0;
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-5);
+  padding-block-end: var(--ds-space-7);
+  scroll-margin-block-start: var(--ds-space-6);
+}
+
+.principles {
+  display: grid;
+  gap: var(--ds-space-5);
+  margin-block-start: var(--ds-space-4);
+}
+
+@media (min-width: 720px) {
+  .principles {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.principleHead {
+  margin: 0 0 var(--ds-space-3);
+  color: var(--ds-text);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-bold);
+}
+
+.footer {
+  padding-block: var(--ds-space-7);
+  border-block-start: 1px solid var(--ds-border);
+}

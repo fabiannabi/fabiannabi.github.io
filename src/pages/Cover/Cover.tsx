@@ -4,6 +4,7 @@ import { RotatingHeadline } from "../../components/RotatingHeadline/RotatingHead
 import { StackRail } from "../../components/StackRail/StackRail";
 import { StatusPill } from "../../components/StatusPill/StatusPill";
 import { coverSub, headline, identity, links, stack, stats } from "../../data/content";
+import { XRayToggle } from "../../ds/xray/XRayToggle";
 import styles from "./Cover.module.css";
 
 /**
@@ -22,6 +23,7 @@ export function Cover() {
             <p className={styles.role}>{identity.coverRole}</p>
           </div>
           <StatusPill pulse>{identity.status}</StatusPill>
+          <XRayToggle />
         </div>
 
         <main className={styles.mid}>
@@ -48,6 +50,9 @@ export function Cover() {
           <div className={styles.cta}>
             <ActionLink href={links.profile} arrow>
               Read the full profile
+            </ActionLink>
+            <ActionLink href={links.design} variant="ghost">
+              Design system
             </ActionLink>
             <ActionLink href={links.email} variant="ghost">
               Email

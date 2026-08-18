@@ -1,0 +1,93 @@
+.chip {
+  --chip-bg: var(--ds-surface-raised);
+  --chip-fg: var(--ds-text-muted);
+  --chip-border: var(--ds-border);
+
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ds-target-min);
+  border: 1px solid var(--chip-border);
+  border-radius: var(--ds-radius-pill);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  transition:
+    background var(--ds-duration-fast) var(--ds-ease),
+    border-color var(--ds-duration-fast) var(--ds-ease),
+    color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.selected {
+  --chip-bg: var(--ds-accent-surface);
+  --chip-fg: var(--ds-accent);
+  --chip-border: var(--ds-accent);
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.main {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ds-target-min);
+  padding-inline: var(--ds-space-4);
+  border: none;
+  border-radius: var(--ds-radius-pill);
+  background: none;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+}
+
+button.main {
+  cursor: pointer;
+}
+
+button.main:focus-visible,
+.remove:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+.chip:hover:not(.disabled) button.main {
+  color: var(--ds-text);
+}
+
+/* The remove button keeps its own 24px target rather than sharing the chip's,
+   so the two hit areas never overlap and a mis-tap does not delete a filter the
+   user meant to select. */
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ds-target-min);
+  height: var(--ds-target-min);
+  margin-inline-end: var(--ds-space-1);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity var(--ds-duration-fast) var(--ds-ease);
+}
+
+.remove:hover {
+  opacity: 1;
+}
+
+.remove svg {
+  width: 9px;
+  height: 9px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.main + .remove {
+  margin-inline-start: calc(var(--ds-space-3) * -1);
+}

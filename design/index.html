@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blueprint — a design system by Fabián Alcalá</title>
+    <meta
+      name="description"
+      content="Eight components, their real props, and the accessibility decisions behind them — with an x-ray mode that shows how the page is built."
+    />
+    <meta property="og:title" content="Blueprint — a design system by Fabián Alcalá" />
+    <meta
+      property="og:description"
+      content="Components you can take apart. Three token layers, contrast computed in CI, and an x-ray blueprint mode."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fabiannabi.github.io/design/" />
+    <link rel="canonical" href="https://fabiannabi.github.io/design/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      /* Before first paint. Deciding the theme in React costs a frame of the
+         wrong palette on every load, and the flash is the bug. Stored under its
+         own key so /design/ can be read in light while the profile stays dark. */
+      (() => {
+        try {
+          const saved = localStorage.getItem("ds-theme");
+          const system = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.dataset.dsTheme =
+            saved === "light" || saved === "dark" ? saved : system;
+        } catch {
+          document.documentElement.dataset.dsTheme = "dark";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/entries/design.tsx"></script>
+  </body>
+</html>

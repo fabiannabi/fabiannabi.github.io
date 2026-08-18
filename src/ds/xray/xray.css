@@ -1,0 +1,149 @@
+/* ===========================================================
+   X-RAY — the blueprint overlay.
+
+   Global rather than a CSS Module because it targets an attribute contract
+   (data-ds-component) that any instrumented element in the document opts into,
+   including the ones on the cover and the profile.
+
+   Nothing here renders until [data-xray] is on the root element, so the cost
+   when the mode is off is zero: no wrapper nodes, no extra boxes, no layout.
+   =========================================================== */
+:root {
+  /* Falls back to the page palette: the same overlay runs over the design
+     system, the cover and the profile, and each has its own accent. Both
+     resolutions are contrast-checked by scripts/audit-contrast.mjs. */
+  --xray-line: var(--ds-accent, var(--accent));
+  --xray-content-line: var(--ds-info, var(--dim));
+  --xray-label-bg: var(--ds-accent, var(--accent));
+  --xray-label-text: var(--ds-accent-contrast, var(--bg));
+  --xray-label-size: 10px;
+}
+
+/* ---------- the border box ---------- */
+
+[data-xray] [data-ds-component] {
+  position: relative;
+  outline: 1px dashed var(--xray-line);
+  outline-offset: 0;
+}
+
+[data-xray="on"] [data-ds-component] {
+  animation: xray-frame-in var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+  animation-delay: var(--xray-delay, 0ms);
+}
+
+[data-xray="leaving"] [data-ds-component] {
+  animation: xray-frame-out var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
+}
+
+/* Focus must still win. A blueprint that hides the focus ring would be breaking
+   the exact criterion this page exists to demonstrate. */
+[data-xray] [data-ds-component]:focus-visible {
+  outline: var(--ds-focus-width, 2px) solid var(--xray-line);
+  outline-offset: var(--ds-focus-offset, 2px);
+}
+
+/* ---------- the label ---------- */
+
+[data-xray] [data-ds-component]::before {
+  content: attr(data-ds-component) " " attr(data-ds-props) " " attr(data-ds-box);
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-start: 0;
+  z-index: 2;
+  margin-block-end: 2px;
+  padding: 1px 4px;
+  border-radius: 2px;
+  background: var(--xray-label-bg);
+  color: var(--xray-label-text);
+  font-family: var(--ds-font-mono, monospace);
+  font-size: var(--xray-label-size);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+[data-xray="on"] [data-ds-component]::before {
+  animation: xray-label-in var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+  animation-delay: var(--xray-delay, 0ms);
+}
+
+[data-xray="leaving"] [data-ds-component]::before {
+  animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+}
+
+/* ---------- the content box ---------- */
+
+/* Inset by the padding the browser actually computed, which XRayProvider reads
+   and writes back. The gap between this and the outline IS the padding — the
+   spacing is shown rather than annotated. */
+[data-xray] [data-ds-component]::after {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--xray-pbs, 0);
+  inset-block-end: var(--xray-pbe, 0);
+  inset-inline-start: var(--xray-pis, 0);
+  inset-inline-end: var(--xray-pie, 0);
+  z-index: 1;
+  outline: 1px dashed var(--xray-content-line);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+[data-xray="on"] [data-ds-component]::after {
+  animation: xray-content-in var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
+  animation-delay: var(--xray-delay, 0ms);
+}
+
+[data-xray="leaving"] [data-ds-component]::after {
+  animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes xray-frame-in {
+  from {
+    outline-color: transparent;
+  }
+}
+
+@keyframes xray-frame-out {
+  to {
+    outline-color: transparent;
+  }
+}
+
+@keyframes xray-label-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes xray-label-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes xray-content-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+/* The global reduced-motion rule collapses durations, but the staggered delay
+   would still hold each element invisible in turn. Zero it out. */
+@media (prefers-reduced-motion: reduce) {
+  [data-xray] [data-ds-component],
+  [data-xray] [data-ds-component]::before,
+  [data-xray] [data-ds-component]::after {
+    animation-delay: 0ms !important;
+  }
+}

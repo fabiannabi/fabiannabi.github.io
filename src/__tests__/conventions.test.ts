@@ -33,8 +33,13 @@ const cssFiles = (): string[] =>
     .filter((entry) => entry.endsWith(".css"))
     .map((entry) => join(SRC, entry));
 
-/** Token files are where colour literals are allowed to live. */
-const isTokenFile = (path: string): boolean => /tokens\.[\w-]+\.css$/.test(path);
+/**
+ * Token files are the one place a colour literal is allowed to live: the site's
+ * palettes, and the design system's generated primitive ramps. Everything else —
+ * every CSS Module, every page stylesheet — must resolve through them.
+ */
+const isTokenFile = (path: string): boolean =>
+  /tokens\.[\w-]+\.css$/.test(path) || /[\\/]ds[\\/]tokens[\\/]/.test(path);
 
 const stripComments = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, "");
 

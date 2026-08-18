@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { xray } from "../../ds/xray/instrument";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { VisuallyHidden } from "../VisuallyHidden/VisuallyHidden";
 import styles from "./StackRail.module.css";
@@ -86,7 +87,12 @@ export function StackRail({ items }: Props) {
   return (
     <>
       <VisuallyHidden as="p">{`Stack: ${items.join(", ")}.`}</VisuallyHidden>
-      <div className={styles.rail} ref={railRef} aria-hidden="true">
+      <div
+        className={styles.rail}
+        ref={railRef}
+        aria-hidden="true"
+        {...xray("StackRail", { items: items.length, animated: !reduced })}
+      >
         <div className={styles.track} ref={trackRef}>
           {[0, 1].map((copy) =>
             items.map((item) => (

@@ -1,0 +1,39 @@
+.inline {
+  padding: 1px var(--ds-space-2);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-raised);
+  color: var(--ds-text);
+  font-family: var(--ds-font-mono);
+  font-size: 0.9em;
+}
+
+.block {
+  margin: 0;
+  /* Without this the block sizes to max-content inside any flex or grid parent
+     that does not stretch its children, and a long line pushes the *page* wide
+     instead of scrolling inside the block — which is SC 1.4.10, caused by the
+     very component meant to prevent it. */
+  max-width: 100%;
+  min-width: 0;
+  padding: var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
+  color: var(--ds-text);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+  line-height: var(--ds-leading-snug);
+  /* Its own scroll axis, so a long line never widens the page. */
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.block:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+.block code {
+  font: inherit;
+}

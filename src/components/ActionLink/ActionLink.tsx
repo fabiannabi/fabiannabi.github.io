@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { xray } from "../../ds/xray/instrument";
 import styles from "./ActionLink.module.css";
 
 type Props = {
@@ -17,6 +18,7 @@ export function ActionLink({ href, children, variant = "solid", arrow = false }:
       className={`${styles.action} ${variant === "ghost" ? styles.ghost : styles.solid}`}
       href={href}
       {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
+      {...xray("ActionLink", { variant, ...(external ? { external: true } : {}) })}
     >
       {children}
       {arrow ? (

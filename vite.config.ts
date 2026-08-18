@@ -24,6 +24,7 @@ export default defineConfig({
       input: {
         cover: resolve(here, "index.html"),
         profile: resolve(here, "profile/index.html"),
+        design: resolve(here, "design/index.html"),
       },
     },
   },

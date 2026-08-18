@@ -1,0 +1,57 @@
+.text {
+  margin: 0;
+  font-family: var(--ds-font-sans);
+  line-height: var(--ds-leading-normal);
+}
+
+/* ---------- size ---------- */
+.xs {
+  font-size: var(--ds-text-xs);
+}
+.sm {
+  font-size: var(--ds-text-sm);
+}
+.md {
+  font-size: var(--ds-text-md);
+}
+.lg {
+  font-size: var(--ds-text-lg);
+  line-height: var(--ds-leading-snug);
+}
+
+/* ---------- tone ---------- */
+/* Every one of these is checked against both surfaces by the contrast audit.
+   There is deliberately no "faint" tone: the value that would look right
+   measures about 2:1, and a tone nobody can read is not a tone. */
+.default {
+  color: var(--ds-text);
+}
+.muted {
+  color: var(--ds-text-muted);
+}
+.subtle {
+  color: var(--ds-text-subtle);
+}
+.accent {
+  color: var(--ds-accent);
+}
+.danger {
+  color: var(--ds-danger);
+}
+
+/* ---------- weight ---------- */
+.regular {
+  font-weight: var(--ds-weight-regular);
+}
+.medium {
+  font-weight: var(--ds-weight-medium);
+}
+.bold {
+  font-weight: var(--ds-weight-bold);
+}
+
+/* Around 65 characters. Beyond roughly 75 the eye loses the start of the next
+   line, which reads as "this page is dense" rather than "these lines are long". */
+.measure {
+  max-width: 65ch;
+}

@@ -1,4 +1,5 @@
 import type { Section } from "../../data/content";
+import { xray } from "../../ds/xray/instrument";
 import styles from "./SectionNav.module.css";
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 
 export function SectionNav({ sections, activeId }: Props) {
   return (
-    <nav className={styles.nav} aria-label="Sections">
+    <nav className={styles.nav} aria-label="Sections" {...xray("SectionNav", { active: activeId })}>
       <ul className={styles.list}>
         {sections.map((section) => {
           const isActive = section.id === activeId;

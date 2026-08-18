@@ -1,0 +1,14 @@
+/* Page-level rules for the design system docs. The page is styled entirely from
+   --ds-* tokens: it is the first consumer of the system it documents, which is
+   the cheapest way to find out that a token is missing. */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-family: var(--ds-font-sans);
+  font-size: var(--ds-text-md);
+  line-height: var(--ds-leading-normal);
+}

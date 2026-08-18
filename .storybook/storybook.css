@@ -1,0 +1,18 @@
+/* The canvas is the design system's own surface, so a component is never seen
+   against a background it will not ship on. */
+body {
+  margin: 0;
+  padding: var(--ds-space-6);
+  background: var(--ds-surface);
+  color: var(--ds-text);
+  font-family: var(--ds-font-sans);
+  font-size: var(--ds-text-md);
+  line-height: var(--ds-leading-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

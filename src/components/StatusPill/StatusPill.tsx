@@ -1,3 +1,4 @@
+import { xray } from "../../ds/xray/instrument";
 import styles from "./StatusPill.module.css";
 
 type Props = {
@@ -8,7 +9,10 @@ type Props = {
 
 export function StatusPill({ children, pulse = false }: Props) {
   return (
-    <span className={pulse ? `${styles.pill} ${styles.pulse}` : styles.pill}>
+    <span
+      className={pulse ? `${styles.pill} ${styles.pulse}` : styles.pill}
+      {...xray("StatusPill", { ...(pulse ? { pulse } : {}) })}
+    >
       <span className={styles.dot} aria-hidden="true" />
       {children}
     </span>
