@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { xray } from "../../ds/xray/instrument";
-import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
-import { VisuallyHidden } from "../VisuallyHidden/VisuallyHidden";
+import { Heading } from "../../ds/components/Heading/Heading";
+import { VisuallyHidden } from "../../ds/components/VisuallyHidden/VisuallyHidden";
+import { local } from "../../ds/xray/instrument";
+import { usePrefersReducedMotion } from "../../ds/hooks/usePrefersReducedMotion";
 import styles from "./RotatingHeadline.module.css";
 
 const CYCLE_MS = 3400;
@@ -16,9 +17,21 @@ type Props = {
 };
 
 /**
- * The <h1> carries its full sentence in a visually hidden span, and the visible
- * rotating construction is aria-hidden. Without this a screen reader announces
- * "I build the other teams build on."
+ * The cover's opening claim, with one word cycling.
+ *
+ * This is app code, not a design system component, and the audit that moved it
+ * out is the reason it now reads the way it does. One page uses it, and what it
+ * encapsulates is a presentation conceit — a system that shipped it would be
+ * shipping this cover's idea to everyone who installed the package.
+ *
+ * What is left here is the behaviour: a timer, a measurement, and a fade. The
+ * type is Heading at the hero step, so the headline cannot drift away from the
+ * rest of the page's typography, and the underline is measured from the word it
+ * sits under.
+ *
+ * The h1 carries its full sentence in a VisuallyHidden and the visible rotating
+ * construction is aria-hidden. Without this a screen reader announces the
+ * fragments and the claim comes out ungrammatical.
  */
 export function RotatingHeadline({ before, after, words, sentence }: Props) {
   const reduced = usePrefersReducedMotion();
@@ -61,21 +74,26 @@ export function RotatingHeadline({ before, after, words, sentence }: Props) {
   }, [leaving, words.length]);
 
   return (
-    <h1 className={styles.headline} {...xray("RotatingHeadline", { words: words.length, rotating: !reduced })}>
-      <VisuallyHidden>{sentence}</VisuallyHidden>
-      <span aria-hidden="true">
-        {before}{" "}
-        <span className={styles.slot} ref={slotRef}>
-          <span
-            key={index}
-            ref={wordRef}
-            className={leaving ? `${styles.word} ${styles.leaving}` : styles.word}
-          >
-            {word}
-          </span>
-        </span>{" "}
-        {after}
-      </span>
-    </h1>
+    <div
+      className={styles.headline}
+      {...local("RotatingHeadline", { words: words.length, rotating: !reduced })}
+    >
+      <Heading level={1} size="hero">
+        <VisuallyHidden>{sentence}</VisuallyHidden>
+        <span aria-hidden="true">
+          {before}{" "}
+          <span className={styles.slot} ref={slotRef}>
+            <span
+              key={index}
+              ref={wordRef}
+              className={leaving ? `${styles.word} ${styles.leaving}` : styles.word}
+            >
+              {word}
+            </span>
+          </span>{" "}
+          {after}
+        </span>
+      </Heading>
+    </div>
   );
 }

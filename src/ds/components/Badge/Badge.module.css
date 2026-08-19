@@ -7,13 +7,45 @@
   align-items: center;
   padding: var(--ds-space-1) var(--ds-space-3);
   border: 1px solid var(--badge-border);
-  border-radius: var(--ds-radius-sm);
   background: var(--badge-bg);
   color: var(--badge-fg);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  line-height: var(--ds-leading-snug);
   white-space: nowrap;
+}
+
+/* ---------- shape ---------- */
+
+.square {
+  border-radius: var(--ds-radius-sm);
+}
+
+/* The standalone form. A control height so it lines up with a Toggle or a small
+   Button beside it, and the slightly larger mono step because it is read on its
+   own rather than as an annotation on something else. */
+.pill {
+  gap: var(--ds-space-3);
+  min-height: var(--ds-control-sm);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-radius-pill);
+}
+
+/* ---------- dot ---------- */
+
+.dot {
+  width: var(--ds-space-3);
+  height: var(--ds-space-3);
+  flex: none;
+  border-radius: 50%;
+  background: var(--badge-fg);
+}
+
+.pulse .dot {
+  animation: badge-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  50% {
+    opacity: 0.35;
+  }
 }
 
 .neutral {

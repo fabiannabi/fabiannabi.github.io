@@ -36,9 +36,57 @@
   --ds-text-2xl: 32px;
   --ds-text-3xl: 44px;
 
+  /* Mono metadata. Two steps, because 11px caps and 12px sentence case are the
+     only micro sizes the system actually needed twice. */
+  /* A glyph beside a word, not a word. */
+  --ds-text-2xs: 9px;
+  --ds-text-meta: 11.5px;
+  --ds-text-cap: 12px;
+  /* Between md and lg. The one step the fixed scale was missing: a lead
+     paragraph set at md reads as body, at lg it competes with a heading. */
+  --ds-text-lead: 16px;
+  /* Inline code sits in a line of prose and has to match whatever size that
+     line is, so this is a ratio rather than a step. */
+  --ds-text-code-inline: 0.9em;
+
+  /* Fluid steps. A page that sets type against the viewport should not have to
+     opt out of the system to do it, which is what the site did before it
+     consumed this file. Each carries its own tracking, because tracking is a
+     property of the size at display sizes, not a free knob. */
+  --ds-text-fluid-sm: clamp(15px, 1.7vw, 18px);
+  --ds-text-fluid-md: clamp(20px, 2.4vw, 28px);
+  --ds-text-fluid-lg: clamp(22px, 2.6vw, 28px);
+  --ds-text-fluid-xl: clamp(38px, 5.4vw, 50px);
+  /* The top of a landing page, where the type is the layout. */
+  --ds-text-fluid-2xl: clamp(38px, 7.4vw, 88px);
+
+  /* Tracking. Caps need more of it than lower case at the same size, which is
+     why Label derives it from size *and* case rather than exposing a prop. */
+  /* Display tracking runs tighter as the type grows: a heading set at body
+     tracking falls apart at 88px. Heading and Display pick a step by size. */
+  --ds-tracking-flush: -0.042em;
+  --ds-tracking-tighter: -0.035em;
+  --ds-tracking-tight: -0.03em;
+  --ds-tracking-snug: -0.025em;
+  --ds-tracking-heading: -0.02em;
+  --ds-tracking-normal: 0;
+  --ds-tracking-wide: 0.05em;
+  --ds-tracking-wider: 0.08em;
+  --ds-tracking-caps: 0.11em;
+  --ds-tracking-caps-loose: 0.16em;
+
+  /* Below one of its own size. At 88px a line set at 1.1 opens a gap that
+     reads as a paragraph break inside one sentence. */
+  --ds-leading-hero: 1.02;
+  --ds-leading-flush: 1.1;
   --ds-leading-tight: 1.15;
   --ds-leading-snug: 1.4;
+  /* Lead type. Sits 0.02 below normal and earns it: leading is proportional to
+     size, so an 18px paragraph needs marginally less of it than a 15px one to
+     read with the same rhythm. */
+  --ds-leading-relaxed: 1.6;
   --ds-leading-normal: 1.62;
+  --ds-leading-loose: 1.75;
 
   --ds-weight-regular: 400;
   --ds-weight-medium: 500;

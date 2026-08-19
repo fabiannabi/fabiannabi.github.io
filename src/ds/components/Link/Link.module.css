@@ -1,0 +1,48 @@
+.link {
+  /* Padding, not line-height: the target has to be 24px tall, not look it. */
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ds-target-min);
+  color: inherit;
+  text-decoration: none;
+  /* Present at every state, transparent until hovered, so the line never moves. */
+  border-block-end: 1px solid transparent;
+  transition:
+    color var(--ds-duration-fast) var(--ds-ease),
+    border-color var(--ds-duration-fast) var(--ds-ease);
+}
+
+.link:hover {
+  color: var(--ds-accent);
+  border-block-end-color: var(--ds-accent);
+}
+
+/* ---------- face ---------- */
+.sans {
+  font-family: var(--ds-font-sans);
+}
+
+.mono {
+  font-family: var(--ds-font-mono);
+  letter-spacing: var(--ds-tracking-wide);
+}
+
+/* ---------- size ---------- */
+.sm {
+  font-size: var(--ds-text-cap);
+}
+
+.md {
+  font-size: var(--ds-text-md);
+}
+
+/* ---------- tone ---------- */
+.default {
+  color: var(--ds-text);
+}
+.muted {
+  color: var(--ds-text-muted);
+}
+.subtle {
+  color: var(--ds-text-subtle);
+}

@@ -5,7 +5,7 @@
   background: var(--ds-surface-raised);
   color: var(--ds-text);
   font-family: var(--ds-font-mono);
-  font-size: 0.9em;
+  font-size: var(--ds-text-code-inline);
 }
 
 .block {

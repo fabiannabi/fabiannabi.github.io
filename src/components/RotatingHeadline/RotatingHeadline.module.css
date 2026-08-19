@@ -1,11 +1,10 @@
-.headline {
-  font-family: var(--display);
-  font-weight: 800;
-  color: var(--ink);
-  margin: 0;
-  font-size: clamp(38px, 7.4vw, 88px);
-  line-height: 1.02;
-  letter-spacing: -0.042em;
+/* Layout only. The type is Heading at the hero step — a font-size here would
+   mean the cover had gone back to setting its own headline.
+
+   The measure is on the heading and not on this wrapper, because `ch` resolves
+   against the element's own font size: 15ch on a wrapper set at body size is
+   130px, and the first attempt wrapped an 88px headline into six lines. */
+.headline h1 {
   max-width: 15ch;
 }
 

@@ -1,0 +1,35 @@
+.display {
+  margin: 0;
+  color: var(--ds-text);
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-black);
+  line-height: var(--ds-leading-flush);
+  text-wrap: balance;
+}
+
+/* A subtitle under a name: display face, body scale. The only fixed step here,
+   because a line this short has nothing to gain from answering to the viewport. */
+.xs {
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-bold);
+  letter-spacing: var(--ds-tracking-normal);
+  line-height: var(--ds-leading-tight);
+}
+
+/* The figure in a statistic. Block, so a label can sit under it without a
+   wrapper doing the work. */
+.sm {
+  display: block;
+  font-size: var(--ds-text-fluid-md);
+  letter-spacing: var(--ds-tracking-snug);
+}
+
+.md {
+  font-size: var(--ds-text-fluid-lg);
+  letter-spacing: var(--ds-tracking-tight);
+}
+
+.lg {
+  font-size: var(--ds-text-fluid-xl);
+  letter-spacing: var(--ds-tracking-tighter);
+}

@@ -1,0 +1,5 @@
+/* The two lines are already block-level from Display and Label; this only has
+   to stop a list from looking like a list. */
+.stat {
+  list-style: none;
+}

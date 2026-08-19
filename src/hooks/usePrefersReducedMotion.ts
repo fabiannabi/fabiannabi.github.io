@@ -1,30 +1,11 @@
-import { useSyncExternalStore } from "react";
-
-const QUERY = "(prefers-reduced-motion: reduce)";
-
-const subscribe = (onChange: () => void): (() => void) => {
-  const mql = window.matchMedia(QUERY);
-  mql.addEventListener("change", onChange);
-  return () => mql.removeEventListener("change", onChange);
-};
-
-const getSnapshot = (): boolean => window.matchMedia(QUERY).matches;
-
-/* Server/prerender default: assume reduced. Starting an animation and then
-   stopping it is worse than never starting one. */
-const getServerSnapshot = (): boolean => true;
+export { usePrefersReducedMotion } from "../ds/hooks/usePrefersReducedMotion";
 
 /**
- * Reactive, not read-once.
+ * A thin re-export, the same shape as useTheme over useThemeAttribute.
  *
- * CSS handles the declarative half via the media query in tokens.base.css, but
- * a rAF loop keeps running regardless of what the stylesheet says — nothing in
- * CSS can stop `requestAnimationFrame`. Every JS-driven animation on this site
- * reads this hook and refuses to start.
- *
- * Reading it once on mount was the earlier version, and it meant a visitor who
- * turned the OS setting on mid-visit kept the marquee moving until reload.
+ * The hook belongs to the design system: every animated component in it reads
+ * the flag, and the system has to work in a consumer's app that has never heard
+ * of this site. The site imports it from here so that page code keeps importing
+ * from src/hooks and the dependency still points the right way — the site
+ * consumes the system, never the reverse.
  */
-export function usePrefersReducedMotion(): boolean {
-  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-}

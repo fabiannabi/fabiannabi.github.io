@@ -1,6 +1,9 @@
-import type { Section } from "../../data/content";
-import { xray } from "../../ds/xray/instrument";
+import { Label } from "../../ds/components/Label/Label";
+import { local } from "../../ds/xray/instrument";
 import styles from "./SectionNav.module.css";
+
+/* Owned here, not imported from the site's content module — see Entry. */
+export type Section = { readonly id: string; readonly label: string };
 
 type Props = {
   sections: readonly Section[];
@@ -9,7 +12,7 @@ type Props = {
 
 export function SectionNav({ sections, activeId }: Props) {
   return (
-    <nav className={styles.nav} aria-label="Sections" {...xray("SectionNav", { active: activeId })}>
+    <nav className={styles.nav} aria-label="Sections" {...local("SectionNav", { active: activeId })}>
       <ul className={styles.list}>
         {sections.map((section) => {
           const isActive = section.id === activeId;
@@ -22,7 +25,9 @@ export function SectionNav({ sections, activeId }: Props) {
                 aria-current={isActive ? "true" : undefined}
               >
                 <i className={styles.marker} aria-hidden="true" />
-                {section.label}
+                <Label size="md" caps tone={isActive ? "default" : "subtle"} as="span">
+                  {section.label}
+                </Label>
               </a>
             </li>
           );

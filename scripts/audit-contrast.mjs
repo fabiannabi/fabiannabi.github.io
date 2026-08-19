@@ -72,11 +72,15 @@ const tokensIn = (css, selector) => {
  */
 const resolve = (value, table, seen = new Set()) => {
   if (!value) return undefined;
-  const alias = value.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+  /* The fallback form matters: the bridge writes var(--dimmer, var(--dim))
+     because the cover has two inks and the profile has three. Reading only the
+     bare form silently returned undefined and printed NaN as a failure. */
+  const alias = value.match(/^var\(\s*(--[\w-]+)\s*(?:,\s*([\s\S]+?)\s*)?\)$/);
   if (!alias) return value;
-  const next = alias[1];
+  const [, next, fallback] = alias;
   if (seen.has(next)) throw new Error(`Circular token reference at ${next}`);
   seen.add(next);
+  if (table[next] === undefined && fallback !== undefined) return resolve(fallback, table, seen);
   return resolve(table[next], table, seen);
 };
 
@@ -239,6 +243,74 @@ for (const [selector, themeName] of [
   const t = { ...primitives, ...tokensIn(semanticCss, selector) };
   console.log(`\ndesign system · ${themeName}`);
   for (const entry of DS_CHECKS) check(t, entry);
+}
+
+/* ============================================== the site, through the DS == */
+
+/**
+ * The cover and the profile are built from the design system's components but
+ * painted in their own palettes, which tokens.ds-bridge.css does by remapping
+ * the semantic layer. That remap is a colour decision, so it is measured — the
+ * same DS_CHECKS list, resolved through the bridge into whichever page palette
+ * loaded underneath it.
+ *
+ * Without this the bridge would be the one layer in the stack nobody checked,
+ * and it is the layer that decides what every component on two of the three
+ * pages is painted with.
+ */
+const bridgeCss = load("src/styles/tokens.ds-bridge.css");
+failures += assertAscii(bridgeCss, "src/styles/tokens.ds-bridge.css");
+const bridge = tokensIn(bridgeCss, ":root");
+
+/** rgba() over the page background, resolved to the literal it actually shows. */
+const flattenWash = (table) => {
+  const wash = resolve(table["--ds-accent-surface"], table);
+  const parts = wash?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+  if (!parts) return table;
+  const bg = hex2rgb(resolve(table["--bg"], table));
+  const flat = flatten([+parts[1], +parts[2], +parts[3]], bg, parts[4] === undefined ? 1 : +parts[4]);
+  return { ...table, "--ds-accent-surface": `#${flat.map((c) => c.toString(16).padStart(2, "0")).join("")}` };
+};
+
+for (const { file, label, themes } of siteTargets) {
+  const css = load(file);
+  const base = tokensIn(css, ":root");
+
+  for (const [selector, themeName] of themes) {
+    const t = flattenWash({ ...base, ...tokensIn(css, selector), ...bridge });
+    console.log(`\n${label} · ${themeName} · through the design system`);
+    for (const entry of DS_CHECKS) check(t, entry);
+  }
+}
+
+/* ========================================================== the blueprint == */
+
+/**
+ * X-ray is a theme, not an overlay, so it is audited as one. Both check lists
+ * run again against ds/tokens/blueprint.css, because the blueprint remaps both
+ * palettes: the design system's semantics for /design/, and the site's six
+ * tokens for the cover and the profile.
+ *
+ * This is the palette most likely to be waved through — it is a mode, it is
+ * temporary, nobody reads a blueprint for long. None of which is an argument a
+ * success criterion accepts.
+ */
+const blueprintCss = load("src/ds/tokens/blueprint.css");
+failures += assertAscii(blueprintCss, "src/ds/tokens/blueprint.css");
+
+{
+  const t = { ...tokensIn(blueprintCss, ":root"), ...tokensIn(blueprintCss, "\\[data-xray\\]") };
+  console.log("\nblueprint · x-ray");
+
+  for (const entry of DS_CHECKS) check(t, entry);
+  for (const entry of SITE_CHECKS) check(t, entry);
+
+  /* The annotation prints in --xray-accent on --xray-paper, and the frames and
+     registration marks are drawn in --xray-line. Those are rules in xray.css
+     rather than semantic aliases, so nothing above reaches them. */
+  check(t, ["component annotation", "--xray-accent", "--xray-paper", AA_TEXT]);
+  check(t, ["component frame", "--xray-line", "--xray-paper", AA_UI]);
+  check(t, ["dimension box (decorative)", "--xray-line-soft", "--xray-paper", AA_UI, ADVISORY]);
 }
 
 console.log(`\n${failures === 0 ? "PASS" : "FAIL"} — ${failures} failing pair(s)\n`);

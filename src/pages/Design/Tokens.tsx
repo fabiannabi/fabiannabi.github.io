@@ -1,5 +1,6 @@
 import { Code } from "../../ds/components/Code/Code";
 import { Heading } from "../../ds/components/Heading/Heading";
+import { Label } from "../../ds/components/Label/Label";
 import { Text } from "../../ds/components/Text/Text";
 import styles from "./Tokens.module.css";
 
@@ -35,7 +36,9 @@ export function Tokens() {
       <div className={styles.groups}>
         {GROUPS.map((group) => (
           <div key={group.title}>
-            <h3 className={styles.groupHead}>{group.title}</h3>
+            <Label size="sm" caps tone="default" as="h3">
+              {group.title}
+            </Label>
             <ul className={styles.swatches}>
               {group.tokens.map((token) => (
                 <li key={token} className={styles.swatch}>
@@ -44,7 +47,9 @@ export function Tokens() {
                     style={{ background: `var(${token})` }}
                     aria-hidden="true"
                   />
-                  <code className={styles.token}>{token}</code>
+                  <Label size="md" tone="muted" as="span">
+                    {token}
+                  </Label>
                 </li>
               ))}
             </ul>
@@ -52,7 +57,9 @@ export function Tokens() {
         ))}
       </div>
 
-      <h3 className={styles.groupHead}>Space</h3>
+      <Label size="sm" caps tone="default" as="h3">
+        Space
+      </Label>
       <Text size="sm" tone="muted" measure>
         A 4px base. Components never use a bare pixel value, which is why the x-ray can print a
         padding and have it mean something.
@@ -65,7 +72,9 @@ export function Tokens() {
               style={{ inlineSize: `var(--ds-space-${step})` }}
               aria-hidden="true"
             />
-            <code className={styles.token}>--ds-space-{step}</code>
+            <Label size="md" tone="muted" as="span">
+              --ds-space-{step}
+            </Label>
           </li>
         ))}
       </ul>

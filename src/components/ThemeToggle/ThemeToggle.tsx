@@ -1,6 +1,5 @@
-import { xray } from "../../ds/xray/instrument";
-import type { Theme } from "../../hooks/useTheme";
-import styles from "./ThemeToggle.module.css";
+import { Toggle } from "../../ds/components/Toggle/Toggle";
+import type { Theme } from "../../ds/hooks/useThemeAttribute";
 
 type Props = {
   theme: Theme;
@@ -8,22 +7,28 @@ type Props = {
 };
 
 /**
- * The label says what the button will do, not what the current state is — "Switch
- * theme" leaves a screen reader user to guess which way. The glyph is decorative
- * and hidden, so the accessible name is the label and nothing else.
+ * The site's theme switch.
+ *
+ * It is not a design system component and it never should have been: "theme" is
+ * a concept this app has, and a system that knows what a theme is has taken a
+ * position on the app's model. What the system owns is the control — Toggle —
+ * and this is a dozen lines of app on top of it.
+ *
+ * The label says what the button will do rather than what the theme currently
+ * is. "Switch theme" leaves a screen reader user to guess which way it goes.
  */
 export function ThemeToggle({ theme, onToggle }: Props) {
   const next: Theme = theme === "dark" ? "light" : "dark";
 
   return (
-    <button
-      type="button"
-      className={styles.toggle}
-      onClick={onToggle}
+    <Toggle
+      pressed={theme === "light"}
+      onToggle={onToggle}
+      iconOnly
       aria-label={`Switch to ${next} theme`}
-      {...xray("ThemeToggle", { theme })}
+      icon={<span aria-hidden="true">{theme === "dark" ? "◐" : "◑"}</span>}
     >
-      <span aria-hidden="true">{theme === "dark" ? "◐" : "◑"}</span>
-    </button>
+      {`Switch to ${next} theme`}
+    </Toggle>
   );
 }

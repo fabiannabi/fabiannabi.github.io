@@ -14,6 +14,23 @@
 .md {
   font-size: var(--ds-text-md);
 }
+/* Inline emphasis inside a sentence. Without this, a <span> marking two words
+   bold in a lead paragraph silently resets them to the body size. */
+.inherit {
+  font-size: inherit;
+  line-height: inherit;
+}
+/* The step the fixed scale was missing. A lead paragraph set at md reads as
+   body; set at lg it competes with the heading above it. */
+.lead {
+  font-size: var(--ds-text-lead);
+}
+/* Fluid, and the only size that is. The opening paragraph of a page is the one
+   place where the type should answer to the viewport rather than to the scale. */
+.fluid {
+  font-size: var(--ds-text-fluid-sm);
+  line-height: var(--ds-leading-relaxed);
+}
 .lg {
   font-size: var(--ds-text-lg);
   line-height: var(--ds-leading-snug);
@@ -54,4 +71,10 @@
    line, which reads as "this page is dense" rather than "these lines are long". */
 .measure {
   max-width: 65ch;
+}
+
+/* Fewer characters, not more: at the lead size 65ch is a physically longer line
+   than it is at md, and the defect the cap exists to prevent comes back. */
+.fluid.measure {
+  max-width: 46ch;
 }

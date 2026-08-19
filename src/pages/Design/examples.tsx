@@ -4,9 +4,15 @@ import { Badge } from "../../ds/components/Badge/Badge";
 import { Button } from "../../ds/components/Button/Button";
 import { Chip } from "../../ds/components/Chip/Chip";
 import { Code } from "../../ds/components/Code/Code";
+import { Display } from "../../ds/components/Display/Display";
 import { Heading } from "../../ds/components/Heading/Heading";
+import { Label } from "../../ds/components/Label/Label";
+import { Link } from "../../ds/components/Link/Link";
+import { Table } from "../../ds/components/Table/Table";
 import { Tabs } from "../../ds/components/Tabs/Tabs";
 import { Text } from "../../ds/components/Text/Text";
+import { Toggle } from "../../ds/components/Toggle/Toggle";
+import { VisuallyHidden } from "../../ds/components/VisuallyHidden/VisuallyHidden";
 import styles from "./examples.module.css";
 
 /* Live, stateful examples. Screenshots go stale and cannot be tabbed through;
@@ -222,13 +228,150 @@ function CodeExample() {
   );
 }
 
+function DisplayExample() {
+  return (
+    <div className={styles.stack}>
+      <Row label="lg">
+        <Display size="lg">Fabian Alcala</Display>
+      </Row>
+      <Row label="md">
+        <Display size="md">Fabian Alcala</Display>
+      </Row>
+      <Row label="sm">
+        <Display size="sm">14 months</Display>
+      </Row>
+      <Row label="xs">
+        <Display size="xs">User Interface Engineer</Display>
+      </Row>
+    </div>
+  );
+}
+
+function LabelExample() {
+  return (
+    <div className={styles.stack}>
+      <Row label="caps">
+        <Label size="sm" caps tone="default">
+          Selected work
+        </Label>
+      </Row>
+      <Row label="caption">
+        <Label size="xs" caps>
+          In software
+        </Label>
+      </Row>
+      <Row label="byline">
+        <Label size="md">User Interface Engineer</Label>
+      </Row>
+    </div>
+  );
+}
+
+
+function LinkExample() {
+  return (
+    <div className={styles.stack}>
+      <Row label="mono">
+        <Link href="#link" font="mono" tone="muted">
+          LinkedIn
+        </Link>
+        <Link href="#link" font="mono" tone="muted">
+          GitHub
+        </Link>
+      </Row>
+      <Row label="in a sentence">
+        <Text>
+          The palette is generated, not chosen —{" "}
+          <Link href="#tokens">see the token page</Link> for the formula.
+        </Text>
+      </Row>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function VisuallyHiddenExample() {
+  return (
+    <div className={styles.stack}>
+      <Text>
+        <VisuallyHidden>There is a sentence here that only a screen reader receives.</VisuallyHidden>
+        Nothing above this line is painted, and a screen reader still reads it. Inspect the DOM, or
+        turn the x-ray on — the content stays in the accessibility tree either way.
+      </Text>
+    </div>
+  );
+}
+
+function ToggleExample() {
+  const [xray, setXray] = useState(true);
+  const [grid, setGrid] = useState(false);
+
+  return (
+    <div className={styles.stack}>
+      <Row label="a mode that stays on">
+        <Toggle pressed={xray} onToggle={() => setXray(!xray)} shortcut="X">
+          X-ray
+        </Toggle>
+        <Toggle pressed={grid} onToggle={() => setGrid(!grid)}>
+          Grid
+        </Toggle>
+      </Row>
+      <Text size="sm" tone="muted">
+        aria-pressed, not a label that flips. A screen reader announces
+        &ldquo;X-ray, toggle button, pressed&rdquo; instead of leaving the state to be read off a
+        colour. The site&rsquo;s theme switch and this page&rsquo;s x-ray control are both this
+        component — the concept each one switches belongs to its caller.
+      </Text>
+    </div>
+  );
+}
+
+const TABLE_COLUMNS = [
+  { key: "token", header: "Token" },
+  { key: "value", header: "Resolves to" },
+  { key: "ratio", header: "Contrast", numeric: true },
+];
+
+const TABLE_ROWS = [
+  { id: "text", cells: [<Code key="t">--ds-text</Code>, "slate-50", "15.63"] },
+  { id: "muted", cells: [<Code key="m">--ds-text-muted</Code>, "slate-400", "6.07"] },
+  { id: "subtle", cells: [<Code key="s">--ds-text-subtle</Code>, "slate-500", "4.88"] },
+];
+
+function TableExample() {
+  return (
+    <Table
+      caption="Text tones against the surface"
+      columns={TABLE_COLUMNS}
+      rows={TABLE_ROWS}
+      rowHeaders
+    />
+  );
+}
+
 export const EXAMPLES: Record<string, ReactNode> = {
   button: <ButtonExample />,
   chip: <ChipExample />,
   badge: <BadgeExample />,
+  table: <TableExample />,
   tabs: <TabsExample />,
   alert: <AlertExample />,
   heading: <HeadingExample />,
+  display: <DisplayExample />,
   text: <TextExample />,
+  label: <LabelExample />,
+  link: <LinkExample />,
   code: <CodeExample />,
+  toggle: <ToggleExample />,
+  visuallyhidden: <VisuallyHiddenExample />,
 };

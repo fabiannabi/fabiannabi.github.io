@@ -4,18 +4,35 @@
   font-family: var(--ds-font-display);
   font-weight: var(--ds-weight-black);
   line-height: var(--ds-leading-tight);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--ds-tracking-heading);
   text-wrap: balance;
+}
+
+/* The top of a landing page, where the heading is the layout rather than a
+   label on it. Leading below 1 of its own size: at 88px the gap between two
+   lines set at 1.1 reads as a paragraph break inside one sentence. */
+.hero {
+  font-size: var(--ds-text-fluid-2xl);
+  letter-spacing: var(--ds-tracking-flush);
+  line-height: var(--ds-leading-hero);
+}
+
+/* The top of a page. Fluid, and flush-leading because at 50px the tight step
+   still opens a gap that reads as a paragraph break inside one line of type. */
+.display {
+  font-size: var(--ds-text-fluid-xl);
+  letter-spacing: var(--ds-tracking-tighter);
+  line-height: var(--ds-leading-flush);
 }
 
 .xl {
   font-size: var(--ds-text-3xl);
-  letter-spacing: -0.035em;
+  letter-spacing: var(--ds-tracking-tighter);
 }
 
 .lg {
   font-size: var(--ds-text-2xl);
-  letter-spacing: -0.03em;
+  letter-spacing: var(--ds-tracking-tight);
 }
 
 .md {

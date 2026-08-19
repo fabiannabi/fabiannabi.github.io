@@ -37,3 +37,47 @@ export function xray(component: string, props: Record<string, unknown> = {}): XR
     ...(formatted ? { "data-ds-props": formatted } : {}),
   };
 }
+
+export type XRayLocalProps = XRayProps & {
+  "data-ds-local": "";
+};
+
+/**
+ * Stamps a component that is real, but is not part of the design system.
+ *
+ * RotatingHeadline, StackRail, StatusPill and the rest live in src/components:
+ * they are components, with props and a box, and the blueprint should draw them
+ * as such. What it must not do is draw them *identically* to a Display or a
+ * Text, because that is a claim — that the system is responsible for this box —
+ * and it is false. They lose the registration marks and their name is set in the
+ * muted ink; the marks are what says "this one came from Blueprint".
+ *
+ * Three tiers, and the drawing is only worth reading if it keeps them apart:
+ * xray() is the system, local() is a one-off component, region() is markup that
+ * is not a component at all.
+ */
+export function local(component: string, props: Record<string, unknown> = {}): XRayLocalProps {
+  return { ...xray(component, props), "data-ds-local": "" };
+}
+
+export type XRayRegionProps = {
+  "data-ds-region": string;
+};
+
+/**
+ * Stamps a block of page markup that is *not* a design system component.
+ *
+ * The blueprint draws these differently on purpose — dashed, unlabelled at the
+ * corner, no registration marks — and the difference is the most useful thing
+ * on the page. A solid frame is something the system is responsible for. A
+ * dashed one is bespoke markup that has not earned a component yet, and being
+ * able to see the ratio at a glance is worth more than a coverage number
+ * nobody recomputes.
+ *
+ * Deliberately a separate attribute rather than xray("Stats"): claiming a page
+ * div is a system component would make the blueprint lie about the thing it
+ * exists to show.
+ */
+export function region(name: string): XRayRegionProps {
+  return { "data-ds-region": name };
+}

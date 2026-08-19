@@ -16,7 +16,7 @@ export const headingDoc: ComponentDoc = {
     },
     {
       name: "size",
-      type: '"sm" | "md" | "lg" | "xl"',
+      type: '"sm" | "md" | "lg" | "xl" | "display" | "hero"',
       default: "matches the level",
       description: "The visual size. Override it when the design calls for it; the outline is unaffected.",
     },

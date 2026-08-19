@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -64,6 +64,32 @@ describe("no raw colour outside the token files", () => {
   );
 });
 
+/**
+ * The colour rule below has a twin nobody wrote down: type is tokenized too.
+ * An audit found eight values that had escaped — four of them in Heading, the
+ * component that owns tracking, still carrying the literals the --ds-tracking-*
+ * steps were added to replace.
+ *
+ * This is what "inside the tokenization" actually means, and it is not the same
+ * as "composed from another component". Button sets its own font-size and is
+ * fully tokenized; Heading delegated to nothing and was not.
+ */
+describe("no raw typography outside the token files", () => {
+  const TYPOGRAPHY = /(?:font-size|letter-spacing|line-height|font-weight)\s*:\s*([^;]+);/g;
+  const ALLOWED = /^(?:var\(|inherit|normal|unset|revert)/;
+
+  it.each(cssFiles().filter((path) => !isTokenFile(path)).map((p) => [label(p), p]))(
+    "%s",
+    (_name, path) => {
+      const found = [...read(path).matchAll(TYPOGRAPHY)]
+        .map((match) => match[1]?.trim() ?? "")
+        .filter((value) => value !== "" && !ALLOWED.test(value));
+
+      expect(found, "every type value resolves from a token in ds/tokens/scale.css").toEqual([]);
+    },
+  );
+});
+
 describe("logical properties only", () => {
   // The profile mirrors for RTL. A physical property is a bug there, not a style.
   const PHYSICAL =
@@ -94,10 +120,48 @@ describe("reduced motion is honoured globally", () => {
   });
 
   it("checks the flag in JavaScript too, where CSS cannot reach", () => {
-    // Nothing in a stylesheet stops a rAF loop.
-    const hook = readFileSync(join(SRC, "hooks", "usePrefersReducedMotion.ts"), "utf8");
+    // Nothing in a stylesheet stops a rAF loop. The hook lives in the design
+    // system, because every animated component in it reads the flag and the
+    // system has to work in an app that has never heard of this site; src/hooks
+    // re-exports it so page code still imports from one place.
+    const hook = readFileSync(join(SRC, "ds", "hooks", "usePrefersReducedMotion.ts"), "utf8");
 
     expect(hook).toContain("prefers-reduced-motion: reduce");
+  });
+});
+
+/**
+ * An audit found nine of fourteen components with no test at all and thirty-one
+ * accessibility claims in the docs with nothing behind them. Writing the tests
+ * fixed that once; this stops it drifting back, which is the only version of a
+ * convention that is worth anything.
+ */
+describe("every design system component is tested against its own claims", () => {
+  const COMPONENTS = join(SRC, "ds", "components");
+
+  const componentNames = (): string[] =>
+    readdirSync(COMPONENTS, { encoding: "utf8" }).filter((entry) =>
+      existsSync(join(COMPONENTS, entry, `${entry}.tsx`)),
+    );
+
+  it.each(componentNames())("%s ships a test", (name) => {
+    const test = join(COMPONENTS, name, `${name}.test.tsx`);
+
+    expect(existsSync(test), `${name} has accessibility notes in its docs and no test`).toBe(true);
+  });
+
+  it.each(componentNames())("%s runs axe over its own output", (name) => {
+    const body = readFileSync(join(COMPONENTS, name, `${name}.test.tsx`), "utf8");
+
+    expect(body).toContain("expectNoAxeViolations");
+  });
+
+  it.each(componentNames())("%s documents what it guarantees", (name) => {
+    const docs = readFileSync(join(COMPONENTS, name, `${name}.docs.ts`), "utf8");
+
+    // A component in the registry with an empty accessibility list is a
+    // component claiming nothing, which is worse than claiming and being wrong.
+    expect(docs).toMatch(/accessibility: \[\s*"/);
   });
 });
 

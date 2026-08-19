@@ -1,0 +1,69 @@
+/* ===========================================================
+   THE BRIDGE — the site's palette, expressed as the design system's semantics.
+
+   The cover and the profile are built from Blueprint's components, but they are
+   not painted in Blueprint's colours: the cover is synthwave, the profile is a
+   near-monochrome that flips light and dark. This file is what lets both be
+   true at once. It maps the design system's semantic contract onto whichever
+   six-token palette the page already loaded.
+
+     tokens.cover.css      --accent: #ff5ca8
+     this file             --ds-accent: var(--accent)
+     Button.module.css     --button-bg: var(--ds-accent)
+
+   Which is the third time the same mechanism does the work. [data-ds-theme]
+   remaps this layer for the docs, [data-xray] remaps it for the blueprint, and
+   this remaps it for the site. Not one component stylesheet changed for any of
+   them, and that is the only evidence worth offering that the middle layer is
+   real.
+
+   It carries no colour of its own on purpose. Every value here resolves to a
+   token the page's palette already defines, so a palette edit cannot leave the
+   components behind — and the contrast audit measures the page's tokens, which
+   are these.
+   =========================================================== */
+:root {
+  --ds-surface: var(--bg);
+  --ds-surface-raised: var(--bg-2);
+  --ds-surface-overlay: var(--bg-2);
+
+  --ds-text: var(--ink);
+  --ds-text-muted: var(--dim);
+  /* The cover has no third ink -- one screen of text does not need one -- so it
+     falls back rather than the system falling over. */
+  --ds-text-subtle: var(--dimmer, var(--dim));
+
+  --ds-border: var(--line);
+  /* The edge of an interactive control, gated at 3:1. --accent-line is the
+     site's decorative rule and does not clear it on either palette; the body
+     ink does, and is what the site's own controls already draw with. */
+  --ds-border-strong: var(--dim);
+
+  --ds-accent: var(--accent);
+  --ds-accent-hover: var(--ink);
+  --ds-accent-surface: var(--wash);
+  --ds-accent-border: var(--accent-line);
+  --ds-accent-contrast: var(--bg);
+
+  /* The site has no status palette, and inventing one here would mean two
+     sources of truth for a colour nobody on these two pages paints. The tones
+     resolve to the page's own ink so that a component reaching for one is
+     legible rather than invisible -- and so that the contract is complete, which
+     is what stops a component from rendering with an empty custom property. */
+  --ds-info: var(--accent);
+  --ds-info-surface: var(--bg-2);
+  --ds-info-border: var(--line);
+
+  --ds-success: var(--accent);
+  --ds-success-surface: var(--bg-2);
+  --ds-success-border: var(--line);
+
+  --ds-warning: var(--ink);
+  --ds-warning-surface: var(--bg-2);
+  --ds-warning-border: var(--line);
+
+  --ds-danger: var(--ink);
+  --ds-danger-surface: var(--bg-2);
+  --ds-danger-border: var(--line);
+  --ds-danger-contrast: var(--bg);
+}

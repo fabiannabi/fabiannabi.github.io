@@ -18,12 +18,9 @@
   will-change: transform;
 }
 
+/* Layout and the diamond. The words are a Label. */
 .item {
   font-style: normal;
-  font-family: var(--mono);
-  font-size: var(--fs-lead);
-  color: var(--dim);
-  letter-spacing: 0.03em;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -36,7 +33,7 @@
 .item::before {
   content: "\25C6";
   color: var(--accent);
-  font-size: 9px;
+  font-size: var(--ds-text-2xs);
   transition:
     transform var(--dur) var(--ease),
     opacity var(--dur) var(--ease);
@@ -53,7 +50,7 @@
 .rail .item:hover {
   opacity: 1;
   color: var(--ink);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ds-tracking-wider);
 }
 
 .rail .item:hover::before {

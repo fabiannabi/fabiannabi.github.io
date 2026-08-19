@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
-import { xray } from "../../ds/xray/instrument";
-import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
-import { VisuallyHidden } from "../VisuallyHidden/VisuallyHidden";
+import { local } from "../../ds/xray/instrument";
+import { usePrefersReducedMotion } from "../../ds/hooks/usePrefersReducedMotion";
+import { Label } from "../../ds/components/Label/Label";
+import { VisuallyHidden } from "../../ds/components/VisuallyHidden/VisuallyHidden";
 import styles from "./StackRail.module.css";
 
 const BASE_SPEED = 26; // px per second
@@ -91,13 +92,15 @@ export function StackRail({ items }: Props) {
         className={styles.rail}
         ref={railRef}
         aria-hidden="true"
-        {...xray("StackRail", { items: items.length, animated: !reduced })}
+        {...local("StackRail", { items: items.length, animated: !reduced })}
       >
         <div className={styles.track} ref={trackRef}>
           {[0, 1].map((copy) =>
             items.map((item) => (
               <i key={`${copy}-${item}`} className={styles.item}>
-                {item}
+                <Label size="lead" tone="muted" as="span">
+                  {item}
+                </Label>
               </i>
             )),
           )}

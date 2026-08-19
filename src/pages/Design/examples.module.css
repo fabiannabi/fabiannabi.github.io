@@ -22,7 +22,7 @@
   color: var(--ds-text-subtle);
   font-family: var(--ds-font-mono);
   font-size: var(--ds-text-xs);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ds-tracking-wider);
   text-transform: uppercase;
 }
 
@@ -50,4 +50,29 @@
   stroke-width: 1.4;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* A row of statistics, which is the arrangement Stat is built for. */
+.statRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-7);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Glow is fixed to the viewport, so the example gives it a box to sit in and
+   clips it there. Without this the docs page would demonstrate it by washing
+   the whole screen, which is accurate and useless. */
+.glowStage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 140px;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--ds-space-6);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
 }

@@ -1,0 +1,98 @@
+.toggle {
+  --toggle-fg: var(--ds-text);
+  --toggle-bg: var(--ds-surface-raised);
+  --toggle-border: var(--ds-border-strong);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  /* --ds-control-*, not --ds-target-min: the 24px floor is the accessibility
+     minimum, not a size. Sizing to the control scale is what makes this line up
+     with a Badge or a small Button beside it. */
+  min-height: var(--ds-control-sm);
+  min-width: var(--ds-target-min);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border: 1px solid var(--toggle-border);
+  border-radius: var(--ds-radius-pill);
+  background: var(--toggle-bg);
+  color: var(--toggle-fg);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  letter-spacing: var(--ds-tracking-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color var(--ds-duration) var(--ds-ease),
+    color var(--ds-duration) var(--ds-ease),
+    background var(--ds-duration) var(--ds-ease);
+}
+
+.toggle:hover {
+  --toggle-border: var(--ds-accent);
+  --toggle-fg: var(--ds-accent);
+}
+
+.toggle:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+/* Pressed is a filled control, and it is also announced. The fill is the
+   reinforcement, never the only signal (SC 1.4.1). */
+.toggle[aria-pressed="true"] {
+  --toggle-bg: var(--ds-accent);
+  --toggle-border: var(--ds-accent);
+  --toggle-fg: var(--ds-accent-contrast);
+}
+
+/* ---------- size ---------- */
+
+.md {
+  min-height: var(--ds-control-sm);
+}
+
+.sm {
+  min-height: var(--ds-target-min);
+  padding: var(--ds-space-1) var(--ds-space-3);
+}
+
+/* ---------- shape ---------- */
+
+.iconOnly {
+  padding-inline: var(--ds-space-2);
+  aspect-ratio: 1;
+  justify-content: center;
+}
+
+/* ---------- parts ---------- */
+
+.toggle svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+/* An icon that carries a filled part reads the state as well, which is one more
+   channel than colour alone. */
+.toggle[aria-pressed="true"] svg rect:last-child {
+  fill: currentColor;
+}
+
+.kbd {
+  font-family: inherit;
+  font-size: inherit;
+  padding-inline: var(--ds-space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--ds-radius-sm);
+  opacity: 0.65;
+}
+
+/* The shortcut hint is noise on a device with no keyboard to press it on. */
+@media (max-width: 640px) {
+  .kbd {
+    display: none;
+  }
+}

@@ -1,0 +1,75 @@
+/* The table scrolls on its own axis so a long cell never widens the page
+   (SC 1.4.10). It is focusable and named because it scrolls (SC 2.1.1). */
+.scroller {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+}
+
+.scroller:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ds-text-sm);
+  text-align: start;
+}
+
+/* Layout. The type is a Label. */
+.caption {
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-block-end: 1px solid var(--ds-border);
+  text-align: start;
+}
+
+/* Clipped, not hidden: `display: none` on a caption removes it from the
+   accessibility tree, which is the one thing a caption is for. */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.table th,
+.table td {
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-block-end: 1px solid var(--ds-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table thead th {
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child th,
+.table tbody tr:last-child td {
+  border-block-end: none;
+}
+
+.table td {
+  color: var(--ds-text-muted);
+}
+
+/* A row header identifies its row; it is not a second column of headings, so it
+   does not take the heading weight. */
+.table tbody th {
+  font-weight: var(--ds-weight-regular);
+  white-space: nowrap;
+}
+
+/* Figures line up on their last digit or they cannot be compared down a column. */
+.numeric {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}

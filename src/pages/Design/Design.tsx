@@ -1,9 +1,13 @@
 import { Alert } from "../../ds/components/Alert/Alert";
 import { Code } from "../../ds/components/Code/Code";
 import { Heading } from "../../ds/components/Heading/Heading";
+import { Label } from "../../ds/components/Label/Label";
+import { Link } from "../../ds/components/Link/Link";
 import { Text } from "../../ds/components/Text/Text";
+import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { byCategory, registry } from "../../ds/docs/registry";
 import { useThemeAttribute } from "../../ds/hooks/useThemeAttribute";
+import { region } from "../../ds/xray/instrument";
 import { XRayToggle } from "../../ds/xray/XRayToggle";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { ComponentSection } from "./ComponentSection";
@@ -25,10 +29,10 @@ export function Design() {
 
       <div className={styles.shell}>
         <header className={styles.sidebar}>
-          <div className={styles.brand}>
-            <a href="/" className={styles.back}>
+          <div className={styles.brand} {...region("Brand")}>
+            <Link href="/" font="mono" tone="subtle" size="md">
               ← Fabián Alcalá
-            </a>
+            </Link>
             <Heading level={1} size="md">
               Blueprint
             </Heading>
@@ -37,7 +41,7 @@ export function Design() {
             </Text>
           </div>
 
-          <nav className={styles.nav} aria-label="Components">
+          <nav className={styles.nav} aria-label="Components" {...region("Component index")}>
             <a
               href="#overview"
               className={active === "overview" ? `${styles.navLink} ${styles.navActive}` : styles.navLink}
@@ -55,7 +59,9 @@ export function Design() {
 
             {byCategory().map(([category, docs]) => (
               <div key={category} className={styles.navGroup}>
-                <p className={styles.navHead}>{category}</p>
+                <Label size="sm" caps tone="subtle" as="p">
+                  {category}
+                </Label>
                 {docs.map((doc) => (
                   <a
                     key={doc.slug}
@@ -74,14 +80,9 @@ export function Design() {
 
           <div className={styles.controls}>
             <XRayToggle />
-            <button
-              type="button"
-              className={styles.themeBtn}
-              onClick={toggle}
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-            >
-              <span aria-hidden="true">{theme === "dark" ? "◐" : "◑"}</span>
-            </button>
+            {/* The system's own toggle. This page had a hand-rolled button here,
+                which is a poor look on the page arguing for the component. */}
+            <ThemeToggle theme={theme} onToggle={toggle} />
           </div>
         </header>
 
@@ -98,14 +99,18 @@ export function Design() {
             </Text>
 
             <Alert tone="info" title="Try the x-ray">
-              Press <Code>X</Code>, or use the toggle, to turn the page into a blueprint: every
-              component outlined and labelled with the props it was given and the padding it actually
-              computed. It works on the cover and the profile too.
+              Press <Code>X</Code>, or use the toggle, to print this page as a blueprint: the whole
+              palette collapses to one cyanotype, every component is drawn as a named frame on ruled
+              paper, and the gap between the two boxes is the padding the browser actually computed.
+              It is a theme, not an overlay — no component stylesheet knows the mode exists. It works
+              on the cover and the profile too.
             </Alert>
 
-            <div className={styles.principles}>
+            <div className={styles.principles} {...region("Principles")}>
               <div>
-                <h3 className={styles.principleHead}>Three token layers</h3>
+                <Heading level={3} size="sm">
+                  Three token layers
+                </Heading>
                 <Text size="sm" tone="muted">
                   Primitives say what a colour is, semantic tokens say what it is for, component
                   tokens apply it. A component never reaches past the middle layer, which is what
@@ -113,7 +118,9 @@ export function Design() {
                 </Text>
               </div>
               <div>
-                <h3 className={styles.principleHead}>Contrast is computed</h3>
+                <Heading level={3} size="sm">
+                  Contrast is computed
+                </Heading>
                 <Text size="sm" tone="muted">
                   Every foreground and background pair in both themes is measured against WCAG 2.2 in
                   CI. The palette itself is generated in OKLCH, so the ramps are perceptually even by
@@ -121,7 +128,9 @@ export function Design() {
                 </Text>
               </div>
               <div>
-                <h3 className={styles.principleHead}>The API enforces the rules</h3>
+                <Heading level={3} size="sm">
+                  The API enforces the rules
+                </Heading>
                 <Text size="sm" tone="muted">
                   An icon-only button will not compile without an accessible name. A chip's remove
                   button cannot be nested inside its toggle. The guidance below is what could not be
@@ -137,7 +146,7 @@ export function Design() {
             <ComponentSection key={doc.slug} doc={doc} example={EXAMPLES[doc.slug]} />
           ))}
 
-          <footer className={styles.footer}>
+          <footer className={styles.footer} {...region("Colophon")}>
             <Text size="sm" tone="subtle" measure>
               Built with React, TypeScript and CSS Modules. No component library underneath — the
               point is the layer, not the install.

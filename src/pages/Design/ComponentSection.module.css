@@ -32,15 +32,17 @@
   margin-block-start: var(--ds-space-7);
 }
 
-.subHead {
-  margin: 0 0 var(--ds-space-4);
-  color: var(--ds-text-subtle);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  font-weight: var(--ds-weight-medium);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+/* The sub-heads are a Label now, and Label takes no className — deliberately,
+   because a design system that lets every caller restyle it is a stylesheet with
+   extra steps. So the spacing between a head and the block it introduces lives
+   here, on the element, which is where layout belongs anyway.
+
+   The colour, family, size, tracking and case that used to be here all moved
+   into Label, which is the point of the exercise. */
+.sub > :is(h3, p) {
+  margin-block-end: var(--ds-space-4);
 }
+
 
 .anatomy,
 .notes {
@@ -84,21 +86,23 @@
   border-color: var(--ds-danger-border);
 }
 
-.guidanceHead {
-  margin: 0 0 var(--ds-space-3);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.do > p,
+.dont > p {
+  margin-block-end: var(--ds-space-3);
 }
 
-.do .guidanceHead {
-  color: var(--ds-success);
+
+.do .do > p,
+.dont > p {
+  margin-block-end: var(--ds-space-3);
 }
 
-.dont .guidanceHead {
-  color: var(--ds-danger);
+
+.dont .do > p,
+.dont > p {
+  margin-block-end: var(--ds-space-3);
 }
+
 
 .guidance ul {
   margin: 0;

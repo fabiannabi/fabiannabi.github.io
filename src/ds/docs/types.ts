@@ -15,7 +15,15 @@ export type PropDoc = {
   readonly description: string;
 };
 
-export type ComponentCategory = "Actions" | "Feedback" | "Data display" | "Navigation" | "Typography";
+export type ComponentCategory =
+  | "Actions"
+  | "Feedback"
+  | "Data display"
+  | "Navigation"
+  | "Typography"
+  /* Pieces that are not a control and not type: the visually hidden utility and
+     the page atmosphere. They still have an API and still have to be documented. */
+  | "Foundations";
 
 export type ComponentDoc = {
   readonly name: string;

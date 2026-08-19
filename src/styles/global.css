@@ -38,7 +38,7 @@ a {
 
 code {
   font-family: var(--mono);
-  font-size: 0.9em;
+  font-size: var(--ds-text-code-inline);
 }
 
 button {

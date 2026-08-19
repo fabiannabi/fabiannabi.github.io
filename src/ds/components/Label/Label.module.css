@@ -1,0 +1,60 @@
+.label {
+  margin: 0;
+  font-family: var(--ds-font-mono);
+  font-weight: var(--ds-weight-regular);
+  /* Tight, because these are single-line markers. Body leading on a one-line
+     caption only adds a gap under it that nothing balances. */
+  line-height: var(--ds-leading-tight);
+}
+
+/* ---------- size ---------- */
+.xs {
+  font-size: var(--ds-text-xs);
+}
+.sm {
+  font-size: var(--ds-text-meta);
+  letter-spacing: var(--ds-tracking-wider);
+}
+.md {
+  font-size: var(--ds-text-cap);
+  letter-spacing: var(--ds-tracking-wide);
+}
+
+/* Mono set at reading size rather than as a caption: a marquee, a code-adjacent
+   list, anything read at arm's length. */
+.lead {
+  font-size: var(--ds-text-lead);
+  letter-spacing: var(--ds-tracking-normal);
+}
+
+/* ---------- case ---------- */
+/* Capitals lose their word shape, so they need the extra tracking to stay
+   readable. The looser step is reserved for the larger of the two caps sizes. */
+.caps {
+  text-transform: uppercase;
+  letter-spacing: var(--ds-tracking-caps);
+}
+
+.caps.sm {
+  letter-spacing: var(--ds-tracking-caps-loose);
+}
+
+/* ---------- tone ---------- */
+.default {
+  color: var(--ds-text);
+}
+.muted {
+  color: var(--ds-text-muted);
+}
+.subtle {
+  color: var(--ds-text-subtle);
+}
+.accent {
+  color: var(--ds-accent);
+}
+.danger {
+  color: var(--ds-danger);
+}
+.inherit {
+  color: inherit;
+}

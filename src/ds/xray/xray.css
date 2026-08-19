@@ -1,34 +1,229 @@
 /* ===========================================================
-   X-RAY — the blueprint overlay.
+   X-RAY — the blueprint.
+
+   Two halves, and the split matters.
+
+   The *colour* half is not here. It lives in ds/tokens/blueprint.css as a theme:
+   turning x-ray on remaps the semantic layer and the whole document repaints
+   without one component stylesheet knowing the mode exists. If that half needed
+   rules in this file, the token architecture would have been a story rather than
+   a fact.
+
+   What is here is the *drawing*: the ruled paper the page is printed on, the
+   developing pass, and the rules that reduce a rendered component to a named box
+   at the exact size it really occupies. The result is the page's composition —
+   which boxes the design system is responsible for and how they are stacked —
+   with the content taken out of the way, because content is what you look at
+   when you are not looking at structure.
 
    Global rather than a CSS Module because it targets an attribute contract
-   (data-ds-component) that any instrumented element in the document opts into,
-   including the ones on the cover and the profile.
+   (data-ds-component) that any instrumented element opts into, including the
+   ones on the cover and the profile.
 
    Nothing here renders until [data-xray] is on the root element, so the cost
    when the mode is off is zero: no wrapper nodes, no extra boxes, no layout.
    =========================================================== */
-:root {
-  /* Falls back to the page palette: the same overlay runs over the design
-     system, the cover and the profile, and each has its own accent. Both
-     resolutions are contrast-checked by scripts/audit-contrast.mjs. */
-  --xray-line: var(--ds-accent, var(--accent));
-  --xray-content-line: var(--ds-info, var(--dim));
-  --xray-label-bg: var(--ds-accent, var(--accent));
-  --xray-label-text: var(--ds-accent-contrast, var(--bg));
-  --xray-label-size: 10px;
+
+/* Registered so the corner marks can be *drawn* rather than faded in: a custom
+   property is a discrete value to the animation engine until it has a type.
+   With this, one interpolated length grows all eight marks out of the corners.
+   Where @property is unsupported the marks simply appear at full length. */
+@property --xray-tick {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
 }
 
-/* ---------- the border box ---------- */
+/* ---------- the paper ---------- */
+
+/* The field colour arrives through the token remap -- body already paints
+   var(--bg) / var(--ds-surface). Only the ruling is drawn here, on the body
+   rather than a fixed overlay node, so it sits under the content in the natural
+   stacking order and scrolls with the drawing like paper does. */
+[data-xray] body {
+  background-image:
+    linear-gradient(to right, var(--xray-grid-major) 0 1px, transparent 1px),
+    linear-gradient(to bottom, var(--xray-grid-major) 0 1px, transparent 1px),
+    linear-gradient(to right, var(--xray-grid) 0 1px, transparent 1px),
+    linear-gradient(to bottom, var(--xray-grid) 0 1px, transparent 1px);
+  background-size:
+    var(--xray-grid-step-major) var(--xray-grid-step-major),
+    var(--xray-grid-step-major) var(--xray-grid-step-major),
+    var(--xray-grid-step) var(--xray-grid-step),
+    var(--xray-grid-step) var(--xray-grid-step);
+  background-repeat: repeat;
+}
+
+/* The ruling resolves into place instead of blinking on. */
+[data-xray="on"] body {
+  animation: xray-paper-in var(--xray-develop) var(--ds-ease, ease) both;
+}
+
+[data-xray="leaving"] body {
+  animation: xray-paper-out var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
+}
+
+/* ---------- the developing pass ---------- */
+
+/* One traverse of the page, once, on entry: the print coming up in the tray.
+   A pseudo-element on the body rather than a node, because a node that exists
+   only to be decorative is a node a screen reader has to be told to ignore. */
+[data-xray="on"] body::before {
+  content: "";
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 9999;
+  height: 42vh;
+  background: linear-gradient(to bottom, transparent, var(--xray-sweep) 76%, var(--xray-accent));
+  opacity: 0.55;
+  pointer-events: none;
+  animation: xray-develop var(--xray-develop) var(--ds-ease, ease) both;
+}
+
+/* ---------- the mockup ---------- */
+
+/* The part that makes this a wireframe rather than an inspector. Every
+   instrumented component drops its fill, its border, its icons and its text,
+   keeps its box to the pixel, and is named in the middle of it.
+
+   Blanked with `color: transparent`, not `visibility: hidden`, and that is not
+   a stylistic choice: `visibility: hidden` takes content out of the
+   accessibility tree, so a mode built to reveal structure would have deleted
+   the page for anyone reading it with a screen reader. Transparent text is
+   invisible, still selectable, and still announced. The blueprint is a visual
+   mode and stays one. */
 
 [data-xray] [data-ds-component] {
+  --xray-tick: var(--xray-tick-length);
+
   position: relative;
-  outline: 1px dashed var(--xray-line);
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-decoration-color: transparent;
+
+  /* outline, not border: a border would change the box and the blueprint would
+     be measuring a layout it caused. The frame follows the component's radius. */
+  outline: 1px solid var(--xray-line);
   outline-offset: 0;
+
+  /* Registration marks, eight bars at the four corners of the border box. They
+     are background layers rather than a pseudo-element because both of this
+     element's pseudo-elements are already spoken for -- the name plate and the
+     content box -- and no component here paints a background image of its own. */
+  background-image:
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line)),
+    linear-gradient(var(--xray-line), var(--xray-line));
+  background-size:
+    var(--xray-tick) 1px,
+    1px var(--xray-tick),
+    var(--xray-tick) 1px,
+    1px var(--xray-tick),
+    var(--xray-tick) 1px,
+    1px var(--xray-tick),
+    var(--xray-tick) 1px,
+    1px var(--xray-tick);
+  background-position:
+    top left,
+    top left,
+    top right,
+    top right,
+    bottom left,
+    bottom left,
+    bottom right,
+    bottom right;
+  background-repeat: no-repeat;
+  /* Aligned to the frame, which is the border box, not the padding box. */
+  background-origin: border-box;
+  background-clip: border-box;
+}
+
+/* Everything inside, including the pseudo-elements components use for their own
+   decoration -- StackRail's diamond, Tabs' selected underline.
+
+   `!important` because a module is free to be more specific than this file can
+   predict (`.tabs .tab[aria-selected="true"]` already is), and a wireframe that
+   leaked one component's fill is a wireframe nobody trusts.
+
+   Instrumented descendants are excluded: a component nested in a component gets
+   its own frame and its own name plate, and blanking it here would erase them. */
+[data-xray]
+  :is([data-ds-component], [data-ds-region])
+  *:not([data-ds-component], [data-ds-region], [data-ds-chrome], [data-ds-chrome] *),
+[data-xray]
+  :is([data-ds-component], [data-ds-region])
+  *:not([data-ds-component], [data-ds-region], [data-ds-chrome], [data-ds-chrome] *)::before,
+[data-xray]
+  :is([data-ds-component], [data-ds-region])
+  *:not([data-ds-component], [data-ds-region], [data-ds-chrome], [data-ds-chrome] *)::after {
+  color: transparent !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  text-decoration-color: transparent !important;
+}
+
+/* A component that is not from the design system.
+
+   Same frame, because it is a real component with a real box, but no
+   registration marks and its name in the muted ink. The marks are the claim
+   that the system owns this box, and drawing them around RotatingHeadline or
+   StackRail would make the blueprint assert something false about its own
+   author's work — which is the one thing a drawing like this cannot do and
+   still be worth showing anyone. */
+[data-xray] [data-ds-component][data-ds-local] {
+  background-image: none;
+}
+
+[data-xray] [data-ds-component][data-ds-local]::before {
+  color: var(--xray-ink-muted);
+}
+
+/* An inline component is not drawn at all.
+
+   A <span> emphasising two words inside a paragraph is typography, not
+   structure, and a wireframe draws structure. It has no rectangle either: it
+   fragments across line boxes, so there is nothing to frame even if framing it
+   were right. Three attempts proved the point rather than solving it — an
+   outline came out as a skewed L across the break, an underline sat below text
+   the blueprint had already made invisible, and a filled wash was the only
+   solid in a drawing made of lines. Each looked like a fault because each was
+   answering the wrong question.
+
+   The paragraph is the box. What is emphasised inside it is content, and the
+   blueprint has already blanked the content. The stamp stays on the element, so
+   the component is still there to be found in the DOM; it is simply not
+   something this drawing has a mark for. */
+[data-xray] [data-ds-component][data-ds-flow="inline"] {
+  outline: none;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+[data-xray] [data-ds-component][data-ds-flow="inline"]::before,
+[data-xray] [data-ds-component][data-ds-flow="inline"]::after {
+  display: none;
+}
+
+/* Graphics have no text colour to make transparent. Restricted to leaves, so
+   this can never be the rule that hides an instrumented component. */
+[data-xray]
+  :is([data-ds-component], [data-ds-region])
+  :where(svg, img, video, canvas, picture):not([data-ds-chrome] *) {
+  opacity: 0;
 }
 
 [data-xray="on"] [data-ds-component] {
-  animation: xray-frame-in var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+  animation: xray-frame-in var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
   animation-delay: var(--xray-delay, 0ms);
 }
 
@@ -37,47 +232,112 @@
 }
 
 /* Focus must still win. A blueprint that hides the focus ring would be breaking
-   the exact criterion this page exists to demonstrate. */
+   the exact criterion this page exists to demonstrate — and on a wireframe it is
+   the only thing left telling you where you are. */
 [data-xray] [data-ds-component]:focus-visible {
-  outline: var(--ds-focus-width, 2px) solid var(--xray-line);
+  outline: var(--ds-focus-width, 2px) solid var(--xray-accent);
   outline-offset: var(--ds-focus-offset, 2px);
 }
 
-/* ---------- the label ---------- */
+/* ---------- the name plate ---------- */
 
+/* Inside the box, centred, in place of the content it replaced. Above the box
+   was the old behaviour and it was the wrong one: a label floating over a
+   component that still renders normally is a devtools badge, and what it
+   describes is already on screen.
+
+   The name and nothing else. The props and the measured padding stay on the
+   element as data attributes for anyone who wants them, but printing them here
+   — at rest or on hover — turns a drawing back into an inspector, which is the
+   thing this mode was rebuilt to stop being. */
 [data-xray] [data-ds-component]::before {
-  content: attr(data-ds-component) " " attr(data-ds-props) " " attr(data-ds-box);
+  content: attr(data-ds-component);
   position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* No vertical padding: the plate has to fit inside boxes as short as a caption
+     under a figure, and the flex centring already keeps it off the edges. */
+  padding-inline: var(--ds-space-2, 4px);
+  color: var(--xray-accent);
+  font-family: var(--ds-font-mono, monospace);
+  font-size: var(--ds-text-xs, 11px);
+  /* Reset, because a pseudo-element inherits the typography of the element it
+     hangs off. A Label with caps was printing its own annotation as "LABEL /
+     SIZE="XS" TONE="MUTED" CAPS" — the component's styling leaking into the
+     description of the component. */
+  font-style: normal;
+  font-variant: normal;
+  font-weight: var(--ds-weight-regular, 400);
+  text-transform: none;
+  text-decoration: none;
+  /* Nearly solid. The plate is always one word — the fit check guarantees the
+     width — so leading buys nothing here and costs the shortest boxes their
+     name: a caption under a figure is 12.6px tall, and at 1.2 an 11px plate
+     did not fit inside it. 1.1 still clears the descender on a name like
+     RotatingHeadline. */
+  line-height: var(--xray-plate-leading);
+  letter-spacing: var(--xray-plate-tracking);
+  text-align: center;
+  /* The one thing that makes a multi-line attr() label possible. */
+  white-space: pre-line;
+  pointer-events: none;
+}
+
+/* A component that contains another one is tagged *outside* its frame, the way a
+   region is. Centred, a Stat and the Display inside it printed on the same line;
+   moved to the inside top edge they still sat seven pixels apart, because the
+   child starts where the parent's padding ends. Outside is the only position
+   that cannot collide with what it contains.
+
+   Only a *framed* child counts. An inline one is marked with an underline and
+   has no plate to collide with, so a paragraph containing an emphasised span
+   would otherwise be tagged differently from the paragraph next to it that has
+   none — a difference the drawing implies is structural and is not.
+
+   The paper background masks the ruling behind the tag, which is what an
+   annotation on a real drawing does. */
+[data-xray] [data-ds-component]:has([data-ds-component]:not([data-ds-flow="inline"]))::before {
+  inset: auto;
   inset-block-end: 100%;
   inset-inline-start: 0;
-  z-index: 2;
-  margin-block-end: 2px;
-  padding: 1px 4px;
-  border-radius: 2px;
-  background: var(--xray-label-bg);
-  color: var(--xray-label-text);
-  font-family: var(--ds-font-mono, monospace);
-  font-size: var(--xray-label-size);
-  line-height: 1.5;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  pointer-events: none;
+  margin-block-end: 3px;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  padding-inline: 3px;
+  background: var(--xray-paper);
+  text-align: start;
+}
+
+/* Measured by XRayProvider: a box too small for its own name gets no plate at
+   all. A frame with nothing in it is still a frame; a frame labelled "od" is a
+   bug report. */
+[data-xray] [data-ds-component][data-ds-plate="off"]::before {
+  content: "";
 }
 
 [data-xray="on"] [data-ds-component]::before {
   animation: xray-label-in var(--ds-duration, 200ms) var(--ds-ease, ease) both;
-  animation-delay: var(--xray-delay, 0ms);
+  /* One beat after the frame it names: the box is drawn, then it is labelled.
+     Simultaneous reads as a tooltip. */
+  animation-delay: calc(var(--xray-delay, 0ms) + var(--ds-duration-fast, 120ms));
 }
 
 [data-xray="leaving"] [data-ds-component]::before {
   animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
 }
 
-/* ---------- the content box ---------- */
+/* ---------- the dimension box ---------- */
 
 /* Inset by the padding the browser actually computed, which XRayProvider reads
-   and writes back. The gap between this and the outline IS the padding — the
-   spacing is shown rather than annotated. */
+   and writes back. The gap between this and the frame IS the padding -- the
+   spacing is shown rather than annotated. Dashed against the frame's solid, so the two boxes are told
+   apart by line style and not only by position. */
 [data-xray] [data-ds-component]::after {
   content: "";
   position: absolute;
@@ -86,30 +346,127 @@
   inset-inline-start: var(--xray-pis, 0);
   inset-inline-end: var(--xray-pie, 0);
   z-index: 1;
-  outline: 1px dashed var(--xray-content-line);
-  opacity: 0.7;
+  outline: 1px dashed var(--xray-line-soft);
   pointer-events: none;
 }
 
 [data-xray="on"] [data-ds-component]::after {
   animation: xray-content-in var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
-  animation-delay: var(--xray-delay, 0ms);
+  animation-delay: calc(var(--xray-delay, 0ms) + var(--ds-duration-fast, 120ms));
 }
 
 [data-xray="leaving"] [data-ds-component]::after {
   animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
 }
 
+/* ---------- what the system does not own ---------- */
+
+/* Page markup that is not a design system component: the identity block, a
+   section, the colophon. Drawn as a dashed enclosure with a corner tag instead
+   of a solid frame with a centred plate, and that difference is the most useful
+   thing on the drawing -- solid is what the system is responsible for, dashed is
+   what has not earned a component yet. The ratio is visible at a glance, which
+   is more than a coverage number nobody recomputes will ever be.
+
+   Offset outward so the enclosure never sits on the frames it contains. */
+[data-xray] [data-ds-region] {
+  position: relative;
+  color: transparent;
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-decoration-color: transparent;
+  outline: 1px dashed var(--xray-line-soft);
+  outline-offset: var(--ds-space-3, 8px);
+}
+
+/* A legend, sitting on the enclosure's own top line the way a fieldset's does,
+   and at the inline end.
+
+   Both parts are collision fixes. Above the line it needed vertical space of its
+   own, and that space is the gap between one region and the next -- LINKS ended
+   up crowded against the bottom of STATS. On the line it costs no height at all.
+   At the inline end it cannot meet the tag of whatever component starts at the
+   region's beginning, which is the other thing it kept landing on. */
+[data-xray] [data-ds-region]::before {
+  content: attr(data-ds-region);
+  position: absolute;
+  /* The enclosure is offset outward by --ds-space-3, so this is its line. */
+  inset-block-start: calc(-1 * var(--ds-space-3, 8px));
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  z-index: 2;
+  padding-inline: var(--ds-space-3, 8px);
+  /* Masks the dashed line behind the word, which is what makes it read as a
+     legend rather than as text dropped on top of a border. */
+  background: var(--xray-paper);
+  color: var(--xray-ink-subtle);
+  font-family: var(--ds-font-mono, monospace);
+  font-size: var(--ds-text-xs, 11px);
+  line-height: var(--xray-legend-leading);
+  letter-spacing: var(--xray-legend-tracking);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Opacity only: xray-label-in translates, which would overwrite the transform
+   that centres the legend on its line. */
+[data-xray="on"] [data-ds-region],
+[data-xray="on"] [data-ds-region]::before {
+  animation: xray-fade-in var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
+}
+
+[data-xray="leaving"] [data-ds-region],
+[data-xray="leaving"] [data-ds-region]::before {
+  animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+}
+
 /* ---------- keyframes ---------- */
 
+@keyframes xray-paper-in {
+  from {
+    background-size:
+      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
+      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
+      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3),
+      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3);
+  }
+}
+
+@keyframes xray-paper-out {
+  to {
+    background-size:
+      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
+      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
+      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3),
+      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3);
+  }
+}
+
+@keyframes xray-develop {
+  from {
+    transform: translate3d(0, -42vh, 0);
+  }
+  to {
+    transform: translate3d(0, 100vh, 0);
+    opacity: 0;
+  }
+}
+
+/* The frame is drawn: the marks grow out of the corners while the outline
+   arrives. Registered --xray-tick is what makes that an interpolation rather
+   than a jump. */
 @keyframes xray-frame-in {
   from {
+    --xray-tick: 0px;
     outline-color: transparent;
   }
 }
 
 @keyframes xray-frame-out {
   to {
+    --xray-tick: 0px;
     outline-color: transparent;
   }
 }
@@ -117,7 +474,13 @@
 @keyframes xray-label-in {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(3px);
+  }
+}
+
+@keyframes xray-fade-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -130,20 +493,22 @@
 @keyframes xray-content-in {
   from {
     opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 0.7;
-    transform: scale(1);
+    transform: scale(0.97);
   }
 }
 
-/* The global reduced-motion rule collapses durations, but the staggered delay
-   would still hold each element invisible in turn. Zero it out. */
+/* The global reduced-motion rule collapses durations, but two things survive it:
+   a staggered delay would still hold each element invisible in turn, and a sweep
+   that crosses the viewport in 0.01ms is a flash -- the one kind of motion that
+   is a safety problem rather than a taste one. */
 @media (prefers-reduced-motion: reduce) {
   [data-xray] [data-ds-component],
   [data-xray] [data-ds-component]::before,
   [data-xray] [data-ds-component]::after {
     animation-delay: 0ms !important;
+  }
+
+  [data-xray] body::before {
+    display: none;
   }
 }

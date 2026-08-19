@@ -22,43 +22,33 @@
   border-color: var(--line);
 }
 
-.entry:hover .title {
+/* The heading is a Heading now, so this reaches for the element rather than a
+   class this file owns. An interaction state on a row belongs to the row. */
+.entry:hover h3 {
   color: var(--accent);
 }
 
+/* Layout from here down. Every typographic value in this file moved into the
+   components it belongs to when the audit ran. */
 .when {
-  font-family: var(--mono);
-  font-size: var(--fs-mono);
-  letter-spacing: var(--ls-wide);
-  color: var(--dimmer);
   padding-top: var(--s1);
   white-space: nowrap;
 }
 
-.title {
-  font-family: var(--display);
-  font-size: var(--fs-lead);
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -0.015em;
+.entry h3 {
   transition: color var(--dur-fast) var(--ease);
 }
 
-.org {
-  color: var(--dim);
-  font-weight: 500;
+.badgeSlot {
+  margin-inline-start: var(--s2);
 }
 
 .note {
-  font-family: var(--mono);
-  font-size: var(--fs-mono);
-  color: var(--accent);
   margin-top: var(--s1);
 }
 
 .description {
   margin-top: var(--s3);
-  font-size: 14.5px;
   max-width: 52ch;
 }
 
@@ -71,22 +61,4 @@
   list-style: none;
 }
 
-.tag {
-  font-family: var(--mono);
-  font-size: var(--fs-micro);
-  color: var(--accent);
-  background: var(--wash);
-  border-radius: var(--radius-pill);
-  padding: var(--s1) var(--s2);
-}
 
-.badge {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  color: var(--dimmer);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  padding: 2px var(--s2);
-  margin-inline-start: var(--s2);
-  white-space: nowrap;
-}

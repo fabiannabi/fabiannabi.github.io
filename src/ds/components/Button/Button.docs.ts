@@ -5,7 +5,7 @@ export const buttonDoc: ComponentDoc = {
   slug: "button",
   category: "Actions",
   summary:
-    "Triggers an action in the interface. If it navigates somewhere, it is a link, not a button.",
+    "Triggers an action, or — with href — navigates while still looking like one. Same box, same states, one component that cannot drift from itself.",
   anatomy: ["Optional leading icon", "Label", "Focus ring", "Busy indicator when loading"],
   props: [
     {
@@ -52,8 +52,15 @@ export const buttonDoc: ComponentDoc = {
       description:
         "Applies aria-disabled rather than the native attribute, so the control keeps its place in the tab order.",
     },
+    {
+      name: "href",
+      type: "string",
+      description:
+        "Renders an anchor instead of a button, styled identically. A call to action looks like a button and navigates; the site kept a separate ActionLink for exactly that, and the two drifted into different radii, border weights and hovers.",
+    },
   ],
   accessibility: [
+    "With href it is a real anchor, so it lands in the links list rather than the buttons list, and middle-click and copy-link work. Styling is not semantics.",
     "Renders a native <button> with type=\"button\" unless told otherwise, so it never submits a form by accident.",
     "Disabled state uses aria-disabled, not the disabled attribute: a natively disabled button drops out of the tab order, which strands a keyboard user who had just focused it.",
     "Icon-only buttons cannot be constructed without an accessible name.",

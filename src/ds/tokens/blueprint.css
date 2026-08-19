@@ -1,0 +1,139 @@
+/* ===========================================================
+   BLUEPRINT — the x-ray's palette, and the argument for the whole file.
+
+   X-ray is not an overlay painted on top of the page. It is a *theme*: a remap
+   of the semantic layer, exactly like [data-ds-theme="light"] is. Turning it on
+   swaps this file's values in and every component in the document redraws as
+   line art without one component stylesheet knowing the mode exists. That is
+   the claim the three token layers make, tested by the most violent restyle the
+   site can perform on itself.
+
+   It remaps two palettes, because the same overlay runs on all three pages: the
+   design system's --ds-* semantics, and the site's own six-token palette used by
+   the cover and the profile. Both collapse onto the same cyanotype.
+
+   Everything is monochrome on purpose. Alert's tones, the accent, the status
+   colours — all of it flattens to one ink. If a component still reads correctly
+   here, its meaning was never carried by hue (1.4.1), which is the thing every
+   design system claims and few can demonstrate on demand.
+
+   Audited by scripts/audit-contrast.mjs as a fifth palette. A blueprint that
+   fails contrast is not a blueprint, it is a decoration.
+   =========================================================== */
+:root {
+  /* The field. Cyanotype, not "dark blue": the paper a drawing is printed on. */
+  --xray-paper: #0b2545;
+  /* A panel drawn on the field — raised surfaces, code blocks, chip fills. */
+  --xray-paper-raised: #1a3250;
+
+  /* Ink, three weights. 13.84 / 8.86 / 7.38 against the paper. */
+  --xray-ink: #eaf4ff;
+  --xray-ink-muted: #a8c8e8;
+  --xray-ink-subtle: #8fb8de;
+
+  /* The drafting line: every component frame and every control edge. 7.38. */
+  --xray-line: #8fb8de;
+  /* Construction lines — the grid, the content box, decorative separators.
+     3.45, above the 1.4.11 floor even though nothing here depends on it. */
+  --xray-line-soft: #4d7ba8;
+
+  /* The one thing brighter than the ink: labels, focus, the developing sweep.
+     10.46 on the paper. */
+  --xray-accent: #8fe0ff;
+
+  /* Graph paper. Alpha over the field rather than a mixed literal, so the ruling
+     stays correct if the paper is ever retoned. */
+  --xray-grid: rgba(255, 255, 255, 0.045);
+  --xray-grid-major: rgba(255, 255, 255, 0.09);
+
+  /* The developing pass, a gradient's midpoint. */
+  --xray-sweep: rgba(143, 224, 255, 0.14);
+
+  /* Ruling. 12px is --ds-space-4; the major line lands every eight of them, so
+     component padding measures a whole number of squares. */
+  --xray-grid-step: 12px;
+  --xray-grid-step-major: 96px;
+
+  /* The drawing's own type. A name plate is one word and a legend is a marker,
+     so neither borrows a step from the product's scale. */
+  --xray-plate-leading: 1.1;
+  --xray-plate-tracking: 0.04em;
+  --xray-legend-leading: 1.2;
+  --xray-legend-tracking: 0.14em;
+
+  /* Length of the corner registration marks on a component frame. */
+  --xray-tick-length: 9px;
+
+  /* The developing pass. Longer than any component transition on purpose: this
+     is the page changing state, not a control responding. The exit is not this
+     value -- it is --ds-duration-slow, which XRayProvider also holds in JS. */
+  --xray-develop: 720ms;
+}
+
+/* ---------- the remap ----------
+
+   Qualified with :root rather than written as a bare [data-xray], which is what
+   XRayProvider actually sets. A bare attribute selector ties with [data-ds-theme]
+   and [data-theme] and would then be decided by import order -- which held in dev
+   and lost in the production bundle, where the token chunk is emitted ahead of
+   the page chunk. Beating them on specificity instead makes the remap true
+   wherever this file lands in the cascade. */
+
+:root[data-xray] {
+  /* Native form controls, scrollbars and the like follow the paper. */
+  color-scheme: dark;
+
+  /* ----- the design system's semantic layer ----- */
+
+  --ds-surface: var(--xray-paper);
+  --ds-surface-raised: var(--xray-paper-raised);
+  --ds-surface-overlay: var(--xray-paper-raised);
+
+  --ds-text: var(--xray-ink);
+  --ds-text-muted: var(--xray-ink-muted);
+  --ds-text-subtle: var(--xray-ink-subtle);
+
+  --ds-border: var(--xray-line-soft);
+  --ds-border-strong: var(--xray-line);
+
+  --ds-accent: var(--xray-accent);
+  --ds-accent-hover: var(--xray-ink);
+  --ds-accent-surface: var(--xray-paper-raised);
+  --ds-accent-border: var(--xray-line);
+  --ds-accent-contrast: var(--xray-paper);
+
+  /* Every status tone, flattened to one ink. What is left telling them apart is
+     Alert's glyph shape and its visually hidden tone word — which was always
+     the point of building it that way. */
+  --ds-info: var(--xray-ink);
+  --ds-info-surface: var(--xray-paper-raised);
+  --ds-info-border: var(--xray-line-soft);
+
+  --ds-success: var(--xray-ink);
+  --ds-success-surface: var(--xray-paper-raised);
+  --ds-success-border: var(--xray-line-soft);
+
+  --ds-warning: var(--xray-ink);
+  --ds-warning-surface: var(--xray-paper-raised);
+  --ds-warning-border: var(--xray-line-soft);
+
+  --ds-danger: var(--xray-ink);
+  --ds-danger-surface: var(--xray-paper-raised);
+  --ds-danger-border: var(--xray-line-soft);
+  --ds-danger-contrast: var(--xray-paper);
+
+  /* ----- the site's palette, for the cover and the profile ----- */
+
+  --bg: var(--xray-paper);
+  --bg-2: var(--xray-paper-raised);
+  --ink: var(--xray-ink);
+  --dim: var(--xray-ink-muted);
+  --dimmer: var(--xray-ink-subtle);
+  --line: var(--xray-line-soft);
+  --accent: var(--xray-accent);
+  --accent-line: var(--xray-line);
+
+  /* The cover's atmosphere. A blueprint has none — Glow reads this token and
+     paints nothing, without Glow being told the mode exists. */
+  --wash: transparent;
+}

@@ -26,11 +26,26 @@
   transition:
     background var(--ds-duration-fast) var(--ds-ease),
     border-color var(--ds-duration-fast) var(--ds-ease),
+    box-shadow var(--ds-duration-fast) var(--ds-ease),
+    transform var(--ds-duration-fast) var(--ds-ease),
     color var(--ds-duration-fast) var(--ds-ease);
 }
 
 .button:hover {
   background: var(--button-bg-hover);
+}
+
+/* A solid control lifts. It is the system's one piece of hover motion, so it is
+   the same everywhere rather than a flourish one page gives itself, and the
+   glow is the control's own fill so a re-theme carries it. */
+.solid:hover,
+.danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px var(--button-bg);
+}
+
+.button {
+  text-decoration: none;
 }
 
 .button:focus-visible {
@@ -75,6 +90,17 @@
   --button-border: var(--ds-danger);
 }
 
+/* The arrow points at where the control goes, so it moves that way on hover.
+   Three pixels: enough to read as intent, not enough to read as an animation. */
+.iconEnd {
+  display: inline-flex;
+  transition: transform var(--ds-duration-fast) var(--ds-ease);
+}
+
+.button:hover .iconEnd {
+  transform: translateX(3px);
+}
+
 /* ---------- sizes ---------- */
 
 .sm {
@@ -87,9 +113,12 @@
   min-height: var(--ds-control-md);
 }
 
+/* Radius scales with the control: a 6px corner on a 44px box reads as a
+   rectangle that forgot to be rounded. */
 .lg {
   min-height: var(--ds-control-lg);
   padding-inline: var(--ds-space-6);
+  border-radius: var(--ds-radius-lg);
   font-size: var(--ds-text-md);
 }
 

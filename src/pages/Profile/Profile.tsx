@@ -1,6 +1,6 @@
 import { Entry } from "../../components/Entry/Entry";
 import { SectionNav } from "../../components/SectionNav/SectionNav";
-import { StatusPill } from "../../components/StatusPill/StatusPill";
+import { Badge } from "../../ds/components/Badge/Badge";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import {
   about,
@@ -13,6 +13,12 @@ import {
   work,
   writing,
 } from "../../data/content";
+import { Display } from "../../ds/components/Display/Display";
+import { Heading } from "../../ds/components/Heading/Heading";
+import { Label } from "../../ds/components/Label/Label";
+import { Link } from "../../ds/components/Link/Link";
+import { Text } from "../../ds/components/Text/Text";
+import { region } from "../../ds/xray/instrument";
 import { XRayToggle } from "../../ds/xray/XRayToggle";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useTheme } from "../../hooks/useTheme";
@@ -23,11 +29,17 @@ const SECTION_IDS = sections.map((section) => section.id);
 /** Odd indices are the emphasised runs. See RichParagraph in data/content.ts. */
 function RichText({ parts }: { parts: readonly string[] }) {
   return (
-    <p>
+    <Text tone="muted">
       {parts.map((part, index) =>
-        index % 2 === 1 ? <strong key={index}>{part}</strong> : <span key={index}>{part}</span>,
+        index % 2 === 1 ? (
+          <Text key={index} as="span" size="inherit" weight="medium">
+            {part}
+          </Text>
+        ) : (
+          <span key={index}>{part}</span>
+        ),
       )}
-    </p>
+    </Text>
   );
 }
 
@@ -43,70 +55,109 @@ export function Profile() {
 
       <div className={styles.wrap}>
         <header className={styles.left}>
-          <div>
-            <p className={styles.back}>
-              <a href={links.cover}>← Back</a>
-            </p>
-            <h1 className={styles.name}>{identity.name}</h1>
-            <p className={styles.role}>{identity.role}</p>
-            <p className={styles.tagline}>{identity.tagline}</p>
-            <StatusPill>{identity.statusWithLocation}</StatusPill>
+          <div {...region("Identity")}>
+            <div className={styles.back}>
+              <Label size="sm" tone="subtle" as="div">
+                <Link href={links.cover} font="mono" tone="subtle">
+                  ← Back
+                </Link>
+              </Label>
+            </div>
+            <Heading level={1} size="display">
+              {identity.name}
+            </Heading>
+            <div className={styles.role}>
+              <Display size="xs">{identity.role}</Display>
+            </div>
+            <div className={styles.tagline}>
+              <Text size="lead" tone="muted">
+                {identity.tagline}
+              </Text>
+            </div>
+            <Badge tone="accent" shape="pill" dot>
+              {identity.statusWithLocation}
+            </Badge>
 
             <SectionNav sections={sections} activeId={activeId} />
           </div>
 
-          <div className={styles.social}>
-            <a className={styles.socialLink} href={links.linkedin}>
+          <div className={styles.social} {...region("Social")}>
+            <Link href={links.linkedin} font="mono" tone="muted">
               LinkedIn
-            </a>
-            <a className={styles.socialLink} href={links.github}>
+            </Link>
+            <Link href={links.github} font="mono" tone="muted">
               GitHub
-            </a>
-            <a className={styles.socialLink} href={links.email}>
+            </Link>
+            <Link href={links.email} font="mono" tone="muted">
               Email
-            </a>
-            <a className={styles.socialLink} href="/design/">
+            </Link>
+            <Link href="/design/" font="mono" tone="muted">
               Design system
-            </a>
+            </Link>
             <XRayToggle />
             <ThemeToggle theme={theme} onToggle={toggle} />
           </div>
         </header>
 
         <main className={styles.right}>
-          <section id="about" className={styles.about}>
-            <h2 className={styles.sectionHead}>About</h2>
+          <section id="about" className={styles.about} {...region("About")}>
+            <div className={styles.sectionHead}>
+              <Label size="sm" caps tone="default" as="h2">
+                About
+              </Label>
+            </div>
             {about.map((paragraph, index) => (
               <RichText key={index} parts={paragraph} />
             ))}
-            <p className={personalLine.isPlaceholder ? styles.todo : undefined} title={personalLine.hint}>
-              {personalLine.text}
-            </p>
+            <div
+              className={
+                personalLine.isPlaceholder ? `${styles.personal} ${styles.todo}` : styles.personal
+              }
+              title={personalLine.hint}
+            >
+              <Text tone="muted">{personalLine.text}</Text>
+            </div>
           </section>
 
-          <section id="experience">
-            <h2 className={styles.sectionHead}>Experience</h2>
+          <section id="experience" {...region("Experience")}>
+            <div className={styles.sectionHead}>
+              <Label size="sm" caps tone="default" as="h2">
+                Experience
+              </Label>
+            </div>
             {experience.map((entry) => (
               <Entry key={entry.title} entry={entry} />
             ))}
           </section>
 
-          <section id="work">
-            <h2 className={styles.sectionHead}>Selected work</h2>
+          <section id="work" {...region("Selected work")}>
+            <div className={styles.sectionHead}>
+              <Label size="sm" caps tone="default" as="h2">
+                Selected work
+              </Label>
+            </div>
             {work.map((entry) => (
               <Entry key={entry.title} entry={entry} />
             ))}
           </section>
 
-          <section id="writing">
-            <h2 className={styles.sectionHead}>Writing</h2>
+          <section id="writing" {...region("Writing")}>
+            <div className={styles.sectionHead}>
+              <Label size="sm" caps tone="default" as="h2">
+                Writing
+              </Label>
+            </div>
             {writing.map((entry) => (
               <Entry key={entry.title} entry={entry} />
             ))}
           </section>
 
-          <footer>
-            <p className={styles.colophon}>{colophon}</p>
+          <footer {...region("Colophon")}>
+            <div className={styles.colophon}>
+              <Text size="sm" tone="subtle">
+                {colophon}
+              </Text>
+            </div>
           </footer>
         </main>
       </div>

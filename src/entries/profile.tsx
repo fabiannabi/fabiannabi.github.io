@@ -6,8 +6,10 @@ import { Profile } from "../pages/Profile/Profile";
 import "../styles/tokens.base.css";
 import "../ds/tokens/scale.css";
 import "../styles/tokens.profile.css";
+import "../styles/tokens.ds-bridge.css";
 import "../styles/global.css";
 import "../styles/page-profile.css";
+import "../ds/tokens/blueprint.css";
 import "../ds/xray/xray.css";
 
 const container = document.getElementById("root");

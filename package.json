@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --port 4173 --strictPort",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -22,7 +22,8 @@
     "build:storybook": "storybook build -o dist/storybook",
     "audit:contrast": "node scripts/audit-contrast.mjs",
     "palette": "node scripts/generate-palette.mjs > src/ds/tokens/primitives.css",
-    "verify": "pnpm typecheck && pnpm audit:contrast && pnpm test && pnpm build"
+    "verify": "pnpm typecheck && pnpm audit:contrast && pnpm test && pnpm build && pnpm weigh",
+    "weigh": "node scripts/weigh-pages.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

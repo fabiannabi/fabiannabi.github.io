@@ -20,13 +20,38 @@ const round = (value: string): number => Math.round(parseFloat(value) || 0);
 const STAGGER_MS = 12;
 const STAGGER_CAP = 16;
 
+/* Roughly the width one monospace character occupies at --ds-text-xs, plus the
+   name plate's own padding. Used only to decide whether a name fits inside a
+   box; nothing measured is derived from it. */
+const CHAR_PX = 6.8;
+const PLATE_PADDING = 10;
+const PLATE_MIN_HEIGHT = 12;
+
 function measure(root: ParentNode): void {
   const elements = root.querySelectorAll<HTMLElement>("[data-ds-component]");
 
   elements.forEach((el, index) => {
     el.style.setProperty("--xray-delay", `${Math.min(index, STAGGER_CAP) * STAGGER_MS}ms`);
 
+    /* A name plate clipped to "od" reads as a rendering bug, not as a label, and
+       a wireframe full of them is worse than one with a few unnamed boxes. CSS
+       cannot ask how wide its own text is, so the decision is made here, where
+       the box has already been measured for the padding readout. */
+    const rect = el.getBoundingClientRect();
+    const name = el.dataset["dsComponent"] ?? "";
+    const fits =
+      rect.width >= name.length * CHAR_PX + PLATE_PADDING && rect.height >= PLATE_MIN_HEIGHT;
+    el.dataset["dsPlate"] = fits ? "on" : "off";
+
     const cs = getComputedStyle(el);
+
+    /* An inline component is typography, not structure, and the blueprint does
+       not draw it. It has no rectangle to draw either: a <span> marking two
+       words fragments across line boxes, so an outline comes out as a skewed L
+       and a centred plate lands on a shape that does not exist. Flagged here
+       because CSS cannot ask an element what its used display is. */
+    if (cs.display === "inline") el.dataset["dsFlow"] = "inline";
+    else delete el.dataset["dsFlow"];
 
     // Logical, because the profile mirrors for RTL and so does the blueprint.
     const blockStart = cs.getPropertyValue("padding-block-start") || cs.paddingTop;
@@ -41,8 +66,12 @@ function measure(root: ParentNode): void {
 
     const block = round(blockStart);
     const inline = round(inlineStart);
-    el.dataset["dsBox"] =
+    const box =
       block === 0 && inline === 0 ? "" : block === inline ? `${block}px` : `${block}px ${inline}px`;
+    /* Published, not printed. The blueprint draws the padding as the gap
+       between its two boxes; the number is here for anyone who wants to read it
+       off the element, and putting it on screen is what made this an inspector. */
+    el.dataset["dsBox"] = box;
   });
 }
 
@@ -52,6 +81,8 @@ function clearMeasurements(root: ParentNode): void {
       el.style.removeProperty(name);
     }
     delete el.dataset["dsBox"];
+    delete el.dataset["dsPlate"];
+    delete el.dataset["dsFlow"];
   }
 }
 

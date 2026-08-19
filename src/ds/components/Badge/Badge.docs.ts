@@ -20,8 +20,29 @@ export const badgeDoc: ComponentDoc = {
       required: true,
       description: "The label. Should read as a state: “Active”, “Overdue”, “Beta”.",
     },
+    {
+      name: "shape",
+      type: '"square" | "pill"',
+      default: '"square"',
+      description:
+        "pill is the standalone form: rounded, a control height so it lines up with a Toggle beside it, and room for a dot. The site kept a separate StatusPill for this, which was this component with a different radius.",
+    },
+    {
+      name: "dot",
+      type: "boolean",
+      default: "false",
+      description: "A leading dot. Decorative — the badge's own text carries the meaning.",
+    },
+    {
+      name: "pulse",
+      type: "boolean",
+      default: "false",
+      description:
+        "Animates the dot, and implies it. Stops under prefers-reduced-motion through the stylesheet, so a visitor who asked for stillness gets a static dot rather than a slower one.",
+    },
   ],
   accessibility: [
+    "The dot is aria-hidden. It decorates the words, and announcing it would add noise and no meaning.",
     "Renders as inert text, with no role and no tab stop — it is content, not a control.",
     "The label carries the meaning and the tone reinforces it. A badge whose text is a bare number, distinguished only by its colour, would fail SC 1.4.1.",
     "Every tone's text and tinted surface are checked as a pair, in both themes, by the contrast audit.",

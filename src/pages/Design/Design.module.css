@@ -61,17 +61,6 @@
   gap: var(--ds-space-2);
 }
 
-.back {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: var(--ds-target-min);
-  color: var(--ds-text-subtle);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  transition: color var(--ds-duration-fast) var(--ds-ease);
-}
 
 .back:hover {
   color: var(--ds-accent);
@@ -83,20 +72,21 @@
   flex-direction: column;
   gap: var(--ds-space-1);
   overflow-y: auto;
+  /* The default scrollbar is a chunky grey slab against this sidebar. Thin, in
+     the palette's own line colour, and it disappears where the platform already
+     overlays it. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-border-strong) transparent;
 }
 
 .navGroup {
   margin-block-start: var(--ds-space-5);
 }
 
-.navHead {
-  margin: 0 0 var(--ds-space-2);
-  color: var(--ds-text-subtle);
-  font-family: var(--ds-font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.navGroup > p {
+  margin-block-end: var(--ds-space-2);
 }
+
 
 .navLink {
   display: flex;
@@ -134,20 +124,6 @@
   flex-wrap: wrap;
 }
 
-.themeBtn {
-  inline-size: 34px;
-  block-size: 34px;
-  border: 1px solid var(--ds-border-strong);
-  border-radius: var(--ds-radius-md);
-  background: none;
-  color: var(--ds-text-muted);
-  font-size: 14px;
-  line-height: 1;
-  cursor: pointer;
-  transition:
-    color var(--ds-duration-fast) var(--ds-ease),
-    border-color var(--ds-duration-fast) var(--ds-ease);
-}
 
 .themeBtn:hover {
   border-color: var(--ds-accent);
@@ -186,13 +162,6 @@
   }
 }
 
-.principleHead {
-  margin: 0 0 var(--ds-space-3);
-  color: var(--ds-text);
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-text-sm);
-  font-weight: var(--ds-weight-bold);
-}
 
 .footer {
   padding-block: var(--ds-space-7);

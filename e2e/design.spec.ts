@@ -40,7 +40,10 @@ test.describe("Design system", () => {
   });
 
   test("keeps its own theme, independent of the profile", async ({ page }) => {
-    await page.getByRole("button", { name: /switch to light theme/i }).click();
+    // .first() is the sidebar's control: the page documents ThemeToggle further
+    // down, so there is a second button with the same accessible name, and that
+    // one drives its own local state rather than the page's theme.
+    await page.getByRole("button", { name: /switch to light theme/i }).first().click();
     await expect(page.locator("html")).toHaveAttribute("data-ds-theme", "light");
 
     await page.goto("/profile/");

@@ -32,7 +32,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "pnpm build && pnpm preview --port 4173 --strictPort",
+    /* The port is pinned in package.json so that a Lighthouse run and this
+       suite hit the same server. Repeating the flags here made it the second
+       source of truth for one number. */
+    command: "pnpm build && pnpm preview",
     url: "http://localhost:4173",
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

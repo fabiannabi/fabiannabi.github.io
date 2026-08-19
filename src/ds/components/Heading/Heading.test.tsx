@@ -1,11 +1,25 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { expectNoAxeViolations } from "../../../test/axe";
 import { Badge } from "../Badge/Badge";
 import { Code } from "../Code/Code";
 import { Text } from "../Text/Text";
 import { Heading } from "./Heading";
 
 describe("Heading", () => {
+  it("has no axe violations", async () => {
+    const { container } = render(
+      <>
+        <Heading level={1} size="hero">
+          I build the design systems other teams build on.
+        </Heading>
+        <Heading level={2}>Components you can take apart</Heading>
+      </>,
+    );
+
+    await expectNoAxeViolations(container);
+  });
+
   it("renders a real heading element at the given level", () => {
     render(<Heading level={3}>Section</Heading>);
 

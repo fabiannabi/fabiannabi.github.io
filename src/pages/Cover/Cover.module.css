@@ -1,3 +1,7 @@
+/* Layout only. Every typographic decision on this page belongs to the design
+   system — if a rule here sets a font-size, a colour or a tracking, the page has
+   started re-implementing the system instead of consuming it. */
+
 .wrap {
   position: relative;
   z-index: 1;
@@ -20,24 +24,9 @@
 
 .ident {
   margin-inline-end: auto;
-}
-
-.name {
-  font-family: var(--display);
-  font-weight: 800;
-  color: var(--ink);
-  margin: 0;
-  font-size: clamp(22px, 2.6vw, 28px);
-  letter-spacing: -0.03em;
-  line-height: var(--lh-tight);
-}
-
-.role {
-  margin: var(--s1) 0 0;
-  font-family: var(--mono);
-  font-size: var(--fs-small);
-  letter-spacing: 0.05em;
-  color: var(--dim);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
 }
 
 /* ---------- centre ---------- */
@@ -50,15 +39,7 @@
 }
 
 .sub {
-  margin: var(--s6) 0 0;
-  font-size: clamp(15px, 1.7vw, 18px);
-  max-width: 46ch;
-  line-height: 1.6;
-}
-
-.sub b {
-  color: var(--ink);
-  font-weight: 500;
+  margin-top: var(--s6);
 }
 
 .stats {
@@ -68,24 +49,6 @@
   margin: var(--s7) 0 0;
   padding: 0;
   list-style: none;
-}
-
-.stat b {
-  display: block;
-  font-family: var(--display);
-  font-weight: 800;
-  color: var(--ink);
-  font-size: clamp(20px, 2.4vw, 28px);
-  letter-spacing: -0.025em;
-  line-height: var(--lh-tight);
-}
-
-.stat span {
-  font-family: var(--mono);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--dim);
 }
 
 .cta {

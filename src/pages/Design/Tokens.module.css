@@ -19,15 +19,16 @@
   }
 }
 
-.groupHead {
-  margin: 0 0 var(--ds-space-4);
-  color: var(--ds-text-subtle);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  font-weight: var(--ds-weight-medium);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+/* Same as ComponentSection: the head is a Label, so its spacing is set on the
+   element from here and its typography comes from the component. */
+.section h3 {
+  margin-block-end: var(--ds-space-4);
 }
+
+.section h3:not(:first-of-type) {
+  margin-block-start: var(--ds-space-8);
+}
+
 
 .swatches,
 .space {
@@ -61,8 +62,3 @@
   border-radius: 1px;
 }
 
-.token {
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  color: var(--ds-text-muted);
-}
