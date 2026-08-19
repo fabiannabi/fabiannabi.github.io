@@ -55,7 +55,7 @@ export const coverSub = {
   emphasis:
     "Components, accessibility, localization and the telemetry that proves any of it is being used",
   tail:
-    "— shipped as semver packages from a pnpm monorepo, with AI doing the mechanical half and none of the deciding.",
+    "— shipped as semver packages from a pnpm monorepo, with AI as an accelerator, never an authority.",
 } as const;
 
 /**
@@ -179,7 +179,7 @@ export const experience: readonly Entry[] = [
     when: "2023 — Present",
     title: "Senior User Interface Engineer",
     org: "Salesloft",
-    note: "Associate to Engineer in 14 months, then Senior",
+    note: "Associate to Engineer in 14 months, Senior in August 2026",
     description:
       "Build and maintain the components the whole product is assembled from, in a pnpm monorepo consumed as versioned packages. Own the pipelines around them — translation workflows, component telemetry, accessibility in CI — and review feature work across teams.",
     tags: [

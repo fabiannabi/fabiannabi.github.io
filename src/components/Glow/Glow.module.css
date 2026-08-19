@@ -20,17 +20,20 @@
   }
 }
 
-/* A filtered ancestor becomes the containing block for its fixed descendants,
-   so while a vision simulation runs this layer stops being viewport-sized and
-   starts being document-sized. At inset: -30% with a drift transform on top,
-   that grew the cover by 330px and put a scrollbar on the page the moment
-   anyone pressed a chip.
+/* The atmosphere sits out the simulation.
 
-   Pinned to the document and stilled for the duration. The simulation is a
-   question about colour; the drift is not part of it, and a wash that does not
-   move is still a wash. */
+   A filtered ancestor becomes the containing block for its fixed descendants,
+   so while a vision filter runs this layer stops being viewport-sized and
+   starts being document-sized. Pinning it with inset: 0 looked like the fix and
+   was not: for one frame the browser still resolves the base rule's -30%
+   against the new basis, the layer reaches 308px past the bottom, and an
+   absolutely positioned box that overflows grows the document where a fixed one
+   does not. The scrollbar flash was visible and measurable.
+
+   Hidden instead, because the alternative is a fix that is true one frame late.
+   It costs nothing that matters: this is a decorative wash with no content, and
+   simulating the colour of an atmosphere answers no part of the question the
+   simulator is asking. */
 [data-vision] .glow {
-  position: absolute;
-  inset: 0;
-  animation: none;
+  display: none;
 }
