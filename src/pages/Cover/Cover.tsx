@@ -9,6 +9,7 @@ import { Label } from "../../ds/components/Label/Label";
 import { Stat } from "../../components/Stat/Stat";
 import { Text } from "../../ds/components/Text/Text";
 import { region } from "../../ds/xray/instrument";
+import { VisionToggle } from "../../ds/a11y/VisionToggle";
 import { XRayToggle } from "../../ds/xray/XRayToggle";
 import styles from "./Cover.module.css";
 
@@ -43,7 +44,10 @@ export function Cover() {
           <Badge tone="accent" shape="pill" pulse>
             {identity.status}
           </Badge>
-          <XRayToggle />
+          <div className={styles.instruments}>
+            <XRayToggle />
+            <VisionToggle />
+          </div>
         </header>
 
         <main className={styles.mid}>

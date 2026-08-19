@@ -142,6 +142,15 @@ pretend otherwise.
 
    Every one of them is measured by the contrast audit. Eight palettes, and a
    new remap means a new section in `scripts/audit-contrast.mjs`.
+
+   **A theme adds primitives, never semantics.** `--ds-surface` is called
+   `--ds-surface` in every theme; what changes underneath is which primitive it
+   points at. The blueprint owns `--xray-paper` and `--xray-line`, and remaps
+   `--ds-surface` and `--ds-border-strong` onto them — it does not introduce a
+   `--ds-blueprint-surface` for components to learn about. `xray.css` broke this
+   for a while by reading `--xray-line` directly, which tied the drawing to one
+   particular theme; it reads the semantic layer now, so the x-ray would draw
+   correctly under a theme nobody has written yet.
 3. **No raw colour outside the token files.** Enforced:
    `src/__tests__/conventions.test.ts` greps every CSS Module for hex and
    `rgb()` literals and fails on a match.
@@ -199,6 +208,31 @@ Each component ships four files: the implementation, its CSS Module, a
 page and the props tables render from the `.docs.ts`; Storybook generates its own
 tables from the TypeScript via react-docgen. **Add a component to
 `src/ds/docs/registry.ts` or it will not appear on the docs page.**
+
+### Simulating colour vision deficiency
+
+`src/ds/a11y/` renders the page as a dichromat sees it — protanopia,
+deuteranopia, tritanopia — from the Machado, Oliveira & Fernandes (2009)
+matrices at severity 1.0. The control is on the cover, next to the x-ray.
+
+- **`color-interpolation-filters="linearRGB"` is not optional.** The matrices are
+  defined on linear light and `feColorMatrix` defaults to sRGB. Applying them to
+  gamma-encoded values produces a picture that looks plausible and is not the
+  simulation — worse than no simulation, because it invites a decision. There is
+  a unit test and an e2e test on the attribute.
+- The filter goes on `body`, not `:root`. A filtered element becomes the
+  containing block for its fixed-position descendants, and the root is where
+  browsers disagree; `Glow` and the blueprint's developing sweep are both fixed.
+- **The same matrices gate the build.** `audit-contrast.mjs` re-measures all 166
+  non-advisory pairs through each deficiency. WCAG does not ask for this — 1.4.3
+  is a luminance rule and simulation shifts luminance — but a pair that cannot
+  survive deuteranomaly is a palette problem worth knowing about. All three
+  currently pass, tightest 3.89 against a floor of 3.
+- **It is an instrument, not an accommodation.** Nobody with protanopia needs a
+  button to turn protanopia on. The button exists so the person choosing the
+  colours has to look. What actually serves that reader is the page never
+  resting meaning on hue — which is why the rotating slot carries an underline,
+  and why there is an e2e test asserting the underline survives the simulation.
 
 ### The x-ray
 

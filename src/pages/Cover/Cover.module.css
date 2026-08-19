@@ -22,6 +22,16 @@
   flex-wrap: wrap;
 }
 
+/* The two instruments the page ships with. They wrap together rather than
+   separately, so the blueprint switch never ends up on its own line above a row
+   of vision chips. */
+.instruments {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+}
+
 .ident {
   margin-inline-end: auto;
   display: flex;

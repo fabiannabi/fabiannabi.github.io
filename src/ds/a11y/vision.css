@@ -1,0 +1,28 @@
+/* ===========================================================
+   VISION SIMULATION
+
+   One rule per deficiency, and nothing else. The filters themselves are defined
+   in VisionProvider, in linear light.
+
+   The filter goes on <body>, not on :root. A filtered element becomes the
+   containing block for its fixed-position descendants, and the root is the one
+   place where browsers disagree about whether that applies — putting it on the
+   body makes the behaviour the same everywhere, and the two fixed layers on this
+   site (Glow and the blueprint's developing sweep) are then contained
+   predictably rather than by accident.
+
+   Nothing renders until [data-vision] is on the root element, so the cost while
+   it is off is zero.
+   =========================================================== */
+
+[data-vision="protanopia"] body {
+  filter: url("#ds-protanopia");
+}
+
+[data-vision="deuteranopia"] body {
+  filter: url("#ds-deuteranopia");
+}
+
+[data-vision="tritanopia"] body {
+  filter: url("#ds-tritanopia");
+}

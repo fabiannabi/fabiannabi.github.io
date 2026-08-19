@@ -20,6 +20,15 @@
    (data-ds-component) that any instrumented element opts into, including the
    ones on the cover and the profile.
 
+   It reads the semantic layer and nothing below it, the same rule every
+   component follows. It used to reach straight for --xray-line and --xray-paper,
+   which made the drawing depend on one particular theme: the frames are
+   --ds-border-strong and the plate is --ds-accent, so the blueprint remaps them
+   like any other theme and the x-ray would draw correctly under a theme nobody
+   has written yet. The only exception is the ruling and the developing pass,
+   which have no product equivalent to be the semantic of — a page has no
+   concept of graph paper.
+
    Nothing here renders until [data-xray] is on the root element, so the cost
    when the mode is off is zero: no wrapper nodes, no extra boxes, no layout.
    =========================================================== */
@@ -75,7 +84,7 @@
   inset-inline: 0;
   z-index: 9999;
   height: 42vh;
-  background: linear-gradient(to bottom, transparent, var(--xray-sweep) 76%, var(--xray-accent));
+  background: linear-gradient(to bottom, transparent, var(--xray-sweep) 76%, var(--ds-accent));
   opacity: 0.55;
   pointer-events: none;
   animation: xray-develop var(--xray-develop) var(--ds-ease, ease) both;
@@ -106,7 +115,7 @@
 
   /* outline, not border: a border would change the box and the blueprint would
      be measuring a layout it caused. The frame follows the component's radius. */
-  outline: 1px solid var(--xray-line);
+  outline: 1px solid var(--ds-border-strong);
   outline-offset: 0;
 
   /* Registration marks, eight bars at the four corners of the border box. They
@@ -114,14 +123,14 @@
      element's pseudo-elements are already spoken for -- the name plate and the
      content box -- and no component here paints a background image of its own. */
   background-image:
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line)),
-    linear-gradient(var(--xray-line), var(--xray-line));
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong)),
+    linear-gradient(var(--ds-border-strong), var(--ds-border-strong));
   background-size:
     var(--xray-tick) 1px,
     1px var(--xray-tick),
@@ -184,7 +193,7 @@
 }
 
 [data-xray] [data-ds-component][data-ds-local]::before {
-  color: var(--xray-ink-muted);
+  color: var(--ds-text-muted);
 }
 
 /* An inline component is not drawn at all.
@@ -235,7 +244,7 @@
    the exact criterion this page exists to demonstrate — and on a wireframe it is
    the only thing left telling you where you are. */
 [data-xray] [data-ds-component]:focus-visible {
-  outline: var(--ds-focus-width, 2px) solid var(--xray-accent);
+  outline: var(--ds-focus-width, 2px) solid var(--ds-accent);
   outline-offset: var(--ds-focus-offset, 2px);
 }
 
@@ -263,7 +272,7 @@
   /* No vertical padding: the plate has to fit inside boxes as short as a caption
      under a figure, and the flex centring already keeps it off the edges. */
   padding-inline: var(--ds-space-2, 4px);
-  color: var(--xray-accent);
+  color: var(--ds-accent);
   font-family: var(--ds-font-mono, monospace);
   font-size: var(--ds-text-xs, 11px);
   /* Reset, because a pseudo-element inherits the typography of the element it
@@ -310,7 +319,7 @@
   width: max-content;
   max-width: 100%;
   padding-inline: 3px;
-  background: var(--xray-paper);
+  background: var(--ds-surface);
   text-align: start;
 }
 
@@ -346,7 +355,7 @@
   inset-inline-start: var(--xray-pis, 0);
   inset-inline-end: var(--xray-pie, 0);
   z-index: 1;
-  outline: 1px dashed var(--xray-line-soft);
+  outline: 1px dashed var(--ds-border);
   pointer-events: none;
 }
 
@@ -376,7 +385,7 @@
   border-color: transparent;
   box-shadow: none;
   text-decoration-color: transparent;
-  outline: 1px dashed var(--xray-line-soft);
+  outline: 1px dashed var(--ds-border);
   outline-offset: var(--ds-space-3, 8px);
 }
 
@@ -399,8 +408,8 @@
   padding-inline: var(--ds-space-3, 8px);
   /* Masks the dashed line behind the word, which is what makes it read as a
      legend rather than as text dropped on top of a border. */
-  background: var(--xray-paper);
-  color: var(--xray-ink-subtle);
+  background: var(--ds-surface);
+  color: var(--ds-text-subtle);
   font-family: var(--ds-font-mono, monospace);
   font-size: var(--ds-text-xs, 11px);
   line-height: var(--xray-legend-leading);

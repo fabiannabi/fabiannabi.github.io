@@ -92,6 +92,60 @@ const assertAscii = (css, file) => {
   return 1;
 };
 
+/* ------------------------------------------------- colour vision deficiency -- */
+
+/**
+ * Machado, Oliveira & Fernandes (2009), "A Physiologically-based Model for
+ * Simulation of Color Vision Deficiency", IEEE TVCG 15(6), severity 1.0.
+ *
+ * https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html
+ *
+ * The matrices operate on **linear** RGB. Applying them to gamma-encoded sRGB is
+ * the standard way this gets implemented wrong — it produces a picture that
+ * looks plausible and is not the simulation. The same trap exists in SVG, where
+ * feColorMatrix defaults to sRGB and needs color-interpolation-filters set.
+ *
+ * Around 8% of men and 0.5% of women have some form of CVD; deuteranomaly is
+ * the most common and tritanopia is rare. All three are simulated here because
+ * the cost of checking is a loop.
+ */
+const CVD = {
+  protanopia: [
+    [0.152286, 1.052583, -0.204868],
+    [0.114503, 0.786281, 0.099216],
+    [-0.003882, -0.048116, 1.051998],
+  ],
+  deuteranopia: [
+    [0.367322, 0.860646, -0.227968],
+    [0.280085, 0.672501, 0.047413],
+    [-0.01182, 0.04294, 0.968881],
+  ],
+  tritanopia: [
+    [1.255528, -0.076749, -0.178779],
+    [-0.078411, 0.930809, 0.147602],
+    [0.004733, 0.691367, 0.3039],
+  ],
+};
+
+const toLinear = (v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+
+/** An sRGB triple as a dichromat sees it, returned in linear light. */
+const simulateLinear = (rgb, matrix) => {
+  const [r, g, b] = rgb.map((c) => toLinear(c / 255));
+  return matrix.map((row) => clamp01(row[0] * r + row[1] * g + row[2] * b));
+};
+
+const luminanceOfLinear = ([r, g, b]) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+/** The contrast between two colours as one form of CVD renders them. */
+const ratioUnder = (fg, bg, matrix) => {
+  const a = luminanceOfLinear(simulateLinear(fg, matrix));
+  const b = luminanceOfLinear(simulateLinear(bg, matrix));
+  const [hi, lo] = a > b ? [a, b] : [b, a];
+  return (hi + 0.05) / (lo + 0.05);
+};
+
 /* ----------------------------------------------------------------- report -- */
 
 let failures = 0;
@@ -105,10 +159,15 @@ const report = (name, value, need, advisory = false) => {
   );
 };
 
-const check = (table, [name, fgTok, bgTok, need, advisory]) => {
+/* Every pair the audit measured, kept so the CVD pass can re-measure exactly the
+   same set rather than a hand-maintained copy of it. */
+const measured = [];
+
+const check = (table, [name, fgTok, bgTok, need, advisory], palette = "") => {
   const fg = resolve(table[fgTok], table);
   const bg = resolve(table[bgTok], table);
   if (!fg || !bg) return;
+  if (!advisory) measured.push({ palette, name, fg: hex2rgb(fg), bg: hex2rgb(bg), need });
   report(name, ratio(hex2rgb(fg), hex2rgb(bg)), need, advisory);
 };
 
@@ -150,7 +209,7 @@ for (const { file, label, themes } of siteTargets) {
     const t = { ...base, ...tokensIn(css, selector) };
     console.log(`\n${label} · ${themeName}`);
 
-    for (const entry of SITE_CHECKS) check(t, entry);
+    for (const entry of SITE_CHECKS) check(t, entry, `${label} ${themeName}`);
 
     // Solid button: the page paints --bg-coloured text on an --accent fill.
     report("primary button text", ratio(hex2rgb(t["--bg"]), hex2rgb(t["--accent"])), AA_TEXT);
@@ -242,7 +301,7 @@ for (const [selector, themeName] of [
 ]) {
   const t = { ...primitives, ...tokensIn(semanticCss, selector) };
   console.log(`\ndesign system · ${themeName}`);
-  for (const entry of DS_CHECKS) check(t, entry);
+  for (const entry of DS_CHECKS) check(t, entry, `design system ${themeName}`);
 }
 
 /* ============================================== the site, through the DS == */
@@ -279,7 +338,7 @@ for (const { file, label, themes } of siteTargets) {
   for (const [selector, themeName] of themes) {
     const t = flattenWash({ ...base, ...tokensIn(css, selector), ...bridge });
     console.log(`\n${label} · ${themeName} · through the design system`);
-    for (const entry of DS_CHECKS) check(t, entry);
+    for (const entry of DS_CHECKS) check(t, entry, `${label} ${themeName} via ds`);
   }
 }
 
@@ -302,8 +361,8 @@ failures += assertAscii(blueprintCss, "src/ds/tokens/blueprint.css");
   const t = { ...tokensIn(blueprintCss, ":root"), ...tokensIn(blueprintCss, "\\[data-xray\\]") };
   console.log("\nblueprint · x-ray");
 
-  for (const entry of DS_CHECKS) check(t, entry);
-  for (const entry of SITE_CHECKS) check(t, entry);
+  for (const entry of DS_CHECKS) check(t, entry, "blueprint");
+  for (const entry of SITE_CHECKS) check(t, entry, "blueprint");
 
   /* The annotation prints in --xray-accent on --xray-paper, and the frames and
      registration marks are drawn in --xray-line. Those are rules in xray.css
@@ -311,6 +370,43 @@ failures += assertAscii(blueprintCss, "src/ds/tokens/blueprint.css");
   check(t, ["component annotation", "--xray-accent", "--xray-paper", AA_TEXT]);
   check(t, ["component frame", "--xray-line", "--xray-paper", AA_UI]);
   check(t, ["dimension box (decorative)", "--xray-line-soft", "--xray-paper", AA_UI, ADVISORY]);
+}
+
+/* ============================================ colour vision deficiency == */
+
+/**
+ * Every pair the audit just measured, re-measured as a dichromat sees it.
+ *
+ * WCAG does not ask for this. 1.4.3 is a luminance rule and simulation shifts
+ * luminance, so a pair can pass normally and fail here — which is worth knowing
+ * before someone with deuteranomaly reads the page, and is exactly the kind of
+ * thing a site claiming this expertise should have looked at rather than
+ * assumed.
+ *
+ * It gates the build. If a pair cannot survive the most common form of colour
+ * vision deficiency, the palette is the thing that is wrong.
+ */
+console.log("\ncolour vision deficiency · Machado et al. 2009, severity 1.0");
+
+for (const [type, matrix] of Object.entries(CVD)) {
+  const under = measured.map((pair) => ({
+    ...pair,
+    value: ratioUnder(pair.fg, pair.bg, matrix),
+  }));
+  const failed = under.filter((pair) => pair.value < pair.need);
+  const worst = [...under].sort((a, b) => a.value - b.value)[0];
+
+  failures += failed.length;
+  console.log(
+    `  ${type.padEnd(14)}${String(measured.length).padStart(4)} pairs   ` +
+      `${failed.length === 0 ? "all pass" : `${failed.length} FAIL`}` +
+      `   tightest ${worst.value.toFixed(2)}  (${worst.palette} · ${worst.name})`,
+  );
+  for (const pair of failed) {
+    console.log(
+      `      FAIL ${pair.palette} · ${pair.name}: ${pair.value.toFixed(2)}, need ${pair.need.toFixed(1)}`,
+    );
+  }
 }
 
 console.log(`\n${failures === 0 ? "PASS" : "FAIL"} — ${failures} failing pair(s)\n`);

@@ -37,8 +37,15 @@ export const chipDoc: ComponentDoc = {
       default: "false",
       description: "Applied as aria-disabled so the chip stays reachable.",
     },
+    {
+      name: "description",
+      type: "string",
+      description:
+        "Extra context appended to the accessible name, for a chip whose visible label is an abbreviation. Appended, never substituted.",
+    },
   ],
   accessibility: [
+    "`description` is appended to the visible label rather than replacing it. An aria-label that discards the visible text breaks SC 2.5.3: someone using voice control says the words they can see, and the control has to answer to them.",
     "Selection and removal are two sibling buttons, never nested. A button inside a button is invalid HTML and browsers resolve it by dropping one — usually the one being pressed.",
     "The remove button's name includes the chip's label, so a row of ten chips does not produce ten identical “Remove” entries in a screen reader's element list.",
     "Selection is exposed with aria-pressed, and shown with a border and background change rather than colour alone.",

@@ -17,9 +17,21 @@ test.describe("Cover", () => {
   });
 
   test("reaches every action by keyboard, in reading order", async ({ page }) => {
-    // The x-ray toggle sits with the identity block, so it comes first — DOM
-    // order is tab order, and this test exists to notice when that changes.
-    const expected = ["X-ray", "Read the full profile", "Design system", "Email", "LinkedIn", "GitHub"];
+    // The two instruments sit with the identity block, so they come before the
+    // actions — DOM order is tab order, and this test exists to notice when that
+    // changes. It did, when the vision simulator landed, which is the point.
+    const expected = [
+      "X-ray",
+      "Normal",
+      "Protan",
+      "Deutan",
+      "Tritan",
+      "Read the full profile",
+      "Design system",
+      "Email",
+      "LinkedIn",
+      "GitHub",
+    ];
 
     for (const name of expected) {
       await page.keyboard.press("Tab");

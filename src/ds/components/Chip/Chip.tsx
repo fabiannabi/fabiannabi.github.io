@@ -8,6 +8,15 @@ type Props = {
   /** Makes the chip a toggle. Without it the chip is static content. */
   onSelect?: () => void;
   selected?: boolean;
+  /**
+   * Extra context appended to the accessible name, for a chip whose visible
+   * label is an abbreviation: "Deutan" becomes "Deutan, 1 in 16 men".
+   *
+   * Appended rather than replacing, by construction. An aria-label that
+   * discards the visible text breaks SC 2.5.3 — someone using voice control
+   * says what they can read, and the control has to answer to it.
+   */
+  description?: string;
   /** Renders a separate remove button. Never nested inside the toggle. */
   onRemove?: () => void;
   disabled?: boolean;
@@ -18,7 +27,14 @@ type Props = {
  * other. A nested button is invalid HTML, and browsers resolve it by dropping
  * one — usually the one the user was trying to press.
  */
-export function Chip({ label, onSelect, selected = false, onRemove, disabled = false }: Props) {
+export function Chip({
+  label,
+  onSelect,
+  selected = false,
+  description,
+  onRemove,
+  disabled = false,
+}: Props) {
   const interactive = Boolean(onSelect);
 
   return (
@@ -35,6 +51,7 @@ export function Chip({ label, onSelect, selected = false, onRemove, disabled = f
           type="button"
           className={styles.main}
           aria-pressed={selected}
+          aria-label={description ? `${label}, ${description}` : undefined}
           aria-disabled={disabled || undefined}
           onClick={() => {
             if (!disabled) onSelect?.();

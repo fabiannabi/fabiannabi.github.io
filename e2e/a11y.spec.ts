@@ -68,6 +68,47 @@ for (const [path, label] of PAGES) {
   }
 }
 
+test("simulates colour vision deficiency in linear light", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("button", { name: /^Deutan/ }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-vision", "deuteranopia");
+
+  // The matrices are defined on linear RGB and feColorMatrix defaults to sRGB.
+  // Applying them to gamma-encoded values produces a picture that looks
+  // plausible and is not the simulation.
+  const space = await page.evaluate(
+    () =>
+      document
+        .querySelector("filter#ds-deuteranopia")
+        ?.getAttribute("color-interpolation-filters") ?? null,
+  );
+  expect(space).toBe("linearRGB");
+
+  const applied = await page.evaluate(() => getComputedStyle(document.body).filter);
+  expect(applied).toContain("ds-deuteranopia");
+
+  await page.getByRole("button", { name: "Normal" }).click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-vision", /.*/);
+  expect(await page.evaluate(() => getComputedStyle(document.body).filter)).toBe("none");
+});
+
+test("the claim survives losing the accent hue", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /^Deutan/ }).click();
+
+  // The rotating slot is the one place the cover leans on colour, and it carries
+  // an underline for exactly this reason (SC 1.4.1). Simulating the most common
+  // deficiency must not take the emphasis away with the hue.
+  const rule = await page.evaluate(() => {
+    const slot = document.querySelector("[data-ds-component='RotatingHeadline'] span span");
+    return slot ? getComputedStyle(slot, "::after").width : null;
+  });
+
+  expect(rule).not.toBe("0px");
+  expect(rule).not.toBeNull();
+});
+
 test("every interactive target clears 24x24 CSS px", async ({ page }) => {
   await page.goto("/");
 
