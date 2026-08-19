@@ -11,10 +11,10 @@
 
 export const identity = {
   name: "Fabián Alcalá",
-  role: "User Interface Engineer",
+  role: "Senior User Interface Engineer",
   company: "Salesloft",
   location: "Guadalajara, MX",
-  coverRole: "User Interface Engineer · Salesloft · Guadalajara, MX",
+  coverRole: "Senior User Interface Engineer · Salesloft · Guadalajara, MX",
   status: "Open to lead roles",
   statusWithLocation: "Open to lead roles · Guadalajara, MX",
   tagline: "I build design systems other teams actually adopt — accessible, localized, documented.",
@@ -54,7 +54,8 @@ export const coverSub = {
   lead: "Six years in software.",
   emphasis:
     "Components, accessibility, localization and the telemetry that proves any of it is being used",
-  tail: "— shipped as semver packages from a pnpm monorepo, built with AI in the loop and verified without it.",
+  tail:
+    "— shipped as semver packages from a pnpm monorepo, with AI doing the mechanical half and none of the deciding.",
 } as const;
 
 /**
@@ -136,7 +137,7 @@ export const about: readonly RichParagraph[] = [
   [
     "I work on the layer other teams build on: ",
     "design systems, accessibility, and the platform underneath them.",
-    " Currently a User Interface Engineer at Salesloft, where our design system lives in a pnpm monorepo and ships to other teams as semver packages — so every change I make is someone else's upgrade, and a major is a decision I have to defend.",
+    " Currently a Senior User Interface Engineer at Salesloft, where our design system lives in a pnpm monorepo and ships to other teams as semver packages — so every change I make is someone else's upgrade, and a major is a decision I have to defend.",
   ],
   [
     "A design system is more than its components. ",
@@ -176,9 +177,9 @@ export type Entry = {
 export const experience: readonly Entry[] = [
   {
     when: "2023 — Present",
-    title: "User Interface Engineer",
+    title: "Senior User Interface Engineer",
     org: "Salesloft",
-    note: "Promoted from Associate UI Engineer in 14 months",
+    note: "Associate to Engineer in 14 months, then Senior",
     description:
       "Build and maintain the components the whole product is assembled from, in a pnpm monorepo consumed as versioned packages. Own the pipelines around them — translation workflows, component telemetry, accessibility in CI — and review feature work across teams.",
     tags: [

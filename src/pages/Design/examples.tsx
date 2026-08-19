@@ -241,7 +241,7 @@ function DisplayExample() {
         <Display size="sm">14 months</Display>
       </Row>
       <Row label="xs">
-        <Display size="xs">User Interface Engineer</Display>
+        <Display size="xs">Senior User Interface Engineer</Display>
       </Row>
     </div>
   );
@@ -261,7 +261,7 @@ function LabelExample() {
         </Label>
       </Row>
       <Row label="byline">
-        <Label size="md">User Interface Engineer</Label>
+        <Label size="md">Senior User Interface Engineer</Label>
       </Row>
     </div>
   );

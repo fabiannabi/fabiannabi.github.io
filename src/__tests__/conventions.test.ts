@@ -90,6 +90,26 @@ describe("no raw typography outside the token files", () => {
   );
 });
 
+/**
+ * The scoping is the reason a CSS Module may use an obvious name.
+ *
+ * `.label` exists in both Button and Label; `.sm` exists in seven files. That is
+ * the feature — the names are local, so every component gets to call a thing
+ * what it is — and it holds only while nothing opts out. One `:global` and a
+ * generic name is loose in the document, colliding with a component nobody was
+ * looking at.
+ */
+describe("no CSS Module opts out of its own scope", () => {
+  it.each(cssFiles().filter((path) => path.endsWith(".module.css")).map((p) => [label(p), p]))(
+    "%s",
+    (_name, path) => {
+      const escapes = read(path).match(/:global/g);
+
+      expect(escapes, "a global class from a module collides with the whole document").toBeNull();
+    },
+  );
+});
+
 describe("logical properties only", () => {
   // The profile mirrors for RTL. A physical property is a bug there, not a style.
   const PHYSICAL =
