@@ -29,12 +29,12 @@ describe("vision simulation", () => {
     expect(screen.getByRole("group", { name: /simulate colour vision deficiency/i })).toBeInTheDocument();
   });
 
-  it("appends the prevalence to the label instead of replacing it", () => {
+  it("appends the description to the label instead of replacing it", () => {
     renderToggle();
 
     // SC 2.5.3: someone using voice control says the word they can read, so the
     // visible label has to lead the accessible name.
-    const deutan = screen.getByRole("button", { name: "Deutan, 1 in 16 men" });
+    const deutan = screen.getByRole("button", { name: "Deutan, the most common" });
 
     expect(deutan).toHaveTextContent("Deutan");
   });
@@ -74,6 +74,22 @@ describe("vision simulation", () => {
     await user.click(screen.getByRole("button", { name: "Normal" }));
 
     expect(document.documentElement.dataset["vision"]).toBeUndefined();
+  });
+
+  it("previews each deficiency on its own chip, until one is running", async () => {
+    const user = userEvent.setup();
+    const { container } = renderToggle();
+
+    // At rest every dot is the accent as that chip would render it, which is
+    // what makes four abbreviations worth pressing.
+    const dots = () => [...container.querySelectorAll("fieldset span[aria-hidden='true']")];
+    expect(dots()[2]?.getAttribute("style")).toContain("ds-deuteranopia");
+
+    await user.click(screen.getByRole("button", { name: /^Protan/ }));
+
+    // With the page filtered, a second pass on a dot shows a deficiency nobody
+    // has. The whole page is the preview by then.
+    expect(dots()[2]?.getAttribute("style") ?? "").not.toContain("ds-deuteranopia");
   });
 
   it("declares the filters in linear light", () => {

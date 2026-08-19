@@ -19,3 +19,18 @@
     transform: translate3d(14vw, 10vh, 0) scale(1.18);
   }
 }
+
+/* A filtered ancestor becomes the containing block for its fixed descendants,
+   so while a vision simulation runs this layer stops being viewport-sized and
+   starts being document-sized. At inset: -30% with a drift transform on top,
+   that grew the cover by 330px and put a scrollbar on the page the moment
+   anyone pressed a chip.
+
+   Pinned to the document and stilled for the duration. The simulation is a
+   question about colour; the drift is not part of it, and a wash that does not
+   move is still a wash. */
+[data-vision] .glow {
+  position: absolute;
+  inset: 0;
+  animation: none;
+}

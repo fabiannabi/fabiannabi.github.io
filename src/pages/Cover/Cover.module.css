@@ -22,14 +22,37 @@
   flex-wrap: wrap;
 }
 
-/* The two instruments the page ships with. They wrap together rather than
-   separately, so the blueprint switch never ends up on its own line above a row
-   of vision chips. */
-.instruments {
+/* Its own moment, after the actions and before the rail: the pitch, then what
+   to do about it, then one more thing. Squeezed into the header row beside the
+   blueprint switch it read as a second row of buttons, which is what it looked
+   like and is not what it is. */
+.vision {
+  margin-top: var(--s6);
   display: flex;
-  align-items: center;
-  gap: var(--s3);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--s2);
+  max-width: 46ch;
+}
+
+/* The verdict and its sizer share one grid cell, so the box is as tall as the
+   tallest line it can hold and nothing below it moves when the text changes.
+   A min-height would have been a number that is right at one width and one font
+   size — this is right at every width, and needs no maintenance. */
+.verdict {
+  display: grid;
+}
+
+.verdict > * {
+  grid-area: 1 / 1;
+}
+
+.sizer {
+  display: grid;
+  visibility: hidden;
+}
+
+.sizer > * {
+  grid-area: 1 / 1;
 }
 
 .ident {
@@ -45,7 +68,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-block: var(--s8) var(--s7);
+  /* Trimmed from s8/s7. The pitch measured 871px and a 1440x780 laptop gives
+     780 — "one screen" was prose in CLAUDE.md that nothing checked, and it was
+     false. There is an e2e test on it now. */
+  padding-block: var(--s6) var(--s5);
 }
 
 .sub {
@@ -56,7 +82,7 @@
   display: flex;
   gap: var(--s7);
   flex-wrap: wrap;
-  margin: var(--s7) 0 0;
+  margin: var(--s6) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -65,5 +91,5 @@
   display: flex;
   gap: var(--s3);
   flex-wrap: wrap;
-  margin-top: var(--s7);
+  margin-top: var(--s6);
 }

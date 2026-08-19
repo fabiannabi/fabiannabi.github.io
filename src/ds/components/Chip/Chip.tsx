@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { cx } from "../../utils/cx";
 import { xray } from "../../xray/instrument";
 import styles from "./Chip.module.css";
@@ -17,6 +18,11 @@ type Props = {
    * says what they can read, and the control has to answer to it.
    */
   description?: string;
+  /**
+   * Rendered before the label. Decorative — the label carries the meaning, so
+   * this must never be the only thing distinguishing one chip from another.
+   */
+  icon?: ReactNode;
   /** Renders a separate remove button. Never nested inside the toggle. */
   onRemove?: () => void;
   disabled?: boolean;
@@ -32,6 +38,7 @@ export function Chip({
   onSelect,
   selected = false,
   description,
+  icon,
   onRemove,
   disabled = false,
 }: Props) {
@@ -57,6 +64,7 @@ export function Chip({
             if (!disabled) onSelect?.();
           }}
         >
+          {icon}
           {label}
         </button>
       ) : (

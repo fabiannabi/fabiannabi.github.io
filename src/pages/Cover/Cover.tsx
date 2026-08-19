@@ -3,12 +3,13 @@ import { Button } from "../../ds/components/Button/Button";
 import { Glow } from "../../components/Glow/Glow";
 import { RotatingHeadline } from "../../components/RotatingHeadline/RotatingHeadline";
 import { StackRail } from "../../components/StackRail/StackRail";
-import { coverSub, headline, identity, links, stack, stats } from "../../data/content";
+import { coverSub, headline, identity, links, stack, stats, visionNote } from "../../data/content";
 import { Display } from "../../ds/components/Display/Display";
 import { Label } from "../../ds/components/Label/Label";
 import { Stat } from "../../components/Stat/Stat";
 import { Text } from "../../ds/components/Text/Text";
 import { region } from "../../ds/xray/instrument";
+import { useVision } from "../../ds/a11y/useVision";
 import { VisionToggle } from "../../ds/a11y/VisionToggle";
 import { XRayToggle } from "../../ds/xray/XRayToggle";
 import styles from "./Cover.module.css";
@@ -29,6 +30,8 @@ import styles from "./Cover.module.css";
  * to claim the site is built from the system rather than beside it.
  */
 export function Cover() {
+  const { vision } = useVision();
+
   return (
     <>
       <Glow />
@@ -44,10 +47,7 @@ export function Cover() {
           <Badge tone="accent" shape="pill" pulse>
             {identity.status}
           </Badge>
-          <div className={styles.instruments}>
-            <XRayToggle />
-            <VisionToggle />
-          </div>
+          <XRayToggle />
         </header>
 
         <main className={styles.mid}>
@@ -90,6 +90,43 @@ export function Cover() {
             <Button href={links.github} size="lg" variant="outline">
               GitHub
             </Button>
+          </div>
+
+          <div className={styles.vision} {...region("Vision")}>
+            <Label size="md" tone="muted">
+              {visionNote.invitation}
+            </Label>
+            <VisionToggle />
+            {/* Always in the layout, only sometimes carrying words. Letting the
+                verdict appear would push the rail down on the first press, and
+                this page ships a CLS of 0. */}
+            <div className={styles.verdict}>
+              {/* Every line this box can ever hold, stacked in one grid cell and
+                  hidden. The box is therefore always as tall as its tallest
+                  state, and switching cones moves nothing below it.
+
+                  A reserved min-height was the first attempt and it was wrong:
+                  the resting prompt is one line and a verdict is two, so the
+                  page jumped on the first press — a layout shift in the middle
+                  of a demonstration about visual care. */}
+              <div className={styles.sizer} aria-hidden="true">
+                {[visionNote.prompt, ...Object.values(visionNote.states)].map((line) => (
+                  <Text key={line} size="sm">
+                    {line} {visionNote.claim}
+                  </Text>
+                ))}
+              </div>
+              <div aria-live="polite">
+                <Text size="sm" tone={vision === "none" ? "subtle" : "muted"}>
+                  {vision === "none" ? visionNote.prompt : visionNote.states[vision]}{" "}
+                  {vision === "none" ? null : (
+                    <Text as="span" size="inherit" tone="default" weight="medium">
+                      {visionNote.claim}
+                    </Text>
+                  )}
+                </Text>
+              </div>
+            </div>
           </div>
         </main>
 

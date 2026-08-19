@@ -57,6 +57,31 @@ export const coverSub = {
   tail: "— shipped as semver packages from a pnpm monorepo, built with AI in the loop and verified without it.",
 } as const;
 
+/**
+ * The vision simulator's copy.
+ *
+ * Four unlabelled chips read as debug buttons, which is what they were. The
+ * framing is the difference between a toggle and a claim: the number comes
+ * first, the instrument second, and the last line says what the page just
+ * proved about itself.
+ *
+ * The count is global and ungendered on purpose. Colour vision deficiency is
+ * mostly X-linked and the usual citation — "1 in 12 men" — is accurate and
+ * excludes the reader it is describing to. 300 million people is the same fact
+ * without the exclusion, and each type is then named by what it does rather
+ * than by whose chromosomes carry it.
+ */
+export const visionNote = {
+  invitation: "Around 300 million people see this page differently.",
+  prompt: "Borrow their cones. Watch what survives.",
+  states: {
+    protanopia: "Protanopia — no working red cones.",
+    deuteranopia: "Deuteranomaly — red against green, and much the most common.",
+    tritanopia: "Tritanopia — blue against yellow, and the rare one.",
+  },
+  claim: "The hue is gone. The underline, the weight and the words are not.",
+} as const;
+
 export type Stat = { readonly value: string; readonly label: string };
 
 export const stats: readonly Stat[] = [

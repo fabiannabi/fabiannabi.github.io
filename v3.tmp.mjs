@@ -1,0 +1,13 @@
+import { chromium } from "@playwright/test";
+const dir = process.argv[2];
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1280, height: 500 }, colorScheme: "dark" });
+await p.goto("http://localhost:5173/");
+await p.waitForTimeout(900);
+const box = await p.locator("fieldset").boundingBox();
+const clip = { x: 100, y: Math.max(0, box.y - 90), width: 720, height: 230 };
+await p.screenshot({ path: `${dir}/v3-rest.png`, clip });
+await p.getByRole("button", { name: /^Deutan/ }).click();
+await p.waitForTimeout(400);
+await p.screenshot({ path: `${dir}/v3-deutan.png`, clip });
+await b.close();

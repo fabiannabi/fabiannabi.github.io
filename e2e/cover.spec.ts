@@ -17,25 +17,92 @@ test.describe("Cover", () => {
   });
 
   test("reaches every action by keyboard, in reading order", async ({ page }) => {
-    // The two instruments sit with the identity block, so they come before the
-    // actions — DOM order is tab order, and this test exists to notice when that
-    // changes. It did, when the vision simulator landed, which is the point.
+    // The blueprint switch sits with the identity block and the vision
+    // simulator comes after the actions, where it reads as one more thing —
+    // DOM order is tab order, and this test exists to notice when that changes.
+    // It has now caught the same move twice.
     const expected = [
       "X-ray",
-      "Normal",
-      "Protan",
-      "Deutan",
-      "Tritan",
       "Read the full profile",
       "Design system",
       "Email",
       "LinkedIn",
       "GitHub",
+      "Normal",
+      "Protan",
+      "Deutan",
+      "Tritan",
     ];
 
     for (const name of expected) {
       await page.keyboard.press("Tab");
       await expect(page.locator(":focus")).toContainText(name);
+    }
+  });
+
+  test("keeps the whole pitch above the fold", async ({ page }) => {
+    // "One screen" is the cover's job, and it was prose in CLAUDE.md that
+    // nothing checked — the pitch measured 871px and overflowed a laptop. What
+    // has to be above the fold is the pitch: the headline, the paragraph, the
+    // figures and the actions. The vision simulator sits below it on purpose,
+    // as a reward for scrolling rather than a tax on arriving.
+    // 1280x900 only, and the boundary is stated rather than hidden: the pitch
+    // measures 770px, so it clears this viewport by 130px and a 1440x780 laptop
+    // by 10. On a 1366x700 it does not clear at all — closing that would mean
+    // shrinking an 88px headline, which is a design decision and not a test's
+    // to make. Asserting the tight case would buy a flake, not a guarantee.
+    for (const [width, height] of [[1280, 900]] as const) {
+      await page.setViewportSize({ width, height });
+      await page.goto("/");
+      await page.evaluate(() => document.fonts.ready);
+
+      const actions = page.getByRole("link", { name: /GitHub/ });
+      const box = await actions.boundingBox();
+
+      expect(box, `the actions should be laid out at ${width}x${height}`).not.toBeNull();
+      expect(box!.y + box!.height, `the pitch overflows at ${width}x${height}`).toBeLessThan(height);
+    }
+  });
+
+  test("does not move the page when the simulation changes", async ({ page }) => {
+    // Two separate bugs, both caught here. The verdict is one line at rest and
+    // two once a deficiency is running, and the first version reserved a single
+    // line for it; the box is sized by a hidden copy of every line it can hold
+    // now. The larger one was Glow: a filtered ancestor becomes the containing
+    // block for its fixed descendants, so the wash stopped being viewport-sized
+    // and started being document-sized, and the page grew 330px the moment
+    // anyone pressed a chip.
+    for (const width of [1280, 380]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      // Measured after the web fonts land. Reading immediately after goto
+      // catches the swap from the fallback face, and a font reflow is not the
+      // page moving under the reader — it is what cost an afternoon here.
+      await page.evaluate(() => document.fonts.ready);
+
+      // Document-relative: focusing a chip below the fold scrolls the page, and
+      // a scroll is not the page moving under the reader.
+      const railTop = () =>
+        page.evaluate(
+          () =>
+            Math.round(
+              document.querySelector("footer")!.getBoundingClientRect().top + window.scrollY,
+            ),
+        );
+
+      // The document's own height, which is what a reader actually notices: the
+      // bug that prompted this test showed up as a scrollbar appearing on the
+      // first press, not as text reflowing.
+      const docHeight = () => page.evaluate(() => document.documentElement.scrollHeight);
+
+      const before = await railTop();
+      const beforeHeight = await docHeight();
+
+      for (const name of ["Protan", "Deutan", "Tritan", "Normal"]) {
+        await page.getByRole("button", { name: new RegExp(`^${name}`) }).click();
+        expect(await railTop(), `${name} moved the page at ${width}px`).toBe(before);
+        expect(await docHeight(), `${name} grew the page at ${width}px`).toBe(beforeHeight);
+      }
     }
   });
 

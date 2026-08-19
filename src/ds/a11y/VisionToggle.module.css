@@ -10,3 +10,13 @@
   border: 0;
   flex-wrap: wrap;
 }
+
+/* The accent, run through this chip's own filter. It is the control previewing
+   its own effect, which is the whole reason anyone presses it. */
+.swatch {
+  inline-size: var(--ds-space-3);
+  block-size: var(--ds-space-3);
+  flex: none;
+  border-radius: 50%;
+  background: var(--ds-accent);
+}
