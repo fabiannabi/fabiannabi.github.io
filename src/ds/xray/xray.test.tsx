@@ -50,15 +50,21 @@ describe("formatProps", () => {
 });
 
 describe("XRayToggle", () => {
-  it("is a toggle button that reports its state", async () => {
+  it("says how to leave once the blueprint is on", async () => {
     const user = userEvent.setup();
     render(<Harness />);
 
-    const toggle = screen.getByRole("button", { name: /x-ray/i });
-    expect(toggle).toHaveAttribute("aria-pressed", "false");
+    // The blueprint blanks the page, so the one control still readable has to
+    // offer the way back rather than only name itself. That means the label
+    // carries the state, and aria-pressed is dropped — a button labelled "Exit
+    // x-ray" and announced as pressed says two contradictory things about one
+    // state. Toggle enforces the choice; see its test for both patterns.
+    const toggle = screen.getByRole("button", { name: "X-ray" });
+    expect(toggle).not.toHaveAttribute("aria-pressed");
 
     await user.click(toggle);
-    expect(toggle).toHaveAttribute("aria-pressed", "true");
+
+    expect(screen.getByRole("button", { name: "Exit x-ray" })).toBeInTheDocument();
   });
 
   it("marks the document so the blueprint stylesheet applies", async () => {

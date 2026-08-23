@@ -30,7 +30,7 @@ export const toggleDoc: ComponentDoc = {
       name: "shortcut",
       type: "string",
       description:
-        "A keyboard hint, rendered in a kbd and hidden below 640px, where there is no keyboard to press it on.",
+        "A keyboard hint, rendered in a kbd and hidden below 640px, where there is no keyboard to press it on. Announced through aria-keyshortcuts and kept out of the accessible name.",
     },
     {
       name: "iconOnly",
@@ -39,9 +39,23 @@ export const toggleDoc: ComponentDoc = {
       description:
         "Drops the visible label. The type then demands an aria-label, the same bargain Button makes: an unnamed icon button is a compile error rather than an audit finding.",
     },
-    { name: "size", type: '"sm" | "md"', default: '"md"', description: "md is a control height; sm is the 24px floor." },
+    {
+      name: "size",
+      type: '"sm" | "md" | "lg"',
+      default: '"md"',
+      description:
+        "md is a control height, sm is the 24px floor, lg is 44px — for a control whose problem is being found rather than fitting in.",
+    },
+    {
+      name: "pressedLabel",
+      type: "ReactNode",
+      description:
+        "A different label while the mode is on, for a control that has to offer the way back. Passing it drops aria-pressed, because a button labelled \"Exit x-ray\" and announced as pressed says two contradictory things about one state.",
+    },
   ],
   accessibility: [
+    "The shortcut is exposed with aria-keyshortcuts and its kbd is hidden, so the control is named \"X-ray\" rather than \"X-ray X\". A visual hint is not part of what a button is.",
+    "State lives in the label or in aria-pressed, never in both, and the component decides so a caller cannot ship the contradiction. Without pressedLabel the label is stable and aria-pressed carries the state; with it, the label carries the state and aria-pressed is dropped.",
     "Carries aria-pressed, so the state is in the accessibility tree. A screen reader announces \"X-ray, toggle button, pressed\" instead of leaving it to be read off a fill colour.",
     "The pressed fill is reinforcement, never the only signal (SC 1.4.1) — the state is announced, and where there is an icon its inner shape fills too.",
     "A real button, so it answers to Space and Enter and appears in the tab order without any of that being reimplemented.",

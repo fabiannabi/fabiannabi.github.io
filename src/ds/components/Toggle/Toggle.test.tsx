@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -36,6 +37,35 @@ describe("Toggle", () => {
     );
 
     expect(screen.getByRole("button", { name: "X-ray" })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("swaps the label and drops aria-pressed when given a way back", async () => {
+    const user = userEvent.setup();
+
+    const Harness = () => {
+      const [on, setOn] = useState(false);
+      return (
+        <Toggle pressed={on} onToggle={() => setOn(!on)} pressedLabel="Exit x-ray">
+          X-ray
+        </Toggle>
+      );
+    };
+
+    render(<Harness />);
+
+    const before = screen.getByRole("button", { name: "X-ray" });
+    // Absent in both states, not just the pressed one. Half the pattern is the
+    // contradiction the prop exists to prevent.
+    expect(before).not.toHaveAttribute("aria-pressed");
+
+    await user.click(before);
+
+    // One pattern or the other. A button labelled "Exit x-ray" and announced as
+    // pressed says two contradictory things about the same state, so the
+    // component drops aria-pressed rather than letting a caller ship both.
+    const after = screen.getByRole("button", { name: "Exit x-ray" });
+    expect(after).not.toHaveAttribute("aria-pressed");
+    expect(after).toHaveAttribute("data-pressed");
   });
 
   it("keeps the same label in both states", () => {
@@ -99,5 +129,19 @@ describe("Toggle", () => {
     );
 
     expect(screen.getByRole("button", { name: "Switch to light theme" })).toBeInTheDocument();
+  });
+
+  it("carries a 44px size for a control that has to be found", () => {
+    // The scale had --ds-control-lg and nothing used it. A control docked at the
+    // edge of a page has the opposite problem from one in a toolbar: it is not
+    // competing for room, it is competing for attention, and 44px is also the
+    // AAA target size rather than the 24px floor the other two clear.
+    render(
+      <Toggle size="lg" pressed={false} onToggle={() => undefined}>
+        Large
+      </Toggle>,
+    );
+
+    expect(screen.getByRole("button", { name: "Large" }).className).toContain("lg");
   });
 });

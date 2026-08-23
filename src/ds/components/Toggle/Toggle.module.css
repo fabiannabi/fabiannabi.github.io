@@ -39,7 +39,9 @@
 
 /* Pressed is a filled control, and it is also announced. The fill is the
    reinforcement, never the only signal (SC 1.4.1). */
-.toggle[aria-pressed="true"] {
+/* Keyed on data-pressed, not aria-pressed: a Toggle with a pressedLabel drops
+   aria-pressed, and the fill still has to follow the state. */
+.toggle[data-pressed] {
   --toggle-bg: var(--ds-accent);
   --toggle-border: var(--ds-accent);
   --toggle-fg: var(--ds-accent-contrast);
@@ -56,6 +58,14 @@
   padding: var(--ds-space-1) var(--ds-space-3);
 }
 
+/* The 44px step, for a control whose problem is being noticed rather than
+   fitting in. It clears SC 2.5.5 (AAA) rather than the 24px floor of 2.5.8,
+   which is the only honest reason for a system to carry a third size. */
+.lg {
+  min-height: var(--ds-control-lg);
+  padding: var(--ds-space-3) var(--ds-space-5);
+}
+
 /* ---------- shape ---------- */
 
 .iconOnly {
@@ -65,6 +75,13 @@
 }
 
 /* ---------- parts ---------- */
+
+/* The icon follows the control, or a 44px button carries a 14px glyph adrift in
+   the middle of it. */
+.lg svg {
+  width: 20px;
+  height: 20px;
+}
 
 .toggle svg {
   width: 14px;
@@ -77,7 +94,7 @@
 
 /* An icon that carries a filled part reads the state as well, which is one more
    channel than colour alone. */
-.toggle[aria-pressed="true"] svg rect:last-child {
+.toggle[data-pressed] svg rect:last-child {
   fill: currentColor;
 }
 

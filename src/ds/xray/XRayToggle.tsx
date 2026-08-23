@@ -16,7 +16,15 @@ export function XRayToggle() {
     <Toggle
       pressed={enabled}
       onToggle={toggle}
+      /* Press, or the X key. Deliberately not a hover: redrawing the whole page
+         as a blueprint is not something to do to a reader who was scrolling
+         past, and on touch there is no hover to speak of — a tap fires
+         pointerenter and then click, so the preview would be one frame of
+         blueprint on the way to the press. */
       shortcut="X"
+      /* The blueprint blanks the page, so the one control still readable has to
+         say how to leave rather than only what it is. */
+      pressedLabel="Exit x-ray"
       /* The one control the blueprint may not blank. Everything else on the page
          is reduced to a box; the switch that turns the mode off has to keep
          reading as a switch, or the only way out is the keyboard shortcut whose
