@@ -22,37 +22,13 @@
   flex-wrap: wrap;
 }
 
-/* Its own moment, after the actions and before the rail: the pitch, then what
-   to do about it, then one more thing. Squeezed into the header row beside the
-   blueprint switch it read as a second row of buttons, which is what it looked
-   like and is not what it is. */
-.vision {
-  margin-top: var(--s6);
+/* The switch and the status badge share the end of the header row. Both are
+   --ds-control-sm, so they line up through the token rather than by eye. */
+.instruments {
   display: flex;
-  flex-direction: column;
-  gap: var(--s2);
-  max-width: 46ch;
-}
-
-/* The verdict and its sizer share one grid cell, so the box is as tall as the
-   tallest line it can hold and nothing below it moves when the text changes.
-   A min-height would have been a number that is right at one width and one font
-   size — this is right at every width, and needs no maintenance. */
-.verdict {
-  display: grid;
-}
-
-.verdict > * {
-  grid-area: 1 / 1;
-}
-
-.sizer {
-  display: grid;
-  visibility: hidden;
-}
-
-.sizer > * {
-  grid-area: 1 / 1;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
 }
 
 .ident {
@@ -68,9 +44,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* Trimmed from s8/s7. The pitch measured 871px and a 1440x780 laptop gives
-     780 — "one screen" was prose in CLAUDE.md that nothing checked, and it was
-     false. There is an e2e test on it now. */
+  /* Trimmed from s8/s7. The pitch measured 871px against the 780 a laptop
+     gives — "one screen" was prose in CLAUDE.md that nothing checked, and it
+     was false. There is an e2e test on it now. */
   padding-block: var(--s6) var(--s5);
 }
 
@@ -92,4 +68,18 @@
   gap: var(--s3);
   flex-wrap: wrap;
   margin-top: var(--s6);
+}
+
+/* ---------- the claims ---------- */
+
+/* Their own moment, after the actions and before the rail: the pitch, then what
+   to do about it, then two things you can check. Squeezed into the header row
+   the instruments read as a second set of buttons, which is what they looked
+   like and is not what they are.
+
+   Spacing and nothing else. How the claims are arranged inside this box — a
+   panel each, a line of prose, one switched frame — belongs to the presentation
+   that draws them, and there are three of those under comparison. */
+.claims {
+  margin-top: var(--s7);
 }

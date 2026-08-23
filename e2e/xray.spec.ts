@@ -154,7 +154,8 @@ test.describe("X-ray blueprint", () => {
   }
 
   test("tells a system component apart from an app one", async ({ page }) => {
-    await page.goto("/");
+    // The profile, not the cover: the blueprint left the cover with its switch.
+    await page.goto("/profile/");
     await page.getByRole("button", { name: /x-ray/i }).click();
     await expect(page.locator("html")).toHaveAttribute("data-xray", "on");
 
@@ -166,20 +167,22 @@ test.describe("X-ray blueprint", () => {
     expect(await styleOf(page, fromSystem, "color", "::before")).toBe(ACCENT);
 
     // The app's own. Same frame, no marks, muted name — the marks are the claim
-    // that the system owns the box, and RotatingHeadline is one page's conceit.
-    const appOwn = "[data-ds-component='RotatingHeadline']";
-    await expect(page.locator(appOwn)).toHaveAttribute("data-ds-local", "");
+    // that the system owns the box, and Entry's props are the CV's data model.
+    const appOwn = "[data-ds-component='Entry']";
+    // first(): the CV has twelve of them, and the claim under test is about the
+    // tier a box belongs to, not about which row it is.
+    await expect(page.locator(appOwn).first()).toHaveAttribute("data-ds-local", "");
     expect(await styleOf(page, appOwn, "backgroundImage")).toBe("none");
     expect(await styleOf(page, appOwn, "outlineStyle")).toBe("solid");
     expect(await styleOf(page, appOwn, "color", "::before")).toBe(MUTED);
   });
 
   test("does not draw an inline component", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/profile/");
     await page.getByRole("button", { name: /x-ray/i }).click();
     await expect(page.locator("html")).toHaveAttribute("data-xray", "on");
 
-    // The emphasis inside the cover's opening paragraph. It is typography, not
+    // The emphasis inside a paragraph of the profile. It is typography, not
     // structure, and it fragments across line boxes, so there is no rectangle
     // to draw — every attempt to draw one looked like a rendering fault.
     const inline = "[data-ds-component='Text'] [data-ds-component='Text']";
@@ -196,7 +199,7 @@ test.describe("X-ray blueprint", () => {
   });
 
   test("does not let a component's own typography reach its name plate", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/profile/");
     await page.getByRole("button", { name: /x-ray/i }).click();
     await expect(page.locator("html")).toHaveAttribute("data-xray", "on");
 
@@ -258,20 +261,21 @@ test.describe("X-ray blueprint", () => {
     });
   });
 
-  test("collapses the cover to the same monochrome", async ({ page }) => {
-    await page.goto("/");
+  test("collapses the page to the same monochrome", async ({ page }) => {
+    await page.goto("/profile/");
     await page.getByRole("button", { name: /x-ray/i }).click();
 
     await expect(page.locator("html")).toHaveAttribute("data-xray", "on");
 
-    // The cover's synthwave palette is gone, not tinted: x-ray is a remap of the
+    // The profile's palette is gone, not tinted: x-ray is a remap of the
     // semantic layer, and the page has no say in it.
     await expect.poll(() => styleOf(page, "body", "backgroundColor")).toBe(PAPER);
 
     // Polled: the frame is drawn in from transparent, so reading it once catches
-    // whatever alpha the frame happened to be at.
+    // whatever alpha the frame happened to be at. A Link rather than a Button —
+    // the CV navigates, it does not have calls to action.
     await expect
-      .poll(() => styleOf(page, "[data-ds-component='Button']", "outlineColor"))
+      .poll(() => styleOf(page, "[data-ds-component='Link']", "outlineColor"))
       .toBe(LINE);
 
     // Glow reads --wash, which the blueprint sets to transparent. A drawing has

@@ -1,0 +1,67 @@
+/* The specimens. They belong to the claims rather than to a presentation —
+   all three show the same sample, which is the only reason comparing them
+   says anything.
+
+   They live here and not in the page stylesheet for the reason CLAUDE.md
+   gives: a colour or a tracking in a page module means the page has started
+   re-implementing the system instead of consuming it. The rule under the word
+   is the cover's own accent treatment, and it is a component's business. */
+
+/* The headline's construction, shrunk to fit: the accent on the word and the
+   rule under it. The rule is the point — it is what survives when the hue does
+   not, and it is drawn from --accent-line exactly as the real one is. */
+.slot {
+  position: relative;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.slot::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  height: 2px;
+  background: var(--accent-line);
+}
+
+/* Everything the filter has to work on lives in here, so one element carries
+   the filter and the whole strip changes together. */
+.palette {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  flex-wrap: wrap;
+}
+
+.swatches {
+  display: inline-flex;
+  gap: var(--s1);
+}
+
+.swatches i {
+  inline-size: var(--s4);
+  block-size: var(--s4);
+  border-radius: var(--radius-sm);
+}
+
+.accent {
+  background: var(--accent);
+}
+
+.accentLine {
+  background: var(--accent-line);
+}
+
+.wash {
+  background: var(--wash);
+  border: 1px solid var(--accent-line);
+}
+
+.ink {
+  background: var(--ink);
+}
+
+.dim {
+  background: var(--dim);
+}

@@ -59,28 +59,31 @@ export const coverSub = {
 } as const;
 
 /**
- * The vision simulator's copy.
+ * The claim the cover makes about itself, and the instrument that settles it.
  *
- * Four unlabelled chips read as debug buttons, which is what they were. The
- * framing is the difference between a toggle and a claim: the number comes
- * first, the instrument second, and the last line says what the page just
- * proved about itself.
+ * The structural claim — every box on this page is a component I wrote — has no
+ * copy here on purpose: the switch in the header makes it against the whole
+ * page, which is a better specimen than any sentence about it. What is left is
+ * the one claim with something to show that the page cannot show on its own.
  *
- * The count is global and ungendered on purpose. Colour vision deficiency is
- * mostly X-linked and the usual citation — "1 in 12 men" — is accurate and
- * excludes the reader it is describing to. 300 million people is the same fact
- * without the exclusion, and each type is then named by what it does rather
- * than by whose chromosomes carry it.
+ * The colour count is global and ungendered on purpose. Colour vision
+ * deficiency is mostly X-linked and the usual citation — "1 in 12 men" — is
+ * accurate and excludes the reader it is describing to. 300 million people is
+ * the same fact without the exclusion, and each type is then named by what it
+ * does rather than by whose chromosomes carry it.
  */
-export const visionNote = {
-  invitation: "Around 300 million people see this page differently.",
-  prompt: "Borrow their cones. Watch what survives.",
-  states: {
-    protanopia: "Protanopia — no working red cones.",
-    deuteranopia: "Deuteranomaly — red against green, and much the most common.",
-    tritanopia: "Tritanopia — blue against yellow, and the rare one.",
+export const claims = {
+  lead: "One claim you can check.",
+  colour: {
+    claim: "Nothing here means anything by colour alone.",
+    resting: "300 million people see this page differently. Borrow their cones.",
+    states: {
+      protanopia: "Protanopia — no working red cones.",
+      deuteranopia: "Deuteranomaly — red against green, and much the most common.",
+      tritanopia: "Tritanopia — blue against yellow, and the rare one.",
+    },
+    verdict: "The hue is gone. The underline, the weight and the words are not.",
   },
-  claim: "The hue is gone. The underline, the weight and the words are not.",
 } as const;
 
 export type Stat = { readonly value: string; readonly label: string };

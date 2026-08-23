@@ -79,7 +79,13 @@
    the page chunk. Beating them on specificity instead makes the remap true
    wherever this file lands in the cascade. */
 
-:root[data-xray] {
+/* Two selectors, one rule. At the root, `:root[data-xray]` outranks
+   [data-ds-theme] and [data-theme]; on any other element the bare attribute is
+   enough, because nothing else matches that element and custom properties
+   inherit from it. That second half is what lets a single card render in
+   cyanotype while the page around it stays as it was. */
+:root[data-xray],
+[data-xray] {
   /* Native form controls, scrollbars and the like follow the paper. */
   color-scheme: dark;
 

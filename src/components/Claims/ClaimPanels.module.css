@@ -1,0 +1,219 @@
+/* A panel, not a row. The first version was a sentence with a control under it
+   and nothing else, which reads as a form field and gives no sign that pressing
+   it does anything. The border is the affordance: it is quiet at rest and picks
+   up the accent once the claim is settled. */
+.claim {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  padding: var(--s5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.claim:hover {
+  border-color: var(--accent-line);
+}
+
+.settled {
+  border-color: var(--accent);
+}
+
+/* The live sample. Real components, so it changes with the instrument rather
+   than illustrating what the change would look like. */
+.specimen {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  min-block-size: var(--s7);
+  padding-block: var(--s2);
+}
+
+.instrument {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+/* The answer and its sizer share one grid cell, so the row is as tall as the
+   tallest line it can hold and settling a claim moves nothing below it. A
+   min-height would be a number that is right at one width and one font size;
+   this is right at every width and needs no maintenance. */
+.answer {
+  display: grid;
+}
+
+.answer > * {
+  grid-area: 1 / 1;
+}
+
+.sizer {
+  display: grid;
+  visibility: hidden;
+}
+
+.sizer > * {
+  grid-area: 1 / 1;
+}
+
+/* The way out of the card. Pointing at a panel starts it breathing, which is
+   the invitation the flat version never gave — a border that lights up says
+   something is live, not that there is somewhere to press.
+
+   box-shadow, so nothing reflows, and the global reduced-motion rule collapses
+   the duration to nothing without this file needing to know. */
+.claim:hover .instrument button,
+.claim:focus-within .instrument button {
+  animation: pulse 1.8s var(--ease) infinite;
+}
+
+/* Not the chips. They are the choice; the pulse marks the one control that
+   leaves the card. */
+.claim:hover .instrument fieldset button,
+.claim:focus-within .instrument fieldset button {
+  animation: none;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-line);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.piece {
+  display: inline-flex;
+}
+
+/* The pieces fall into the card rather than appearing in it, and they do not
+   fall in reading order — the middle one lands first, then the left, then the
+   right. In sequence it reads as a list animating; out of sequence it reads as
+   something being assembled, which is what the blueprint is.
+
+   The frames draw themselves in at the same time: that is the x-ray's own
+   animation on the components inside these wrappers, staggered to match.
+
+   The global reduced-motion rule collapses every duration here without this
+   file needing to know, and the delays go with them. */
+.claim[data-xray] .piece {
+  animation: drop var(--dur) var(--ease) both;
+}
+
+.claim[data-xray] .piece:nth-child(1) {
+  animation-delay: 110ms;
+}
+
+.claim[data-xray] .piece:nth-child(1) > * {
+  --xray-delay: 110ms;
+}
+
+.claim[data-xray] .piece:nth-child(2) {
+  animation-delay: 0ms;
+}
+
+.claim[data-xray] .piece:nth-child(3) {
+  animation-delay: 230ms;
+}
+
+.claim[data-xray] .piece:nth-child(3) > * {
+  --xray-delay: 230ms;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) rotate(-3deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The palette swap is instant — custom properties do not transition — so the
+   surface underneath is what carries the change. Slower than the card's own
+   hover, because this one is a mode arriving rather than a control responding. */
+.claim[data-xray] {
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+/* The ruled paper, drawn from the blueprint's own tokens so a card cannot show a
+   grid the page would not, and swept in diagonally so the squares arrive in a
+   wave instead of appearing at once. The mask is the sweep: a hard-edged
+   gradient three times the size of the layer, slid from one corner to the
+   other. */
+.paper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--xray-grid-major) 0 1px, transparent 1px),
+    linear-gradient(to bottom, var(--xray-grid-major) 0 1px, transparent 1px),
+    linear-gradient(to right, var(--xray-grid) 0 1px, transparent 1px),
+    linear-gradient(to bottom, var(--xray-grid) 0 1px, transparent 1px);
+  background-size:
+    var(--xray-grid-step-major) var(--xray-grid-step-major),
+    var(--xray-grid-step-major) var(--xray-grid-step-major),
+    var(--xray-grid-step) var(--xray-grid-step),
+    var(--xray-grid-step) var(--xray-grid-step);
+  mask-image: linear-gradient(135deg, var(--mask-opaque) 0 30%, transparent 55%);
+  mask-size: 300% 300%;
+  animation: paper-in var(--xray-develop) var(--ease) both;
+}
+
+/* Everything the card actually says sits above the paper. */
+.claim > *:not(.paper) {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes paper-in {
+  from {
+    mask-position: 130% 130%;
+  }
+  to {
+    mask-position: 0% 0%;
+  }
+}
+
+/* ---------- the block ---------- */
+
+/* Their own moment, after the actions and before the rail: the pitch, then what
+   to do about it, then two things you can check. Squeezed into the header row
+   the instruments read as a second set of buttons, which is what they looked
+   like and is not what they are. */
+.grid {
+  display: grid;
+  gap: var(--s4);
+}
+
+/* auto-fit rather than two fixed columns: the block holds one claim now, and a
+   single card sitting in half the width with nothing beside it reads as
+   something having failed to load. Two would still pair up. */
+@media (min-width: 760px) {
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    align-items: stretch;
+  }
+
+  .lead {
+    grid-column: 1 / -1;
+  }
+}

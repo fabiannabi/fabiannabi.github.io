@@ -17,8 +17,27 @@ import { readFileSync, statSync } from "node:fs";
 import { gzipSync } from "node:zlib";
 import { join } from "node:path";
 
-/** The cover is one screen of text and has to stay cheap. Gzipped, own JS. */
-const COVER_BUDGET_KB = 8;
+/**
+ * The cover is one screen of text and has to stay cheap. Gzipped, own JS.
+ *
+ * Moved from 8 to 8.5 when the vision simulator became a control the page
+ * always shows rather than a button inside a card. Two compensations were taken
+ * first, and both were things that should have gone anyway: the copy for a
+ * claim the page no longer makes, and an apply button that did the same job as
+ * the eye — the duplication this repo has already undone twice elsewhere. It
+ * was still 60 bytes over.
+ *
+ * **Own JS is not the same as what the page costs.** Taking the x-ray off the
+ * cover *raised* this number by 110 bytes and lowered what the browser fetches
+ * by about 2.3 kB: the blueprint's CSS went (−1.45 kB), the shared chunk shrank
+ * below the vendor line differently, and code that had been hiding inside a
+ * >100 kB chunk got re-attributed to the page. Read the whole row, not the
+ * budget column.
+ *
+ * A ceiling that is raised whenever it is reached is not a ceiling, so the
+ * number to watch is the slack: about 120 bytes at the time of writing.
+ */
+const COVER_BUDGET_KB = 8.5;
 
 /** Anything this large is the framework, not a decision made here. */
 const VENDOR_BYTES = 100_000;

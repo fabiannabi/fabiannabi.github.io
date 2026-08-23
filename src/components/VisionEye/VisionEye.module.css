@@ -1,0 +1,53 @@
+/* In the header row, beside the status badge.
+
+   It was docked to the inline end of the page for a while, absolutely
+   positioned — never fixed, because an element with a `filter` becomes the
+   containing block for its fixed-position descendants and this instrument puts
+   a filter on `body`. Fixed, it jumped to document coordinates the moment it
+   was pointed at and then oscillated: hover previews, the filter moves the dock
+   out from under the pointer, the pointer leaves, the preview ends, the dock
+   comes back. Playwright called it "element is not stable" fifty-six times.
+
+   None of that applies now that it sits in the flow, and the note stays because
+   the next fixed thing on a filtered page will hit it again. */
+.dock {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+/* The label. It is the second-best explanation here — the best one is the page,
+   which has already changed colour by the time anybody reads it. */
+.hint {
+  position: relative;
+  padding: var(--s1) var(--s3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--bg-2);
+  color: var(--dim);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-2xs);
+  letter-spacing: var(--ds-tracking-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+
+  /* Legible at rest and brighter once it is pointed at. It was hover-only at
+     first, which made the resting state a bare icon at the edge of a page — the
+     exact thing an instrument in the chrome must not be. */
+  opacity: 0.75;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.dock:hover .hint,
+.dock:focus-within .hint {
+  opacity: 1;
+}
+
+/* Below 720px the column is the screen and the words have nowhere to go. The
+   icon stays; the words were never the mechanism. */
+@media (max-width: 720px) {
+  .hint {
+    display: none;
+  }
+}

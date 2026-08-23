@@ -431,6 +431,38 @@
   animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
 }
 
+/* ---------- what the blueprint may not touch ---------- */
+
+/* `data-ds-chrome` exempts a subtree from the drawing as well as from the
+   blanking. The x-ray's own switch carries it, and so does the prose on a card
+   that exists to explain an instrument — blanked by the instrument, that card
+   is a cyanotype panel with nothing in it and no way to tell what it was
+   demonstrating.
+   
+   Last in the file and deliberately so. The first attempt added
+   `:not([data-ds-chrome] *)` to each base rule, which lifted them to the same
+   specificity as the inline and local variants and let them win on order
+   instead. An exemption that arrives after everything cannot lose that race. */
+[data-xray] [data-ds-chrome],
+[data-xray] [data-ds-chrome] *,
+[data-xray] [data-ds-chrome] [data-ds-component] {
+  color: inherit;
+  background-image: none;
+  outline: none;
+  box-shadow: none;
+  text-decoration-color: currentcolor;
+}
+
+/* The chrome element itself as well as anything inside it. The x-ray's own
+   switch is both at once — a Toggle carrying data-ds-chrome — and covering only
+   descendants left its name plate drawn across its own label. */
+[data-xray] [data-ds-chrome]::before,
+[data-xray] [data-ds-chrome]::after,
+[data-xray] [data-ds-chrome] [data-ds-component]::before,
+[data-xray] [data-ds-chrome] [data-ds-component]::after {
+  content: none;
+}
+
 /* ---------- keyframes ---------- */
 
 @keyframes xray-paper-in {

@@ -23,7 +23,7 @@ There are two layers of component and the line between them is the single most
 load-bearing decision in this repo.
 
 - **`src/ds`** — the system. Fourteen components, every one of them generic.
-- **`src/components`** — the app. Seven, every one of them composed from the
+- **`src/components`** — the app. Ten, every one of them composed from the
   system.
 
 **The test is not how many times a component is used. It is whether its API
@@ -234,9 +234,66 @@ matrices at severity 1.0. The control is on the cover, next to the x-ray.
   resting meaning on hue — which is why the rotating slot carries an underline,
   and why there is an e2e test asserting the underline survives the simulation.
 
+### One instrument on the cover, and why it is allowed in the chrome
+
+The cover's controls sat in the page chrome, then moved into cards that
+explained them, then came back. What makes the second version of the chrome
+different is that **the instrument demonstrates itself before it is pressed**:
+pointing at the eye beside the status badge renders the whole page through a
+colour vision deficiency, and moving away puts it back. The objection to a
+control in the chrome is that it is a button with no sentence attached; a
+control whose effect you can see without committing to it has the page for a
+sentence.
+
+**The blueprint is not on the cover.** It draws every page as named boxes, which
+is the honest way to show the site is built from the system rather than beside
+it — and that is an argument for the CV and for `/design/` to make. On a cover
+letter it was a second instrument competing with the only thing that page has to
+sell. The cover therefore ships neither `blueprint.css` nor `xray.css` nor the
+provider that measures for them.
+
+**Only the eye previews.** The blueprint switch had a hover preview for an
+afternoon and it came out again: redrawing the whole page is not a thing to do
+to somebody who was scrolling past, and on touch there is no hover at all — a
+tap fires `pointerenter` and then `click`, so the preview is one frame of
+blueprint on the way to the press that was actually meant. The eye keeps its
+preview, for a mouse only, because it changes how the page looks rather than
+what the page is.
+
+`VisionState` therefore separates *what is on screen* from *what was chosen*:
+`vision`, `applied` and `choice`. Labelling a control from the drawing rather
+than from the decision is how a button ends up reading "Stop simulating" under a
+cursor that has not decided anything.
+
+**The halo is not in the Toggle.** `Beacon` wraps a control and draws a wash disc
+and a pulse around it — one pulse every nine seconds, stopping for good once the
+control is hovered, focused or used, and offset between the two so they never
+fire together. A system control that shouted would be useless in a toolbar;
+shouting is this page's problem, so it lives in this page's component. `Beacon`
+carries `data-ds-chrome`: wrapped around the blueprint's own switch it otherwise
+drew a box labelled BEACON over the one control the mode may not hide, and the
+Toggle's `color: inherit` exemption resolved against a parent that had just been
+blanked.
+
+**Only one control applies the simulation**, and it is the eye. The chips on the
+claim choose which deficiency; the card explains. An apply button in the card as
+well would be two controls meaning the same thing — the failure this repo has
+already undone twice, in `ActionLink` over `Button` and `StatusPill` over
+`Badge`.
+
+**Nothing on a filtered page may be `position: fixed`.** An element with a
+`filter` becomes the containing block for its fixed-position descendants, and
+this instrument puts a filter on `body`. The eye was docked to the edge of the
+page for a while, fixed, and it jumped to document coordinates the instant it
+was pointed at — then oscillated: hover previews, the filter moves the dock out
+from under the pointer, the pointer leaves, the preview ends, the dock returns.
+Playwright reported it as "element is not stable" fifty-six times. It is the
+same rule that keeps `Glow` overscanned and hides it while the simulation runs.
+
 ### The x-ray
 
-Toggled by the button or the `X` key, on all three pages. It prints the page as
+Toggled by the button or the `X` key, on the profile and the design system. Not
+on the cover — see above. It prints the page as
 a blueprint: the palette collapses to one cyanotype, the page is ruled like graph
 paper, and every component is reduced to a named box at the size it really
 occupies. It is a wireframe of the live page, not an inspector on top of it.
@@ -445,6 +502,24 @@ designed, and nothing about it should carry Salesloft branding or values.
       `isPlaceholder` to `false` when it is real.
 - [ ] The three `writing` entries are drafts with a "to publish" badge. When a
       post goes live, link it and drop the badge.
+- [ ] **The blueprint's entrance animation needs redesigning: it makes people
+      dizzy.** A grid sweeping diagonally, three pieces falling with rotation,
+      component frames drawing themselves and registration marks growing from
+      the corners — dozens of thin high-contrast lines moving in different
+      directions inside a second. That is the pattern that triggers vestibular
+      responses, and it sits under SC 2.3.3.
+
+      `prefers-reduced-motion` is honoured, and that is not a defence: it covers
+      the reader who already configured their OS, not the one who simply gets
+      dizzy. See NOTES-2026-08-19.md §1.1 for five alternatives. The starting
+      recommendation is a static grid that fades in, with only the frames drawing
+      in — it keeps the sense of construction and drops the translation, which is
+      the part that moves people.
+
+      There is a working version of that shape in `/lab/` (dev only): the
+      exploded view separates along one axis, staggered by depth, over 900ms,
+      and under `prefers-reduced-motion` it starts separated rather than
+      animating faster. Worth looking at before redesigning the entrance.
 - [ ] Form controls — Input, Select, Checkbox, Radio, Switch — are the obvious
       v2 for the design system, and the ones with the most accessibility work.
 - [ ] `Stat` moved out to `src/components` in the audit and is the one call that

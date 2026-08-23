@@ -17,18 +17,20 @@ test.describe("Cover", () => {
   });
 
   test("reaches every action by keyboard, in reading order", async ({ page }) => {
-    // The blueprint switch sits with the identity block and the vision
-    // simulator comes after the actions, where it reads as one more thing —
     // DOM order is tab order, and this test exists to notice when that changes.
-    // It has now caught the same move twice.
+    // It has now caught the same move four times.
     const expected = [
-      "X-ray",
+      // The one instrument is chrome, and chrome comes before content — the
+      // trade for a control a reader meets rather than discovers. It
+      // demonstrates itself on hover and on focus, which is what makes a button
+      // up here something other than furniture.
+      "Simulate colour vision deficiency",
       "Read the full profile",
       "Design system",
       "Email",
       "LinkedIn",
       "GitHub",
-      "Normal",
+      // The chips choose which deficiency; the eye above applies it.
       "Protan",
       "Deutan",
       "Tritan",
@@ -36,7 +38,14 @@ test.describe("Cover", () => {
 
     for (const name of expected) {
       await page.keyboard.press("Tab");
-      await expect(page.locator(":focus")).toContainText(name);
+      const focused = page.locator(":focus");
+
+      // An icon-only control has an accessible name and no text; a chip has
+      // both, and its name carries the description after the word. Asserting on
+      // the text alone would have quietly skipped the first kind.
+      const label = await focused.getAttribute("aria-label");
+      if (label) expect(label).toContain(name);
+      else await expect(focused).toContainText(name);
     }
   });
 
@@ -103,7 +112,7 @@ test.describe("Cover", () => {
       // first press, not as text reflowing.
       const docHeight = () => page.evaluate(() => document.documentElement.scrollHeight);
 
-      for (const name of ["Protan", "Deutan", "Tritan", "Normal"]) {
+      for (const name of ["Protan", "Deutan", "Tritan", "Simulate colour vision deficiency", "Simulate colour vision deficiency"]) {
         const before = await railTop();
         const beforeHeight = await docHeight();
 

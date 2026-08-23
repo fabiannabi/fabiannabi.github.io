@@ -3,6 +3,7 @@ import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   about,
+  claims,
   colophon,
   coverSub,
   experience,
@@ -203,6 +204,21 @@ describe("word counts stay low", () => {
     // 79 at the time of writing. The ceiling is close enough that a new sentence
     // or a fourth stat has to displace something rather than just being added.
     expect(words).toBeLessThanOrEqual(100);
+  });
+
+  /* Two ceilings rather than one, because they measure different things. The
+     pitch is prose a reader has to get through; the claims are apparatus, and
+     most of their words are alternates nobody reads twice. Adding them to the
+     pitch's count would have meant raising a number written to stop exactly
+     that. */
+  it("keeps the instruments to a caption, not a paragraph", () => {
+    const words = countWords(claims.lead, claims.colour.claim, claims.colour.resting);
+
+    // What the page says before anything is pressed. The verdicts replace these
+    // rather than joining them, so they are not counted twice. The ceiling came
+    // down with the second claim: a budget that is not re-cut when the thing it
+    // budgeted for is deleted is not a budget.
+    expect(words).toBeLessThanOrEqual(30);
   });
 
   it("keeps the profile under its ceiling", () => {

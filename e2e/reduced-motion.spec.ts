@@ -35,4 +35,19 @@ test.describe("with reduced motion requested", () => {
     await page.getByRole("link", { name: /read the full profile/i }).click();
     await expect(page).toHaveURL(/\/profile\/$/);
   });
+
+  test("the claim card does not rotate through the deficiencies", async ({ page }) => {
+    await page.goto("/");
+
+    // The card walks the palette on its own, on a timer, and nothing in a
+    // stylesheet stops a timer — the rotation is gated in JavaScript, on the
+    // same reactive hook every other animation here reads.
+    const answer = () =>
+      page.evaluate(() => document.querySelector("[aria-live='polite']")?.textContent ?? "");
+
+    const first = await answer();
+    await page.waitForTimeout(3600);
+
+    expect(await answer()).toBe(first);
+  });
 });

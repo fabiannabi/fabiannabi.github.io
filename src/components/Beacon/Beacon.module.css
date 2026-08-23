@@ -1,0 +1,65 @@
+/* Wrapped around a control, and adding no box of its own: inline-flex so the
+   control keeps whatever layout it had. */
+.beacon {
+  position: relative;
+  display: inline-flex;
+}
+
+/* A wash disc under the control, and unlike the pulse it does not go away. The
+   pulse says "look"; this says "something lives here", which is the part that
+   still has to be true after the pulse has stopped — and the part that survives
+   prefers-reduced-motion, where the pulse never runs at all.
+
+   Sized past the control on purpose. A disc the same size as the button is a
+   border, and the Toggle already has one of those. */
+.glow {
+  position: absolute;
+  inset: calc(var(--s3) * -1);
+  border-radius: var(--radius-pill);
+  background: var(--wash);
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* Exactly the control's box, growing out of it. Anything else reads as a
+   misaligned border rather than as a halo. */
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+  animation: beacon-pulse 9s var(--ease) infinite;
+  animation-delay: var(--beacon-offset, 0s);
+}
+
+/* Nine seconds of nothing and two of pulse. "Every so often" is the whole
+   design: a ring that beats without pause is the pattern this page already has
+   an open note about, and it stops being information after the second beat. */
+@keyframes beacon-pulse {
+  0%,
+  80% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  83% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+/* Once it has been hovered, focused or switched on, the beacon has done its
+   job and gets out of the way for good. */
+.beacon:hover .ring,
+.beacon:focus-within .ring,
+.quiet .ring {
+  animation: none;
+  opacity: 0;
+}
+
+.quiet .glow {
+  opacity: 0;
+}
