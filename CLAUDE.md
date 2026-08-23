@@ -312,6 +312,19 @@ same rule that keeps `Glow` overscanned and hides it while the simulation runs.
 
 ### The x-ray
 
+**It is off the built site, and it is a work in progress.** Both switches are
+out of the pages and the `X` shortcut is development-only, so `pnpm dev` still
+has the whole mode and a visitor has no way into it. That is deliberate rather
+than a deletion: the code, the stylesheets, the provider and the unit tests are
+all still here and still typechecked, and `e2e/xray.spec.ts` skips the two
+blocks that need the mode on — the stamps have their own block that keeps
+running, because `data-ds-component` and `data-ds-local` are inert markup that
+ships either way and the site's claim about being built from its own system
+rides on them. Put a `Toggle` back on a page, drop the `import.meta.env.DEV`
+guard in `XRayProvider`, and un-skip the file.
+
+What follows describes the mode as it works.
+
 Toggled by the button or the `X` key, on the profile and the design system. Not
 on the cover — see above. It prints the page as
 a blueprint: the palette collapses to one cyanotype, the page is ruled like graph
@@ -439,6 +452,73 @@ These are real bugs that already happened here. Do not reintroduce them.
   decided by import order — which held in dev and lost in the production bundle,
   where the token chunk is emitted ahead of the page chunk. The blueprint's
   colours silently did not apply and three e2e tests caught it.
+- **A background set on `body` with no background on the root propagates to the
+  canvas, and the canvas is painted before everything — including negative
+  z-index children.** The ruling used to be `body`'s own background-image, and
+  nothing could be put over it: a cover element at `z-index: -1` in the paper's
+  colour simply did not appear, at any z-index, because it was painting into a
+  layer above something that had already been hoisted underneath the whole
+  document. The ruling is a `body::after` at `position: absolute; inset: 0` now,
+  which keeps it under the content and scrolling with the page, and can be
+  masked.
+- **Nothing in the blueprint's entrance travels.** It took three versions to
+  get there and the first two are worth knowing. The ruling arrived by scaling
+  `background-size` from three times the step down to one — every line on the
+  page moving inward — while a band of light crossed top to bottom: two
+  directions, dozens of thin high-contrast lines, inside a second, which is the
+  vestibular pattern exactly. The second version fixed the directions, uncovering
+  the grid left to right behind a band travelling the same axis with its bright
+  edge locked to the mask's boundary. It was coherent and it was still a bright
+  object crossing a drawing made of thin lines, which reads as noise against a
+  grid. What ships is opacity on the ruling and a slow transition on the page's
+  background colour, and nothing else.
+- **Every part of the exit ends on one duration, and it is not the entrance's.**
+  The frames left at `--ds-duration-slow` while the rest of the exit was still
+  running, which left a third of a second of ruled paper with nothing drawn on
+  it — the page reading as broken rather than the mode being put away. So they
+  were all put on one number. Making that number `--xray-develop` was wrong in
+  the other direction and read as slow: an entrance has something to show and
+  can take its time over it, an exit is a reader saying they are done looking.
+  `--xray-undevelop` is two thirds of it, and `XRayProvider`'s `LEAVE_MS` has to
+  match.
+- **The blueprint animates only the boxes that are on screen.** `/design/`
+  instruments 599 components, and animating each one's frame, name plate and
+  content box is around 1800 animations of `outline-color` and a registered
+  length — none of it compositable, all of it repainting every frame. It ran the
+  entrance at 25fps, with a 133ms gap in it. `XRayProvider` stamps
+  `data-ds-draw` on the components intersecting the viewport when the mode is
+  turned on and the animation rules require it; everything else is simply
+  already drawn. 599 animated boxes became 38, and the entrance is 60fps on both
+  pages. Nobody is watching a box eleven screens below the fold assemble itself,
+  which is the same argument the stagger cap already made.
+- **Whatever replaces the page has to arrive when the page leaves.** The ink is
+  blanked in the single frame `data-xray` lands in, so giving the field colour
+  the entrance's own 720ms made the page vanish: a third of a second of
+  near-white paper with no text on it and a few faint lines, which reads as the
+  page breaking rather than as a mode arriving. The field keeps global.css's
+  fast duration on the way in and only the ruling and the frames develop over
+  `--xray-develop`. On the way out it is the opposite case and does take the
+  long one, because there the palette has already reverted and the blue is being
+  carried away from under a page that is back.
+- **A dropped frame and a discontinuity are different bugs, and only one of
+  them shows up in a frame counter.** The exit was reported as choppy after the
+  entrance was fixed. Measured, it dropped nothing: 54 frames in the first
+  second, worst gap 17ms — cleaner than the entrance. The fault was that the
+  blueprint's palette and its blanking were scoped to `[data-xray]`, so they
+  applied during "leaving" as well: the drawing faded away over 480ms, left a
+  blank blue page, and then the entire real page returned in the single frame
+  the attribute was removed in. Both are scoped to `[data-xray="on"]` now, and
+  what stays on `[data-xray]` is only what is *drawn* — so the page comes back
+  when the reader asks for it and the wireframe lifts off it. Frame timings say
+  nothing about this class of bug; only looking at it does.
+- **Measure before optimising, including when the bug is obvious.** `measure()`
+  interleaved a style write, a `getBoundingClientRect`, an attribute write and a
+  `getComputedStyle` per element — textbook layout thrashing, one forced reflow
+  per instrumented component, landing in the frame the mode turns on in.
+  Splitting it into a read pass and a write pass is correct and it is committed.
+  It also moved the number from 24 frames to 26. The cost was somewhere else
+  entirely, and an afternoon could have gone into making that loop beautiful
+  while the page still ran at 25fps.
 - **A wireframe label that does not fit is worse than no label.** Centring the
   component name inside a 20px-wide `Code` clipped it to "od", which reads as a
   rendering bug. CSS cannot ask how wide its own text is, so `XRayProvider`
@@ -522,25 +602,37 @@ designed, and nothing about it should carry Salesloft branding or values.
       `isPlaceholder` to `false` when it is real.
 - [ ] The three `writing` entries are drafts with a "to publish" badge. When a
       post goes live, link it and drop the badge.
-- [ ] **The blueprint's entrance animation needs redesigning: it makes people
-      dizzy.** The developing sweep across the page, component frames drawing
-      themselves and registration marks growing from the corners — dozens of
-      thin high-contrast lines moving in different directions inside a second.
-      That is the pattern that triggers vestibular responses, and it sits under
-      SC 2.3.3. It runs on `/profile/` and `/design/`; the cover had a
-      panel-sized copy of it, with three pieces falling out of reading order,
-      and that went when the claim it belonged to did.
+- [ ] **Decide whether the x-ray stays at all.** It is off the built site as of
+      August 2026 — both switches removed, the `X` shortcut behind
+      `import.meta.env.DEV` — because the question is no longer whether the
+      animation is right but whether a cover letter and a CV are served by the
+      mode existing. Nothing is deleted. Two things are waiting on the answer:
+      `src/components/Beacon` has no caller left, since the halo went out with
+      the switch it pointed at, and `/profile/` and `/design/` still ship
+      `xray.css` and `blueprint.css` — about 2.6 kB gzipped of stylesheet for a
+      mode nobody can reach. Both are cheap to undo and neither is worth paying
+      for a feature that comes back.
+- [ ] **The blueprint's entrance is redesigned; check whether it is enough.**
+      Nothing travels any more: the ruling fades in on opacity, the page's blue
+      arrives on a 720ms transition, and the band of light that used to cross
+      the viewport is gone. The exit is the same fade in reverse, every part of
+      it ending on one duration. What still animates is each component's frame
+      drawing itself in place, staggered — no translation, which is the part
+      that moves people, so it is a different thing from what this note was
+      about. Worth watching rather than fixing blind.
 
-      `prefers-reduced-motion` is honoured, and that is not a defence: it covers
-      the reader who already configured their OS, not the one who simply gets
-      dizzy. The starting recommendation is a static grid that fades in, with
-      only the frames drawing in — it keeps the sense of construction and drops
-      the translation, which is the part that moves people.
+      One asymmetry left on purpose: the last step of the exit — paper going
+      back to page — takes `--dur-fast` rather than the exit's own duration,
+      because a transition is defined by the after-change style and the
+      attribute the slow rule needs is gone by then. Making it symmetrical means
+      scoping the whole remap to `[data-xray="on"]` and giving "leaving" a
+      palette of its own.
 
-      There is a working version of that shape in `/lab/` (dev only): the
-      exploded view separates along one axis, staggered by depth, over 900ms,
-      and under `prefers-reduced-motion` it starts separated rather than
-      animating faster. Worth looking at before redesigning the entrance.
+      `prefers-reduced-motion` is honoured and is not a defence: it covers the
+      reader who already configured their OS, not the one who simply gets dizzy.
+      /lab/'s exploded view is the other shape this could take — one axis,
+      staggered by depth, over 900ms, starting separated under reduced motion
+      rather than animating faster.
 - [ ] Form controls — Input, Select, Checkbox, Radio, Switch — are the obvious
       v2 for the design system, and the ones with the most accessibility work.
 - [ ] `Stat` moved out to `src/components` in the audit and is the one call that

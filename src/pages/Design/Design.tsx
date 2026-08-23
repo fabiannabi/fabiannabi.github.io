@@ -8,7 +8,6 @@ import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { byCategory, registry } from "../../ds/docs/registry";
 import { useThemeAttribute } from "../../ds/hooks/useThemeAttribute";
 import { region } from "../../ds/xray/instrument";
-import { XRayToggle } from "../../ds/xray/XRayToggle";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { ComponentSection } from "./ComponentSection";
 import { EXAMPLES } from "./examples";
@@ -79,7 +78,8 @@ export function Design() {
           </nav>
 
           <div className={styles.controls}>
-            <XRayToggle />
+            {/* The blueprint's switch was here too, and is out while the mode
+                is being reconsidered — see CLAUDE.md. */}
             {/* The system's own toggle. This page had a hand-rolled button here,
                 which is a poor look on the page arguing for the component. */}
             <ThemeToggle theme={theme} onToggle={toggle} />

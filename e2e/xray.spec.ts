@@ -38,17 +38,77 @@ const ready = async (page: Page): Promise<void> => {
   await expect(page.getByRole("button", { name: /x-ray/i }).first()).toBeVisible();
 };
 
-test.describe("X-ray blueprint", () => {
-  test.use({ colorScheme: "dark" });
-
-  test("costs nothing while it is off", async ({ page }) => {
+/**
+ * The stamps, which are not the mode.
+ *
+ * `data-ds-component`, `data-ds-local` and `data-ds-region` are inert markup:
+ * they ship whether or not anything ever draws them, and the claim this site
+ * makes about being built from its own system rides on them rather than on the
+ * blueprint. They stay out of the block below, which is skipped while the mode
+ * has no way in.
+ */
+test.describe("Component stamps", () => {
+  test("cost nothing while nothing draws them", async ({ page }) => {
     await page.goto("/design/");
 
     await expect(page.locator("html")).not.toHaveAttribute("data-xray", /.*/);
-    // The stamp is inert markup: no wrapper element, no frame, no ruling.
+    // Inert markup: no wrapper element, no frame, no ruling. The ruling is
+    // asserted where it actually lives, or this passes whether the mode is off
+    // or on.
     expect(await styleOf(page, "[data-ds-component='Button']", "outlineStyle")).toBe("none");
-    expect(await styleOf(page, "body", "backgroundImage")).toBe("none");
+    expect(await styleOf(page, "body", "backgroundImage", "::after")).toBe("none");
   });
+
+/**
+ * The claim the site makes, and the one an audit actually has to check.
+ *
+ * The earlier version of this test counted `[data-ds-local]` and demanded
+ * zero, which passed by moving every one-off *into* the system — a page
+ * component named Entry whose props are `when`, `org` and `badge` is the app's
+ * data model wearing the system's badge. The rule that survives is the other
+ * way round: app components are expected, and every one of them has to be
+ * built from the system rather than from raw markup.
+ */
+const PAGES: ReadonlyArray<readonly [string, string]> = [
+  ["/", "cover"],
+  ["/profile/", "profile"],
+];
+
+for (const [path, label] of PAGES) {
+  test(`every ${label} component is built from the system`, async ({ page }) => {
+    await page.goto(path);
+
+    const appComponents = page.locator("[data-ds-local]");
+    const count = await appComponents.count();
+    // The precondition: this page has app components at all, or the loop below
+    // asserts nothing and passes for the wrong reason.
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < count; i++) {
+      const component = appComponents.nth(i);
+      const name = await component.getAttribute("data-ds-component");
+      const fromSystem = component.locator("[data-ds-component]:not([data-ds-local])");
+      expect(await fromSystem.count(), `${name} should be composed from the system`).toBeGreaterThan(
+        0,
+      );
+    }
+  });
+}
+});
+
+/**
+ * Skipped, and not because anything here is failing.
+ *
+ * The blueprint's switch is off both pages and its keyboard shortcut is
+ * development-only while the mode is being reconsidered, so on a built page
+ * there is no way into it and every test below would be asserting against a
+ * page that cannot enter the state. The mode itself, its stylesheets and its
+ * provider are all still here and still typechecked. Put a Toggle back and drop
+ * the guard in XRayProvider and this whole file runs again — it is the coverage
+ * that goes with the entry point, not with the code.
+ */
+test.describe.skip("X-ray blueprint", () => {
+  test.use({ colorScheme: "dark" });
 
   test("repaints the page as blueprint paper", async ({ page }) => {
     await page.goto("/design/");
@@ -61,8 +121,12 @@ test.describe("X-ray blueprint", () => {
     // because the body transitions its background rather than swapping it.
     await expect.poll(() => styleOf(page, "body", "backgroundColor")).toBe(PAPER);
 
-    // Four layers: the major ruling and the minor ruling, each way.
-    const ruling = await styleOf(page, "body", "backgroundImage");
+    // Four layers: the major ruling and the minor ruling, each way. On body's
+    // ::after rather than on body: a background set on body with no background
+    // on the root propagates to the canvas, which is painted before every
+    // negative z-index child, so nothing could ever be drawn over it — and the
+    // ruling has to be maskable to be uncovered.
+    const ruling = await styleOf(page, "body", "backgroundImage", "::after");
     expect(ruling?.match(/linear-gradient/g)).toHaveLength(4);
   });
 
@@ -82,9 +146,14 @@ test.describe("X-ray blueprint", () => {
     const marks = await styleOf(page, selector, "backgroundImage");
     expect(marks?.match(/linear-gradient/g)).toHaveLength(8);
 
-    // No fill and no ink: the box is what is left, which is the point.
-    expect(await styleOf(page, selector, "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
-    expect(await styleOf(page, selector, "color")).toBe("rgba(0, 0, 0, 0)");
+    // No fill and no ink: the box is what is left, which is the point. Polled,
+    // for the same reason the outline above is: the Button transitions its own
+    // background, so a single read catches whatever alpha it happened to be at.
+    // This passed for a while on nothing but the entrance being slow enough —
+    // taking the frame rate from 25 to 60 moved the read earlier and the
+    // assertion started failing on a page that had not changed.
+    await expect.poll(() => styleOf(page, selector, "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
+    await expect.poll(() => styleOf(page, selector, "color")).toBe("rgba(0, 0, 0, 0)");
   });
 
   test("blanks the content but leaves it in the accessibility tree", async ({ page }) => {
@@ -116,42 +185,6 @@ test.describe("X-ray blueprint", () => {
     expect(await styleOf(page, selector, "content", "::before")).not.toContain("variant=");
     expect(await page.getAttribute(selector, "data-ds-props")).toContain("variant=");
   });
-
-  /**
-   * The claim the site makes, and the one an audit actually has to check.
-   *
-   * The earlier version of this test counted `[data-ds-local]` and demanded
-   * zero, which passed by moving every one-off *into* the system — a page
-   * component named Entry whose props are `when`, `org` and `badge` is the app's
-   * data model wearing the system's badge. The rule that survives is the other
-   * way round: app components are expected, and every one of them has to be
-   * built from the system rather than from raw markup.
-   */
-  const PAGES: ReadonlyArray<readonly [string, string]> = [
-    ["/", "cover"],
-    ["/profile/", "profile"],
-  ];
-
-  for (const [path, label] of PAGES) {
-    test(`every ${label} component is built from the system`, async ({ page }) => {
-      await page.goto(path);
-
-      const appComponents = page.locator("[data-ds-local]");
-      const count = await appComponents.count();
-      // The precondition: this page has app components at all, or the loop below
-      // asserts nothing and passes for the wrong reason.
-      expect(count).toBeGreaterThan(0);
-
-      for (let i = 0; i < count; i++) {
-        const component = appComponents.nth(i);
-        const name = await component.getAttribute("data-ds-component");
-        const fromSystem = component.locator("[data-ds-component]:not([data-ds-local])");
-        expect(await fromSystem.count(), `${name} should be composed from the system`).toBeGreaterThan(
-          0,
-        );
-      }
-    });
-  }
 
   test("tells a system component apart from an app one", async ({ page }) => {
     // The profile, not the cover: the blueprint left the cover with its switch.
@@ -247,17 +280,31 @@ test.describe("X-ray blueprint", () => {
 
       // Caught before the timer clears it. Vanishing on a frame reads as a bug.
       await expect(page.locator("html")).toHaveAttribute("data-xray", "leaving");
+
+      // The field is the one thing that leaves slowly, and only on the way out:
+      // the palette reverts at the top of "leaving", so this transition carries
+      // the blue away from under a page that is already back. Coming in it uses
+      // the site's own fast duration, because the ink is blanked in a single
+      // frame and whatever replaces the page has to arrive when the page does.
+      expect(await styleOf(page, "body", "transitionDuration")).toBe("0.48s");
       await expect(page.locator("html")).not.toHaveAttribute("data-xray", /.*/, { timeout: 3000 });
     });
 
-    test("develops with one pass over the page", async ({ page }) => {
+    test("develops by fading, with nothing travelling across the page", async ({ page }) => {
       await page.goto("/design/");
       await ready(page);
       await page.keyboard.press("x");
       // Without this the assertion below is true whether or not x-ray ran.
       await expect(page.locator("html")).toHaveAttribute("data-xray", "on");
 
-      expect(await styleOf(page, "body", "animationName", "::before")).toBe("xray-develop");
+      // The ruling arrives on opacity and the field on a transition, and that
+      // is the whole entrance. Two earlier versions moved something — the grid
+      // contracting from three times its step, then a band of light crossing
+      // the viewport — and both are the pattern the open note is about.
+      expect(await styleOf(page, "body", "animationName", "::after")).toBe("xray-paper-in");
+
+      // Nothing is drawn in front of the page at all.
+      expect(await styleOf(page, "body", "content", "::before")).toBe("none");
     });
   });
 
@@ -306,7 +353,7 @@ test.describe("X-ray blueprint", () => {
   });
 });
 
-test.describe("X-ray with reduced motion", () => {
+test.describe.skip("X-ray with reduced motion", () => {
   test.use({ contextOptions: { reducedMotion: "reduce" }, colorScheme: "dark" });
 
   test("appears without the staggered delay", async ({ page }) => {
@@ -327,10 +374,11 @@ test.describe("X-ray with reduced motion", () => {
     await page.keyboard.press("x");
     await expect(page.locator("html")).toHaveAttribute("data-xray", "on");
 
-    // Collapsing the duration is not enough: a sweep crossing the viewport in
-    // 0.01ms is a flash, which is the one kind of motion that is a safety
-    // problem rather than a taste one. It is removed, not accelerated.
-    expect(await styleOf(page, "body", "display", "::before")).toBe("none");
+    // Collapsing the duration is not enough: a fade that runs in 0.01ms is a
+    // flash, which is the one kind of motion that is a safety problem rather
+    // than a taste one. It is removed, not accelerated.
+    expect(await styleOf(page, "body", "animationName", "::after")).toBe("none");
+    expect(await styleOf(page, "body", "transitionDuration")).toBe("0s");
 
     // The paper itself still arrives — the mode works, it just does not move.
     await expect.poll(() => styleOf(page, "body", "backgroundColor")).toBe(PAPER);

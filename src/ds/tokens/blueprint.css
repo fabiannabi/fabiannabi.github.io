@@ -46,9 +46,6 @@
   --xray-grid: rgba(255, 255, 255, 0.045);
   --xray-grid-major: rgba(255, 255, 255, 0.09);
 
-  /* The developing pass, a gradient's midpoint. */
-  --xray-sweep: rgba(143, 224, 255, 0.14);
-
   /* Ruling. 12px is --ds-space-4; the major line lands every eight of them, so
      component padding measures a whole number of squares. */
   --xray-grid-step: 12px;
@@ -68,6 +65,13 @@
      is the page changing state, not a control responding. The exit is not this
      value -- it is --ds-duration-slow, which XRayProvider also holds in JS. */
   --xray-develop: 720ms;
+
+  /* And the way out, at two thirds of it. The two were the same number for a
+     while and the exit read as slow: the entrance has something to show and can
+     take its time over it, while an exit is a reader saying they are done
+     looking. It is not --ds-duration-slow either — that is a control
+     responding, and at 360ms a full-screen fade is closer to a cut. */
+  --xray-undevelop: 480ms;
 }
 
 /* ---------- the remap ----------
@@ -84,8 +88,14 @@
    enough, because nothing else matches that element and custom properties
    inherit from it. That second half is what lets a single card render in
    cyanotype while the page around it stays as it was. */
-:root[data-xray],
-[data-xray] {
+/* Scoped to "on", not to any [data-xray]. The exit holds a "leaving" state
+   while the drawing animates away, and for as long as the remap applied there
+   too the page stayed blue and blanked for the whole of it — so everything came
+   back in the single frame the attribute was removed in. A wireframe fading out
+   over a page that is already there is a fade; a blank page that snaps back is
+   a cut, and it read as the exit being broken rather than slow. */
+:root[data-xray="on"],
+[data-xray="on"] {
   /* Native form controls, scrollbars and the like follow the paper. */
   color-scheme: dark;
 

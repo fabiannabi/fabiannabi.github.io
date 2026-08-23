@@ -46,10 +46,28 @@
 /* ---------- the paper ---------- */
 
 /* The field colour arrives through the token remap -- body already paints
-   var(--bg) / var(--ds-surface). Only the ruling is drawn here, on the body
-   rather than a fixed overlay node, so it sits under the content in the natural
-   stacking order and scrolls with the drawing like paper does. */
+   var(--bg) / var(--ds-surface). Only the ruling is drawn here.
+
+   On a pseudo-element rather than on body's own background, and that is not a
+   preference. A background set on body with no background on the root
+   propagates to the canvas, and the canvas is painted before everything —
+   including negative z-index children. Anything meant to cover the ruling
+   therefore cannot, whatever it is given for a z-index. Costing an afternoon to
+   discover that, twice, is what this paragraph is for.
+
+   Absolute at inset 0 rather than fixed, so it still sits under the content in
+   the natural stacking order and still scrolls with the drawing like paper
+   does. */
 [data-xray] body {
+  position: relative;
+}
+
+[data-xray] body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     linear-gradient(to right, var(--xray-grid-major) 0 1px, transparent 1px),
     linear-gradient(to bottom, var(--xray-grid-major) 0 1px, transparent 1px),
@@ -63,32 +81,52 @@
   background-repeat: repeat;
 }
 
-/* The ruling resolves into place instead of blinking on. */
-[data-xray="on"] body {
+/* The ruling fades. Nothing about the entrance travels any more.
+
+   Three versions of this. It arrived by animating background-size from three
+   times the step down to one — every line on the page moving inward at once,
+   under a band of light crossing the other way: two directions, dozens of thin
+   high-contrast lines, inside a second, which is the whole of what makes an
+   entrance a vestibular problem. Then it was uncovered left to right by a mask
+   with the band travelling the same axis, which fixed the two directions and
+   left something bright still crossing the screen. Now it is opacity, and the
+   page changing colour under it, and that is all. */
+[data-xray="on"] body::after {
   animation: xray-paper-in var(--xray-develop) var(--ds-ease, ease) both;
 }
 
+[data-xray="leaving"] body::after {
+  animation: xray-paper-out var(--xray-undevelop) var(--ds-ease, ease) both;
+}
+
+/* The paper arrives with the blanking, and only the drawing develops.
+
+   The blue was given the entrance's own 720ms, on the theory that the field is
+   the mode arriving and should take the mode's time. It made the page vanish:
+   the ink is blanked in the frame the attribute lands in, so for a third of a
+   second there was a near-white page with no text on it and a few faint lines —
+   the content gone and nothing yet in its place. Whatever replaces the page has
+   to arrive when the page leaves. The field keeps global.css's own duration,
+   which is fast, and what fades in over --xray-develop is the ruling and the
+   frames. That is the part worth watching anyway.
+
+   The way out is the opposite case and does want the long one: there the
+   palette reverts at the top of "leaving", so this transition is what carries
+   the blue away from under a page that is already back. */
 [data-xray="leaving"] body {
-  animation: xray-paper-out var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
+  transition-duration: var(--xray-undevelop);
 }
 
 /* ---------- the developing pass ---------- */
 
-/* One traverse of the page, once, on entry: the print coming up in the tray.
-   A pseudo-element on the body rather than a node, because a node that exists
-   only to be decorative is a node a screen reader has to be told to ignore. */
-[data-xray="on"] body::before {
-  content: "";
-  position: fixed;
-  inset-block-start: 0;
-  inset-inline: 0;
-  z-index: 9999;
-  height: 42vh;
-  background: linear-gradient(to bottom, transparent, var(--xray-sweep) 76%, var(--ds-accent));
-  opacity: 0.55;
-  pointer-events: none;
-  animation: xray-develop var(--xray-develop) var(--ds-ease, ease) both;
-}
+/* There was one, and it was the last thing moving. A band of light the width of
+   half the viewport crossed the page once on entry and once on the way out —
+   the print coming up in the tray. It went for the reason everything else in
+   this entrance went: it is a bright object travelling across a page, and the
+   page it travels across is a drawing made of thin lines. Read against a grid,
+   noise is exactly what it was.
+
+   body::before is free now. Nothing is asking to be put back in it. */
 
 /* ---------- the mockup ---------- */
 
@@ -103,15 +141,23 @@
    invisible, still selectable, and still announced. The blueprint is a visual
    mode and stays one. */
 
-[data-xray] [data-ds-component] {
-  --xray-tick: var(--xray-tick-length);
-
-  position: relative;
+/* Two blocks, and the split is the exit. What is *drawn* — the frame, the
+   marks, the plate — applies for as long as the mode is on screen at all, so it
+   is still there to animate away during "leaving". What is *blanked* applies
+   only while the mode is on, so the moment somebody asks to leave they get
+   their page back and the drawing lifts off it. */
+[data-xray="on"] [data-ds-component] {
   color: transparent;
   background-color: transparent;
   border-color: transparent;
   box-shadow: none;
   text-decoration-color: transparent;
+}
+
+[data-xray] [data-ds-component] {
+  --xray-tick: var(--xray-tick-length);
+
+  position: relative;
 
   /* outline, not border: a border would change the box and the blueprint would
      be measuring a layout it caused. The frame follows the component's radius. */
@@ -164,13 +210,13 @@
 
    Instrumented descendants are excluded: a component nested in a component gets
    its own frame and its own name plate, and blanking it here would erase them. */
-[data-xray]
+[data-xray="on"]
   :is([data-ds-component], [data-ds-region])
   *:not([data-ds-component], [data-ds-region], [data-ds-chrome], [data-ds-chrome] *),
-[data-xray]
+[data-xray="on"]
   :is([data-ds-component], [data-ds-region])
   *:not([data-ds-component], [data-ds-region], [data-ds-chrome], [data-ds-chrome] *)::before,
-[data-xray]
+[data-xray="on"]
   :is([data-ds-component], [data-ds-region])
   *:not([data-ds-component], [data-ds-region], [data-ds-chrome], [data-ds-chrome] *)::after {
   color: transparent !important;
@@ -225,19 +271,37 @@
 
 /* Graphics have no text colour to make transparent. Restricted to leaves, so
    this can never be the rule that hides an instrumented component. */
-[data-xray]
+[data-xray="on"]
   :is([data-ds-component], [data-ds-region])
   :where(svg, img, video, canvas, picture):not([data-ds-chrome] *) {
   opacity: 0;
 }
 
-[data-xray="on"] [data-ds-component] {
+/* Only the boxes a reader can actually see are drawn in. `data-ds-draw` is
+   stamped by XRayProvider on the components intersecting the viewport at the
+   moment the mode is turned on; everything else is simply already drawn.
+
+   This is the difference between the blueprint running at 25fps and at 60.
+   /design/ instruments 599 components, and each one animating its frame, its
+   name plate and its content box is around 1800 animations of outline-color
+   and a registered length — none of it compositable, all of it repainting every
+   frame. Measured: 27 frames in the first second with them on, 65 with them
+   off, and pinning --xray-tick changed nothing, so it was never the custom
+   property. It was the count.
+
+   It is the same argument the stagger cap already makes one line down. Nobody
+   is watching a box eleven screens below the fold assemble itself. */
+[data-xray="on"] [data-ds-component][data-ds-draw] {
   animation: xray-frame-in var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
   animation-delay: var(--xray-delay, 0ms);
 }
 
-[data-xray="leaving"] [data-ds-component] {
-  animation: xray-frame-out var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
+/* The whole exit is one duration, and every part of the drawing has to end on
+   it. At a control's 360ms the frames were gone while the light was still only
+   halfway across, which left a third of a second of ruled paper with nothing on
+   it — the page looking broken rather than the mode being put away. */
+[data-xray="leaving"] [data-ds-component][data-ds-draw] {
+  animation: xray-frame-out var(--xray-undevelop) var(--ds-ease, ease) both;
 }
 
 /* Focus must still win. A blueprint that hides the focus ring would be breaking
@@ -330,15 +394,15 @@
   content: "";
 }
 
-[data-xray="on"] [data-ds-component]::before {
+[data-xray="on"] [data-ds-component][data-ds-draw]::before {
   animation: xray-label-in var(--ds-duration, 200ms) var(--ds-ease, ease) both;
   /* One beat after the frame it names: the box is drawn, then it is labelled.
      Simultaneous reads as a tooltip. */
   animation-delay: calc(var(--xray-delay, 0ms) + var(--ds-duration-fast, 120ms));
 }
 
-[data-xray="leaving"] [data-ds-component]::before {
-  animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+[data-xray="leaving"] [data-ds-component][data-ds-draw]::before {
+  animation: xray-label-out var(--xray-undevelop) var(--ds-ease, ease) both;
 }
 
 /* ---------- the dimension box ---------- */
@@ -359,13 +423,13 @@
   pointer-events: none;
 }
 
-[data-xray="on"] [data-ds-component]::after {
+[data-xray="on"] [data-ds-component][data-ds-draw]::after {
   animation: xray-content-in var(--ds-duration-slow, 360ms) var(--ds-ease, ease) both;
   animation-delay: calc(var(--xray-delay, 0ms) + var(--ds-duration-fast, 120ms));
 }
 
-[data-xray="leaving"] [data-ds-component]::after {
-  animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+[data-xray="leaving"] [data-ds-component][data-ds-draw]::after {
+  animation: xray-label-out var(--xray-undevelop) var(--ds-ease, ease) both;
 }
 
 /* ---------- what the system does not own ---------- */
@@ -428,7 +492,7 @@
 
 [data-xray="leaving"] [data-ds-region],
 [data-xray="leaving"] [data-ds-region]::before {
-  animation: xray-label-out var(--ds-duration, 200ms) var(--ds-ease, ease) both;
+  animation: xray-label-out var(--xray-undevelop) var(--ds-ease, ease) both;
 }
 
 /* ---------- what the blueprint may not touch ---------- */
@@ -467,30 +531,12 @@
 
 @keyframes xray-paper-in {
   from {
-    background-size:
-      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
-      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
-      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3),
-      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3);
+    opacity: 0;
   }
 }
 
 @keyframes xray-paper-out {
   to {
-    background-size:
-      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
-      calc(var(--xray-grid-step-major) * 3) calc(var(--xray-grid-step-major) * 3),
-      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3),
-      calc(var(--xray-grid-step) * 3) calc(var(--xray-grid-step) * 3);
-  }
-}
-
-@keyframes xray-develop {
-  from {
-    transform: translate3d(0, -42vh, 0);
-  }
-  to {
-    transform: translate3d(0, 100vh, 0);
     opacity: 0;
   }
 }
@@ -549,7 +595,14 @@
     animation-delay: 0ms !important;
   }
 
-  [data-xray] body::before {
-    display: none;
+  /* The ruling stays — it is the mode, not the animation. Only the fade goes,
+     and the page's colour with it: a collapsed duration is a flash, which is
+     the one kind of motion that is a safety problem rather than a taste one. */
+  [data-xray] body::after {
+    animation: none;
+  }
+
+  [data-xray] body {
+    transition: none;
   }
 }

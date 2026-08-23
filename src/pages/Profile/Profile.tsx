@@ -19,9 +19,6 @@ import { Label } from "../../ds/components/Label/Label";
 import { Link } from "../../ds/components/Link/Link";
 import { Text } from "../../ds/components/Text/Text";
 import { region } from "../../ds/xray/instrument";
-import { XRayToggle } from "../../ds/xray/XRayToggle";
-import { useXRay } from "../../ds/xray/useXRay";
-import { Beacon } from "../../components/Beacon/Beacon";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useTheme } from "../../hooks/useTheme";
 import styles from "./Profile.module.css";
@@ -47,7 +44,6 @@ function RichText({ parts }: { parts: readonly string[] }) {
 
 export function Profile() {
   const { theme, toggle } = useTheme();
-  const { enabled: xray } = useXRay();
   const activeId = useActiveSection(SECTION_IDS, sections[0]?.id ?? "about");
 
   return (
@@ -97,13 +93,11 @@ export function Profile() {
             <Link href="/design/" font="mono" tone="muted">
               Design system
             </Link>
-            {/* The halo followed the switch off the cover: a reader who does
-                not know the mode exists will not go looking for it. The design
-                system's own page needs no beacon — there the blueprint is what
-                the page is about. */}
-            <Beacon quiet={xray}>
-              <XRayToggle />
-            </Beacon>
+            {/* The blueprint's switch was here, with a Beacon around it. Both are
+                out while the mode is being reconsidered — see CLAUDE.md. The
+                instrumentation stays: `region` and the `data-ds-*` stamps are
+                inert markup that the architecture tests read whether or not
+                anything draws them. */}
             <ThemeToggle theme={theme} onToggle={toggle} />
           </div>
         </header>
