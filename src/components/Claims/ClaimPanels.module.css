@@ -35,12 +35,19 @@
   padding-block: var(--s2);
 }
 
+/* The chips at the start, the way back at the end. They are not four of a kind
+   — three of them choose a deficiency and the fourth undoes whichever was
+   chosen — and an evenly spaced row of four says they are. */
 .instrument {
   display: flex;
   align-items: center;
   gap: var(--s3);
   flex-wrap: wrap;
   margin-top: auto;
+}
+
+.instrument fieldset {
+  margin-inline-end: auto;
 }
 
 /* The answer and its sizer share one grid cell, so the row is as tall as the
@@ -64,134 +71,30 @@
   grid-area: 1 / 1;
 }
 
-/* The way out of the card. Pointing at a panel starts it breathing, which is
-   the invitation the flat version never gave — a border that lights up says
-   something is live, not that there is somewhere to press.
-
-   box-shadow, so nothing reflows, and the global reduced-motion rule collapses
-   the duration to nothing without this file needing to know. */
-.claim:hover .instrument button,
-.claim:focus-within .instrument button {
-  animation: pulse 1.8s var(--ease) infinite;
-}
-
-/* Not the chips. They are the choice; the pulse marks the one control that
-   leaves the card. */
-.claim:hover .instrument fieldset button,
-.claim:focus-within .instrument fieldset button {
-  animation: none;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 var(--accent-line);
-  }
-  70% {
-    box-shadow: 0 0 0 6px transparent;
-  }
-  100% {
-    box-shadow: 0 0 0 0 transparent;
-  }
-}
+/* There was a pulse on the instrument here, started by pointing at the panel:
+   the card breathing to say there was somewhere to press. It marked the one
+   control that left the card, and every control in this row leaves the card
+   now — a chip filters the whole page the moment it is pressed. A hint that
+   points at everything points at nothing, and this page already has an open
+   note about rings that beat on their own. */
 
 .piece {
   display: inline-flex;
 }
 
-/* The pieces fall into the card rather than appearing in it, and they do not
-   fall in reading order — the middle one lands first, then the left, then the
-   right. In sequence it reads as a list animating; out of sequence it reads as
-   something being assembled, which is what the blueprint is.
+/* A whole blueprint lived in here: the pieces dropping into the card out of
+   reading order so it read as assembly, a ruled paper swept in diagonally by a
+   mask, and a transition on the palette swap underneath. It went with the
+   second claim it belonged to — every box on this page is a component I wrote
+   — which the CV and /design/ make against the whole page rather than against a
+   panel-sized copy of it. The cover stopped shipping blueprint.css with it, so
+   the drawing had no --xray-* to resolve against either.
 
-   The frames draw themselves in at the same time: that is the x-ray's own
-   animation on the components inside these wrappers, staggered to match.
-
-   The global reduced-motion rule collapses every duration here without this
-   file needing to know, and the delays go with them. */
-.claim[data-xray] .piece {
-  animation: drop var(--dur) var(--ease) both;
-}
-
-.claim[data-xray] .piece:nth-child(1) {
-  animation-delay: 110ms;
-}
-
-.claim[data-xray] .piece:nth-child(1) > * {
-  --xray-delay: 110ms;
-}
-
-.claim[data-xray] .piece:nth-child(2) {
-  animation-delay: 0ms;
-}
-
-.claim[data-xray] .piece:nth-child(3) {
-  animation-delay: 230ms;
-}
-
-.claim[data-xray] .piece:nth-child(3) > * {
-  --xray-delay: 230ms;
-}
-
-@keyframes drop {
-  from {
-    opacity: 0;
-    transform: translateY(-12px) rotate(-3deg);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* The palette swap is instant — custom properties do not transition — so the
-   surface underneath is what carries the change. Slower than the card's own
-   hover, because this one is a mode arriving rather than a control responding. */
-.claim[data-xray] {
-  transition:
-    background var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
-}
-
-/* The ruled paper, drawn from the blueprint's own tokens so a card cannot show a
-   grid the page would not, and swept in diagonally so the squares arrive in a
-   wave instead of appearing at once. The mask is the sweep: a hard-edged
-   gradient three times the size of the layer, slid from one corner to the
-   other. */
-.paper {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, var(--xray-grid-major) 0 1px, transparent 1px),
-    linear-gradient(to bottom, var(--xray-grid-major) 0 1px, transparent 1px),
-    linear-gradient(to right, var(--xray-grid) 0 1px, transparent 1px),
-    linear-gradient(to bottom, var(--xray-grid) 0 1px, transparent 1px);
-  background-size:
-    var(--xray-grid-step-major) var(--xray-grid-step-major),
-    var(--xray-grid-step-major) var(--xray-grid-step-major),
-    var(--xray-grid-step) var(--xray-grid-step),
-    var(--xray-grid-step) var(--xray-grid-step);
-  mask-image: linear-gradient(135deg, var(--mask-opaque) 0 30%, transparent 55%);
-  mask-size: 300% 300%;
-  animation: paper-in var(--xray-develop) var(--ease) both;
-}
-
-/* Everything the card actually says sits above the paper. */
-.claim > *:not(.paper) {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes paper-in {
-  from {
-    mask-position: 130% 130%;
-  }
-  to {
-    mask-position: 0% 0%;
-  }
-}
+   It is also the animation the open note in CLAUDE.md is about: three pieces
+   falling with rotation while a grid swept underneath them and frames drew
+   themselves in, all inside a second. The x-ray's own entrance still does a
+   version of that on the profile and on /design/, and still needs redesigning.
+   /lab/ has the shape of the answer. */
 
 /* ---------- the block ---------- */
 

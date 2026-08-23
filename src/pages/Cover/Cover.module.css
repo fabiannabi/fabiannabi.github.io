@@ -22,15 +22,6 @@
   flex-wrap: wrap;
 }
 
-/* The switch and the status badge share the end of the header row. Both are
-   --ds-control-sm, so they line up through the token rather than by eye. */
-.instruments {
-  display: flex;
-  align-items: center;
-  gap: var(--s3);
-  flex-wrap: wrap;
-}
-
 .ident {
   margin-inline-end: auto;
   display: flex;

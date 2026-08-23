@@ -63,13 +63,12 @@ describe("Cover", () => {
   it("offers the simulator without spending a link on it", () => {
     render(<Cover />);
 
-    // A button, not a link: it changes how this page renders rather than
+    // Buttons, not links: they change how this page renders rather than
     // navigating anywhere. The blueprint's switch used to be here as well and
     // moved to the profile and the design system — a cover letter gets one
     // instrument, and this is the one with something to prove about the page.
-    expect(
-      screen.getByRole("button", { name: "Simulate colour vision deficiency" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Deutan/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Back to normal" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /x-ray/i })).not.toBeInTheDocument();
   });
 });

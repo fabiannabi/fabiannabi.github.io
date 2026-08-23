@@ -83,6 +83,10 @@ export const claims = {
       tritanopia: "Tritanopia — blue against yellow, and the rare one.",
     },
     verdict: "The hue is gone. The underline, the weight and the words are not.",
+    /* The way back, and the way to stop the card demonstrating on its own. One
+       label for both, because they are one thing from the reader's side: put it
+       back the way it was. */
+    reset: "Back to normal",
   },
 } as const;
 

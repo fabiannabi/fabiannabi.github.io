@@ -11,20 +11,20 @@ type Props = {
    * movement.
    */
   quiet?: boolean;
-  /**
-   * Seconds to offset the pulse by. Two beacons firing in unison read as one
-   * animation across the page rather than as two controls, and the page is
-   * trying to say "here, and also here".
-   */
-  offset?: number;
 };
+
+/* There was an `offset` prop here, in seconds, for two beacons on one page that
+   would otherwise have pulsed in unison and read as one animation crossing the
+   page. There is one beacon per page now — the eye on the cover, the x-ray's
+   switch on the profile — so the prop had no caller, and a prop with no caller
+   is a guess about the future that the next reader has to take seriously. */
 
 /**
  * A halo that says a control is worth pressing, wrapped around the control
  * rather than built into it.
  *
- * Both of the cover's instruments are quiet by design — a Toggle is a Toggle,
- * and a design system control that shouted would be useless in a toolbar. The
+ * The controls it wraps are quiet by design — a Toggle is a Toggle, and a
+ * design system control that shouted would be useless in a toolbar. The
  * shouting is this page's problem, so it belongs to this page: the wash disc
  * and the pulse are drawn here, and the Toggle inside knows nothing about them.
  * Building them into the Toggle would have shipped the cover's conceit to
@@ -41,15 +41,10 @@ type Props = {
  * `prefers-reduced-motion`, which the global rule honours — the disc is still
  * there saying something lives at this spot.
  */
-export function Beacon({ children, quiet = false, offset = 0 }: Props) {
+export function Beacon({ children, quiet = false }: Props) {
   return (
     <span
       className={quiet ? `${styles.beacon} ${styles.quiet}` : styles.beacon}
-      style={
-        offset
-          ? ({ "--beacon-offset": `${offset}s` } as React.CSSProperties)
-          : undefined
-      }
       /* Chrome, and it has to be. The blueprint blanks a component's text and
          frames its box; wrapped around the switch that turns the blueprint off,
          that drew a box labelled BEACON over the one control the mode may not

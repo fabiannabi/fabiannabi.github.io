@@ -48,30 +48,24 @@ const FILTERS: ReadonlyArray<{ id: Vision; label: string; matrix: string }> = [
 ];
 
 export function VisionProvider({ children }: { children: ReactNode }) {
-  /* What was chosen on purpose, and what is merely being shown. An instrument
-     that can demonstrate itself before it is committed to needs both: the eye
-     at the edge of the cover renders the whole page through a deficiency while
-     the pointer rests on it, and nothing about that is a decision. */
-  const [applied, setApplied] = useState<Vision>("none");
-  const [previewed, setPreviewed] = useState<Vision | null>(null);
+  /* What is on screen. There was a second value beside it — what had been
+     applied, as against what was merely being shown — for an eye that rendered
+     the page through a deficiency while the pointer rested on it. Nothing
+     previews any more, so the two collapsed back into one. */
+  const [vision, setVision] = useState<Vision>("none");
 
-  /* Which one the instruments are pointed at. It survives being switched off,
-     so turning the simulation on again returns to the last deliberate pick
-     rather than to a default the reader did not choose. Deuteranopia to begin
-     with, because it is much the most common. */
+  /* Which one the controls are pointed at. It survives being switched off, so
+     turning the simulation on again returns to the last deliberate pick rather
+     than to a default the reader did not choose. Deuteranopia to begin with,
+     because it is much the most common. */
   const [choice, setChoice] = useState<Deficiency>("deuteranopia");
 
   const select = useCallback((next: Vision) => {
-    setPreviewed(null);
-    setApplied(next);
+    setVision(next);
     if (next !== "none") setChoice(next);
   }, []);
 
   const choose = useCallback((next: Deficiency) => setChoice(next), []);
-
-  const preview = useCallback((next: Vision | null) => setPreviewed(next), []);
-
-  const vision = previewed ?? applied;
 
   useEffect(() => {
     const root = document.documentElement;
@@ -80,8 +74,8 @@ export function VisionProvider({ children }: { children: ReactNode }) {
   }, [vision]);
 
   const value = useMemo(
-    () => ({ vision, applied, choice, select, choose, preview }),
-    [vision, applied, choice, select, choose, preview],
+    () => ({ vision, choice, select, choose }),
+    [vision, choice, select, choose],
   );
 
   return (

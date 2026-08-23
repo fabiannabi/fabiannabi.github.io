@@ -1,8 +1,18 @@
 /* Wrapped around a control, and adding no box of its own: inline-flex so the
-   control keeps whatever layout it had. */
+   control keeps whatever layout it had.
+
+   The halo is the exception, and it has to be. The wash reaches --beacon-halo
+   past the control on every side while the layout is still done against the
+   button's box, so a neighbour spaced by exactly that much lands on the disc
+   rather than beside it — which is what the cover's header looked like: a label
+   pill, a status badge and a wash all touching, with a flex gap in the
+   stylesheet insisting otherwise. Reserving the overhang as margin is what lets
+   a caller space this correctly without having read this file. */
 .beacon {
+  --beacon-halo: var(--s3);
   position: relative;
   display: inline-flex;
+  margin: var(--beacon-halo);
 }
 
 /* A wash disc under the control, and unlike the pulse it does not go away. The
@@ -14,7 +24,7 @@
    border, and the Toggle already has one of those. */
 .glow {
   position: absolute;
-  inset: calc(var(--s3) * -1);
+  inset: calc(var(--beacon-halo) * -1);
   border-radius: var(--radius-pill);
   background: var(--wash);
   pointer-events: none;
@@ -30,7 +40,6 @@
   border-radius: var(--radius-pill);
   pointer-events: none;
   animation: beacon-pulse 9s var(--ease) infinite;
-  animation-delay: var(--beacon-offset, 0s);
 }
 
 /* Nine seconds of nothing and two of pulse. "Every so often" is the whole

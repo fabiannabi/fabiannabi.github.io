@@ -71,10 +71,9 @@ for (const [path, label] of PAGES) {
 test("simulates colour vision deficiency in linear light", async ({ page }) => {
   await page.goto("/");
 
-  // The chips point every instrument at a deficiency; the eye docked at the
-  // edge is the one control that applies it to the page.
+  // A chip is a choice that takes effect: pressing it filters the page rather
+  // than staging a value for some other control to apply.
   await page.getByRole("button", { name: /^Deutan/ }).click();
-  await page.getByRole("button", { name: "Simulate colour vision deficiency" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-vision", "deuteranopia");
 
   // The matrices are defined on linear RGB and feColorMatrix defaults to sRGB.
@@ -91,7 +90,7 @@ test("simulates colour vision deficiency in linear light", async ({ page }) => {
   const applied = await page.evaluate(() => getComputedStyle(document.body).filter);
   expect(applied).toContain("ds-deuteranopia");
 
-  await page.getByRole("button", { name: "Simulate colour vision deficiency" }).click();
+  await page.getByRole("button", { name: "Back to normal" }).click();
   await expect(page.locator("html")).not.toHaveAttribute("data-vision", /.*/);
   expect(await page.evaluate(() => getComputedStyle(document.body).filter)).toBe("none");
 });
@@ -99,7 +98,6 @@ test("simulates colour vision deficiency in linear light", async ({ page }) => {
 test("the claim survives losing the accent hue", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: /^Deutan/ }).click();
-  await page.getByRole("button", { name: "Simulate colour vision deficiency" }).click();
 
   // The rotating slot is the one place the cover leans on colour, and it carries
   // an underline for exactly this reason (SC 1.4.1). Simulating the most common

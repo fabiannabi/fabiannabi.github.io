@@ -23,7 +23,7 @@ There are two layers of component and the line between them is the single most
 load-bearing decision in this repo.
 
 - **`src/ds`** — the system. Fourteen components, every one of them generic.
-- **`src/components`** — the app. Ten, every one of them composed from the
+- **`src/components`** — the app. Nine, every one of them composed from the
   system.
 
 **The test is not how many times a component is used. It is whether its API
@@ -213,7 +213,8 @@ tables from the TypeScript via react-docgen. **Add a component to
 
 `src/ds/a11y/` renders the page as a dichromat sees it — protanopia,
 deuteranopia, tritanopia — from the Machado, Oliveira & Fernandes (2009)
-matrices at severity 1.0. The control is on the cover, next to the x-ray.
+matrices at severity 1.0. The controls are on the cover, in the claim they
+settle.
 
 - **`color-interpolation-filters="linearRGB"` is not optional.** The matrices are
   defined on linear light and `feColorMatrix` defaults to sRGB. Applying them to
@@ -234,16 +235,33 @@ matrices at severity 1.0. The control is on the cover, next to the x-ray.
   resting meaning on hue — which is why the rotating slot carries an underline,
   and why there is an e2e test asserting the underline survives the simulation.
 
-### One instrument on the cover, and why it is allowed in the chrome
+### One instrument on the cover, and it sits inside the claim it settles
 
 The cover's controls sat in the page chrome, then moved into cards that
-explained them, then came back. What makes the second version of the chrome
-different is that **the instrument demonstrates itself before it is pressed**:
-pointing at the eye beside the status badge renders the whole page through a
-colour vision deficiency, and moving away puts it back. The objection to a
-control in the chrome is that it is a button with no sentence attached; a
-control whose effect you can see without committing to it has the page for a
-sentence.
+explained them, then came back to the chrome, and are now in the card for good.
+What settled it: **a control in the chrome is a button with no sentence attached
+to it**, and on this page the sentence was three hundred words further down.
+
+The chrome version had a real answer to that objection and it still lost. An eye
+docked beside the status badge previewed itself — pointing at it rendered the
+whole page through a colour vision deficiency and moving away put it back — on
+the theory that a control whose effect you can see without committing to it has
+the page for a sentence. Two things killed it. It read as cramped no matter what
+the gap said, for a reason worth keeping (see the halo, below); and once the
+chips applied on press it was **a second control that started the same
+simulation**, which is the duplication this repo has undone twice already, in
+`ActionLink` over `Button` and `StatusPill` over `Badge`.
+
+So the instrument row is three chips and one button.
+
+- **A chip is a choice that takes effect.** Press Deutan and the page is
+  deuteranopic. A picker that stages a value somebody then has to go and apply
+  somewhere else is a form; this is an instrument.
+- **"Back to normal" is the one thing the chips cannot be**, and it is live in
+  both states rather than disabled in one: with a simulation running it takes it
+  off, and at rest it stops the card walking the palette on its own. From the
+  reader's side those are one thing — put it back the way it was — so they share
+  a label and a control.
 
 **The blueprint is not on the cover.** It draws every page as named boxes, which
 is the honest way to show the site is built from the system rather than beside
@@ -252,34 +270,36 @@ letter it was a second instrument competing with the only thing that page has to
 sell. The cover therefore ships neither `blueprint.css` nor `xray.css` nor the
 provider that measures for them.
 
-**Only the eye previews.** The blueprint switch had a hover preview for an
-afternoon and it came out again: redrawing the whole page is not a thing to do
-to somebody who was scrolling past, and on touch there is no hover at all — a
-tap fires `pointerenter` and then `click`, so the preview is one frame of
-blueprint on the way to the press that was actually meant. The eye keeps its
-preview, for a mouse only, because it changes how the page looks rather than
-what the page is.
+**Nothing previews any more.** The eye was the only control that did, and the
+x-ray never should have: redrawing the whole page is not a thing to do to
+somebody who was scrolling past, and on touch there is no hover at all — a tap
+fires `pointerenter` and then `click`, so the preview is one frame on the way to
+the press that was actually meant.
 
-`VisionState` therefore separates *what is on screen* from *what was chosen*:
-`vision`, `applied` and `choice`. Labelling a control from the drawing rather
+`VisionState` went back to two values with it — `vision` and `choice`. It had
+four: `applied` beside `vision`, and a `preview` that showed a deficiency
+without committing to it, because labelling a control from the drawing rather
 than from the decision is how a button ends up reading "Stop simulating" under a
-cursor that has not decided anything.
+cursor that has not decided anything. That distinction is only real while
+something can put a deficiency on screen that nobody chose, and nothing can any
+more. A catalogue entry with no caller is allowed here — `Button` and `Alert`
+have none on this site — but a *distinction* with no caller is different: it is
+two values that can never disagree, and the next reader has to work out why
+before they can trust either.
 
-**The halo is not in the Toggle.** `Beacon` wraps a control and draws a wash disc
-and a pulse around it — one pulse every nine seconds, stopping for good once the
-control is hovered, focused or used, and offset between the two so they never
-fire together. A system control that shouted would be useless in a toolbar;
-shouting is this page's problem, so it lives in this page's component. `Beacon`
-carries `data-ds-chrome`: wrapped around the blueprint's own switch it otherwise
-drew a box labelled BEACON over the one control the mode may not hide, and the
-Toggle's `color: inherit` exemption resolved against a parent that had just been
-blanked.
+**A halo is layout.** `Beacon` wraps a control and draws a wash disc and a pulse
+around it — one pulse every nine seconds, stopping for good once the control is
+hovered, focused or used. The disc reaches `--beacon-halo` past the control on
+every side while the caller lays out against the button's box, so a neighbour
+spaced by exactly that much lands *on* the disc: the cover's header had a label
+pill, an eye and a status badge all touching, with a flex gap in the stylesheet
+insisting otherwise. The overhang is `margin` now. `Beacon` carries
+`data-ds-chrome` as well — wrapped around the blueprint's own switch it
+otherwise drew a box labelled BEACON over the one control the mode may not hide.
 
-**Only one control applies the simulation**, and it is the eye. The chips on the
-claim choose which deficiency; the card explains. An apply button in the card as
-well would be two controls meaning the same thing — the failure this repo has
-already undone twice, in `ActionLink` over `Button` and `StatusPill` over
-`Badge`.
+It is on the profile's x-ray switch, and nowhere else. A system control that
+shouted would be useless in a toolbar; shouting is a page's problem, so it lives
+in a page's component.
 
 **Nothing on a filtered page may be `position: fixed`.** An element with a
 `filter` becomes the containing block for its fixed-position descendants, and
@@ -503,18 +523,19 @@ designed, and nothing about it should carry Salesloft branding or values.
 - [ ] The three `writing` entries are drafts with a "to publish" badge. When a
       post goes live, link it and drop the badge.
 - [ ] **The blueprint's entrance animation needs redesigning: it makes people
-      dizzy.** A grid sweeping diagonally, three pieces falling with rotation,
-      component frames drawing themselves and registration marks growing from
-      the corners — dozens of thin high-contrast lines moving in different
-      directions inside a second. That is the pattern that triggers vestibular
-      responses, and it sits under SC 2.3.3.
+      dizzy.** The developing sweep across the page, component frames drawing
+      themselves and registration marks growing from the corners — dozens of
+      thin high-contrast lines moving in different directions inside a second.
+      That is the pattern that triggers vestibular responses, and it sits under
+      SC 2.3.3. It runs on `/profile/` and `/design/`; the cover had a
+      panel-sized copy of it, with three pieces falling out of reading order,
+      and that went when the claim it belonged to did.
 
       `prefers-reduced-motion` is honoured, and that is not a defence: it covers
       the reader who already configured their OS, not the one who simply gets
-      dizzy. See NOTES-2026-08-19.md §1.1 for five alternatives. The starting
-      recommendation is a static grid that fades in, with only the frames drawing
-      in — it keeps the sense of construction and drops the translation, which is
-      the part that moves people.
+      dizzy. The starting recommendation is a static grid that fades in, with
+      only the frames drawing in — it keeps the sense of construction and drops
+      the translation, which is the part that moves people.
 
       There is a working version of that shape in `/lab/` (dev only): the
       exploded view separates along one axis, staggered by depth, over 900ms,

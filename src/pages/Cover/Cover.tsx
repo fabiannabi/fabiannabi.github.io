@@ -17,7 +17,6 @@ import { Label } from "../../ds/components/Label/Label";
 import { Stat } from "../../components/Stat/Stat";
 import { Text } from "../../ds/components/Text/Text";
 import { region } from "../../ds/xray/instrument";
-import { VisionEye } from "../../components/VisionEye/VisionEye";
 import styles from "./Cover.module.css";
 
 /**
@@ -52,24 +51,19 @@ export function Cover() {
               {identity.coverRole}
             </Label>
           </div>
-          {/* One instrument, beside the status badge, and it explains itself
-              before it is pressed: pointing at the eye renders the whole page
-              through a colour vision deficiency and moving away puts it back.
-              That is what earns a control a place in the chrome — the objection
-              is that it is a button with no sentence attached, and a control
-              whose effect you can see without committing to it has the page for
-              a sentence.
+          {/* Nothing but the badge up here. The instrument went down to the
+              claim it settles: a control in the chrome is a button with no
+              sentence attached, and the sentence it needed was three hundred
+              words away at the bottom of the page. Beside the claim it cannot
+              be found without reading why it exists.
 
               The blueprint's switch used to sit here too. It belongs to the
               design system and to the CV, where a wireframe of the page is the
               point; on a cover letter it was a curiosity competing with the
               only thing this page has to sell. */}
-          <div className={styles.instruments}>
-            <VisionEye />
-            <Badge tone="accent" shape="pill" pulse>
-              {identity.status}
-            </Badge>
-          </div>
+          <Badge tone="accent" shape="pill" pulse>
+            {identity.status}
+          </Badge>
         </header>
 
         <main className={styles.mid}>

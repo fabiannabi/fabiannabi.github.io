@@ -49,28 +49,15 @@ export function ClaimPanels({ lead, claims }: Props) {
  * layout shift in the middle of itself.
  */
 function Panel({ claim }: { claim: ClaimModel }) {
-  const preview = (active: boolean) => () => claim.onPreview?.(active);
-
   return (
     <div
       className={claim.settled ? `${styles.claim} ${styles.settled}` : styles.claim}
-      {...(claim.blueprint ? { "data-xray": "on" } : {})}
-      onMouseEnter={preview(true)}
-      onMouseLeave={preview(false)}
-      onFocusCapture={preview(true)}
-      onBlurCapture={preview(false)}
       {...local("Claim", { settled: claim.settled })}
     >
-      {/* Its own element rather than a background on the card, because both of
-          the card's pseudo-elements belong to the x-ray — the name plate and the
-          content box — and a mask is the only way to make ruling arrive as a
-          wave rather than all at once. */}
-      {claim.blueprint ? <span className={styles.paper} inert /> : null}
-
       {/* `data-ds-chrome`, the same exemption the x-ray's own switch carries.
           A card whose job is to explain an instrument cannot be blanked by the
-          instrument — the blueprint would leave a cyanotype panel with nothing
-          in it and no way to tell what it was demonstrating. */}
+          instrument. The cover does not ship the blueprint at all now, and this
+          stays because the profile could show a claim tomorrow. */}
       <div data-ds-chrome="">
         <Text size="sm" weight="medium">
           {claim.claim}
@@ -82,10 +69,8 @@ function Panel({ claim }: { claim: ClaimModel }) {
           violation in its own right, and leaves a control in the tab order that
           a screen reader has been told does not exist. inert removes it from
           both. The sentence and the answer carry everything it shows. */}
-      {/* One wrapper per piece, so the card can drop them into place without
-          overwriting the x-ray's own draw-in on the components themselves. Two
-          animations, two elements — the alternative is restating the system's
-          keyframes here, where they would drift. */}
+      {/* One wrapper per piece, so a presentation can place them itself without
+          reaching into the components the claim handed over. */}
       <div className={styles.specimen} inert>
         {claim.specimen.map((piece, index) => (
           <span key={index} className={styles.piece}>

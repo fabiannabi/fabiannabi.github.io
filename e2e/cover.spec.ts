@@ -20,20 +20,20 @@ test.describe("Cover", () => {
     // DOM order is tab order, and this test exists to notice when that changes.
     // It has now caught the same move four times.
     const expected = [
-      // The one instrument is chrome, and chrome comes before content — the
-      // trade for a control a reader meets rather than discovers. It
-      // demonstrates itself on hover and on focus, which is what makes a button
-      // up here something other than furniture.
-      "Simulate colour vision deficiency",
       "Read the full profile",
       "Design system",
       "Email",
       "LinkedIn",
       "GitHub",
-      // The chips choose which deficiency; the eye above applies it.
+      // The instruments are last because the claim they settle is last. They
+      // were in the header for a while, ahead of everything, which put a
+      // control a reader had no sentence for in front of the pitch.
       "Protan",
       "Deutan",
       "Tritan",
+      // Each chip applies on press, so the row needs one control the chips
+      // cannot be: the way back.
+      "Back to normal",
     ];
 
     for (const name of expected) {
@@ -112,7 +112,7 @@ test.describe("Cover", () => {
       // first press, not as text reflowing.
       const docHeight = () => page.evaluate(() => document.documentElement.scrollHeight);
 
-      for (const name of ["Protan", "Deutan", "Tritan", "Simulate colour vision deficiency", "Simulate colour vision deficiency"]) {
+      for (const name of ["Protan", "Deutan", "Tritan", "Back to normal"]) {
         const before = await railTop();
         const beforeHeight = await docHeight();
 

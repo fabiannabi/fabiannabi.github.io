@@ -5,26 +5,27 @@ export type Vision = "none" | "protanopia" | "deuteranopia" | "tritanopia";
 export type Deficiency = Exclude<Vision, "none">;
 
 /**
- * Three values rather than one, because "what the page is rendering" and "what
- * the reader asked for" stopped being the same thing the moment an instrument
- * could preview itself.
+ * Two values, because a control can point at a deficiency without one running.
  *
  * - `vision` is what is on screen. Read it to render.
- * - `applied` is what somebody chose on purpose. Read it to label a control, or
- *   a button says "Back to normal" while a cursor happens to rest on an eye.
- * - `choice` is which deficiency the instruments are pointed at, whether or not
- *   it is running. It is what a one-touch control applies.
+ * - `choice` is which deficiency the controls are pointed at, whether or not it
+ *   is running. It survives being switched off, so turning the simulation on
+ *   again returns to the last deliberate pick.
+ *
+ * There was a third — `applied`, plus a `preview` that showed a deficiency
+ * without committing to it — for an instrument that demonstrated itself under
+ * the pointer. The instrument is gone and so is the split: while nothing can
+ * show what was not chosen, "what is on screen" and "what was chosen" are one
+ * value, and keeping two would have meant maintaining a distinction the page
+ * can no longer produce.
  */
 export type VisionState = {
   vision: Vision;
-  applied: Vision;
   choice: Deficiency;
-  /** Applies, deliberately. Passing "none" takes the simulation off. */
+  /** Applies. Passing "none" takes the simulation off. */
   select: (next: Vision) => void;
-  /** Points the instruments at a deficiency without applying it. */
+  /** Points the controls at a deficiency without applying it. */
   choose: (next: Deficiency) => void;
-  /** Shows one until it is called with null. Never changes what was applied. */
-  preview: (next: Vision | null) => void;
 };
 
 /* A no-op default, for the same reason XRayContext has one: a design system
@@ -32,9 +33,7 @@ export type VisionState = {
    test, in a story — without the plumbing being mandatory. */
 export const VisionContext = createContext<VisionState>({
   vision: "none",
-  applied: "none",
   choice: "deuteranopia",
   select: () => undefined,
   choose: () => undefined,
-  preview: () => undefined,
 });
