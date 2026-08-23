@@ -1,0 +1,193 @@
+/* Prototype. Not built, not deployed — see src/entries/lab.tsx. */
+
+.wrap {
+  display: grid;
+  gap: var(--s4);
+}
+
+/* The camera. Perspective belongs to the viewport the scene is seen through,
+   never to the scene itself: on the stage it would be recomputed as the stage
+   transformed, and the vanishing point would travel with the object.
+
+   A fixed height with the object centred in it, because a box sized by its
+   content grows as the planes separate — the text underneath would be pushed
+   down by an animation, which is a layout shift with a nicer name. */
+.scene {
+  perspective: 1400px;
+  perspective-origin: 50% 45%;
+  display: grid;
+  place-items: center;
+  min-block-size: 420px;
+  padding: var(--s5);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+}
+
+/* Everything inside keeps its children in the same 3D space. Without this at
+   every level, the first element that flattens takes its whole subtree with it
+   and the depth stops halfway down the tree, silently. */
+.stage,
+.stage * {
+  transform-style: preserve-3d;
+}
+
+/* One angle, and it does not move. Chosen because every plane is legible from
+   it: shallower and the layers overlap into one, steeper and the labels shear
+   past reading. */
+.stage {
+  --lift: 40px;
+  --dur-lift: 900ms;
+
+  display: grid;
+  gap: var(--s5);
+  max-inline-size: 400px;
+  margin-inline: auto;
+  /* Nudged down before the rotation: the plates all extend upward from their
+     boxes, so the drawing's visual centre sits above the element's. Centring
+     the box is not the same as centring the picture. */
+  transform: translateY(18px) rotateX(56deg) rotateZ(-38deg);
+}
+
+.stage [data-ds-component],
+.stage [data-ds-region] {
+  position: relative;
+  outline: 1px solid var(--dim);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- the separation, which is the whole animation ---------- */
+
+/* Three states rather than one transition, so the reduced-motion path is a
+   different starting point and not a faster version of the same movement. */
+.stacked [data-ds-component],
+.stacked [data-ds-region] {
+  transform: translateZ(0);
+}
+
+.apart [data-ds-component],
+.apart [data-ds-region] {
+  transform: translateZ(var(--lift));
+}
+
+/* One axis. The planes move apart along Z and nothing else moves — no rotation
+   arriving, no pieces falling in from off-stage. Dozens of thin high-contrast
+   lines travelling in different directions at once is the pattern that triggers
+   vestibular responses, and this is the answer to it: same construction, one
+   direction, slower.
+
+   Outermost first, by the one number JavaScript contributes. The lift itself
+   compounds through the DOM and is never computed. */
+.separating [data-ds-component],
+.separating [data-ds-region] {
+  animation: lift var(--dur-lift) var(--ease) both;
+  animation-delay: calc(var(--depth, 0) * 110ms);
+}
+
+@keyframes lift {
+  from {
+    transform: translateZ(0);
+  }
+  to {
+    transform: translateZ(var(--lift));
+  }
+}
+
+/* ---------- who owns each plane ---------- */
+
+/* The three tiers the blueprint already draws, for the same reason: a drawing
+   that renders a one-off identically to a system component flatters its author.
+   Accent is the system's, muted is this page's, dashed is markup that has not
+   earned a component. */
+.stage [data-ds-component]:not([data-ds-local]) {
+  outline-color: var(--accent-line);
+}
+
+.stage [data-ds-local] {
+  outline-color: var(--dim);
+}
+
+.stage [data-ds-region] {
+  outline-style: dashed;
+  outline-color: var(--line);
+}
+
+/* The name, on the plane it belongs to. Only ::after is taken — the flat x-ray
+   uses both, and a prototype needing both would be re-implementing it rather
+   than asking a different question. */
+.stage [data-ds-component]::after,
+.stage [data-ds-region]::after {
+  content: attr(data-ds-component) attr(data-ds-region);
+  position: absolute;
+  inset-block-start: -1.35em;
+  inset-inline-start: 0;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-2xs);
+  letter-spacing: var(--ds-tracking-caps);
+  color: var(--accent-line);
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.stage [data-ds-local]::after {
+  color: var(--dim);
+}
+
+.stage [data-ds-region]::after {
+  color: var(--dim);
+}
+
+/* A box that contains another box gets its plate lifted clear of the child's.
+   The same collision the flat x-ray hit — a Stat and the Display inside it start
+   at the same top edge, so the two names print on one line and read as a single
+   broken word. `:has()` is the fix there and it is the fix here. */
+.stage [data-ds-component]:has([data-ds-component])::after,
+.stage [data-ds-region]:has([data-ds-component])::after {
+  inset-block-start: -2.6em;
+}
+
+/* ---------- the composition being drawn ---------- */
+
+.identity {
+  display: grid;
+  justify-items: start;
+  gap: var(--s2);
+  padding: var(--s4);
+}
+
+.stats {
+  display: flex;
+  gap: var(--s5);
+  padding: var(--s4);
+}
+
+.links {
+  display: flex;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  padding: var(--s4);
+}
+
+/* ---------- the numbers, which are the actual output ---------- */
+
+.census {
+  display: flex;
+  gap: var(--s6);
+  flex-wrap: wrap;
+  margin-block-start: var(--s3);
+}
+
+.figure {
+  display: grid;
+  gap: var(--s1);
+}
+
+.notes {
+  display: grid;
+  gap: var(--s3);
+  list-style: disc;
+  padding-inline-start: var(--s5);
+}

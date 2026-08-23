@@ -1,0 +1,14 @@
+/* Prototype layout. Not built, not deployed — see src/entries/lab.tsx. */
+
+.page {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: var(--s7) var(--s5) var(--s9);
+  display: grid;
+  gap: var(--s8);
+}
+
+.head {
+  display: grid;
+  gap: var(--s3);
+}
