@@ -130,7 +130,7 @@ export function Exploded() {
               Senior User Interface Engineer
             </Label>
             <Badge tone="accent" shape="pill" dot>
-              Open to lead roles
+              Open for work
             </Badge>
           </div>
 

@@ -1,19 +1,19 @@
 .rail {
-  border-top: 1px solid var(--line);
-  padding-top: var(--s5);
+  border-top: 1px solid var(--ds-border);
+  padding-top: var(--ds-space-6);
   overflow: hidden;
   mask-image: linear-gradient(
     90deg,
     transparent,
-    var(--mask-opaque) 6%,
-    var(--mask-opaque) 94%,
+    currentcolor 6%,
+    currentcolor 94%,
     transparent
   );
 }
 
 .track {
   display: flex;
-  gap: var(--s7);
+  gap: var(--ds-space-8);
   width: max-content;
   will-change: transform;
 }
@@ -24,19 +24,19 @@
   white-space: nowrap;
   display: flex;
   align-items: center;
-  gap: var(--s4);
+  gap: var(--ds-space-5);
   transition:
-    color var(--dur) var(--ease),
-    opacity var(--dur) var(--ease);
+    color var(--ds-duration-slow) var(--ds-ease),
+    opacity var(--ds-duration-slow) var(--ds-ease);
 }
 
 .item::before {
   content: "\25C6";
-  color: var(--accent);
+  color: var(--ds-accent);
   font-size: var(--ds-text-2xs);
   transition:
-    transform var(--dur) var(--ease),
-    opacity var(--dur) var(--ease);
+    transform var(--ds-duration-slow) var(--ds-ease),
+    opacity var(--ds-duration-slow) var(--ds-ease);
 }
 
 /* Opacity is a contrast change.
@@ -49,11 +49,11 @@
 
 .rail .item:hover {
   opacity: 1;
-  color: var(--ink);
+  color: var(--ds-text);
   letter-spacing: var(--ds-tracking-wider);
 }
 
 .rail .item:hover::before {
   transform: scale(1.6);
-  color: var(--ink);
+  color: var(--ds-text);
 }

@@ -9,7 +9,7 @@ describe("Badge", () => {
       <>
         <Badge>to publish</Badge>
         <Badge tone="accent" shape="pill" pulse>
-          Open to lead roles
+          Open for work
         </Badge>
       </>,
     );
@@ -28,7 +28,7 @@ describe("Badge", () => {
   it("hides the dot from assistive technology", () => {
     const { container } = render(
       <Badge tone="accent" shape="pill" dot>
-        Open to lead roles
+        Open for work
       </Badge>,
     );
 
@@ -36,7 +36,7 @@ describe("Badge", () => {
 
     expect(dot).toBeInTheDocument();
     // The dot decorates the words. Announcing it adds noise and no meaning.
-    expect(screen.getByText("Open to lead roles")).toBeInTheDocument();
+    expect(screen.getByText("Open for work")).toBeInTheDocument();
   });
 
   it("is not interactive", () => {

@@ -4,32 +4,32 @@
 
 .skip {
   position: absolute;
-  inset-inline-start: var(--s4);
+  inset-inline-start: var(--ds-space-5);
   inset-block-start: -80px;
-  background: var(--ink);
-  color: var(--bg);
-  padding: var(--s2) var(--s4);
-  border-radius: var(--radius);
+  background: var(--ds-text);
+  color: var(--ds-surface);
+  padding: var(--ds-space-3) var(--ds-space-5);
+  border-radius: var(--ds-radius-md);
   z-index: 99;
-  transition: inset-block-start var(--dur-fast) var(--ease);
+  transition: inset-block-start var(--ds-duration) var(--ds-ease);
 }
 
 .skip:focus {
-  inset-block-start: var(--s4);
+  inset-block-start: var(--ds-space-5);
 }
 
 /* ---------- shell ---------- */
 .wrap {
   max-width: 1180px;
   margin-inline: auto;
-  padding-inline: var(--s5);
+  padding-inline: var(--ds-space-6);
 }
 
 @media (min-width: 1024px) {
   .wrap {
     display: grid;
     grid-template-columns: minmax(0, 44%) minmax(0, 56%);
-    gap: var(--s7);
+    gap: var(--ds-space-8);
   }
 
   .left {
@@ -40,45 +40,45 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-block: var(--s9) var(--s7);
+    padding-block: var(--ds-space-10) var(--ds-space-8);
   }
 
   .right {
-    padding-block: var(--s9) var(--s8);
+    padding-block: var(--ds-space-10) var(--ds-space-9);
   }
 }
 
 @media (max-width: 1023px) {
   .left {
-    padding-block: var(--s8) var(--s6);
+    padding-block: var(--ds-space-9) var(--ds-space-7);
   }
 
   .right {
-    padding-bottom: var(--s8);
+    padding-bottom: var(--ds-space-9);
   }
 }
 
 /* ---------- left ---------- */
 .back {
-  margin-bottom: var(--s4);
+  margin-bottom: var(--ds-space-5);
 }
 
 .role {
-  margin-top: var(--s3);
+  margin-top: var(--ds-space-4);
 }
 
 /* The one measure the system does not set. 31ch is not a reading measure, it is
    this column: the tagline has to break before the sidebar's own width does. */
 .tagline {
-  margin-top: var(--s4);
-  margin-bottom: var(--s5);
+  margin-top: var(--ds-space-5);
+  margin-bottom: var(--ds-space-6);
   max-width: 31ch;
 }
 
 .social {
   display: flex;
-  gap: var(--s5);
-  margin-top: var(--s6);
+  gap: var(--ds-space-6);
+  margin-top: var(--ds-space-7);
   align-items: center;
   flex-wrap: wrap;
 }
@@ -93,20 +93,20 @@
 
 /* ---------- right ---------- */
 .right section {
-  margin-bottom: var(--s9);
+  margin-bottom: var(--ds-space-10);
 }
 
 .right section:last-of-type {
-  margin-bottom: var(--s7);
+  margin-bottom: var(--ds-space-8);
 }
 
 .sectionHead {
   position: sticky;
   top: 0;
   z-index: 5;
-  padding-block: var(--s4);
-  margin-bottom: var(--s5);
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  padding-block: var(--ds-space-5);
+  margin-bottom: var(--ds-space-6);
+  background: color-mix(in srgb, var(--ds-surface) 92%, transparent);
   backdrop-filter: blur(8px);
 }
 
@@ -117,13 +117,13 @@
     background: none;
     backdrop-filter: none;
     padding-block: 0;
-    margin-bottom: var(--s5);
+    margin-bottom: var(--ds-space-6);
   }
 }
 
 .about p + p,
 .personal {
-  margin-top: var(--s4);
+  margin-top: var(--ds-space-5);
 }
 
 .colophon {
@@ -131,6 +131,6 @@
 }
 
 .todo {
-  border-bottom: 1px dashed var(--accent);
+  border-bottom: 1px dashed var(--ds-accent);
   cursor: help;
 }

@@ -10,8 +10,8 @@
   inset: -30%;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(46vw 46vw at 32.5% 30%, var(--wash), transparent 68%);
-  animation: drift 30s var(--ease) infinite alternate;
+  background: radial-gradient(46vw 46vw at 32.5% 30%, var(--ds-accent-surface), transparent 68%);
+  animation: drift 30s var(--ds-ease) infinite alternate;
 }
 
 @keyframes drift {

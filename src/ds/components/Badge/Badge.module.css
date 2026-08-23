@@ -1,5 +1,14 @@
+/* The words and the dot are separate colours, and the split is what the tonal
+   variants are for. A tone that puts its hue on the text as well is asking a
+   reader to read saturated colour at a small size in a mono face: the cover's
+   status badge measured 5.81:1 against its own surface — passing AA and still
+   uncomfortable, because a luminance ratio says nothing about how a thin stem
+   in a saturated hue actually reads. The dot is the tone. The words are text.
+   That is also the rule this repo states everywhere else: colour reinforces,
+   it never carries alone. */
 .badge {
   --badge-fg: var(--ds-text-muted);
+  --badge-dot: var(--badge-fg);
   --badge-bg: var(--ds-surface-raised);
   --badge-border: var(--ds-border);
 
@@ -35,7 +44,7 @@
   height: var(--ds-space-3);
   flex: none;
   border-radius: 50%;
-  background: var(--badge-fg);
+  background: var(--badge-dot);
 }
 
 .pulse .dot {
@@ -55,31 +64,36 @@
 }
 
 .accent {
-  --badge-fg: var(--ds-accent);
+  --badge-fg: var(--ds-text);
+  --badge-dot: var(--ds-accent);
   --badge-bg: var(--ds-accent-surface);
   --badge-border: var(--ds-accent-border);
 }
 
 .info {
-  --badge-fg: var(--ds-info);
+  --badge-fg: var(--ds-text);
+  --badge-dot: var(--ds-info);
   --badge-bg: var(--ds-info-surface);
   --badge-border: var(--ds-info-border);
 }
 
 .success {
-  --badge-fg: var(--ds-success);
+  --badge-fg: var(--ds-text);
+  --badge-dot: var(--ds-success);
   --badge-bg: var(--ds-success-surface);
   --badge-border: var(--ds-success-border);
 }
 
 .warning {
-  --badge-fg: var(--ds-warning);
+  --badge-fg: var(--ds-text);
+  --badge-dot: var(--ds-warning);
   --badge-bg: var(--ds-warning-surface);
   --badge-border: var(--ds-warning-border);
 }
 
 .danger {
-  --badge-fg: var(--ds-danger);
+  --badge-fg: var(--ds-text);
+  --badge-dot: var(--ds-danger);
   --badge-bg: var(--ds-danger-surface);
   --badge-border: var(--ds-danger-border);
 }

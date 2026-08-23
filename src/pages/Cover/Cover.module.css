@@ -11,14 +11,14 @@
   max-width: 1080px;
   width: 100%;
   margin-inline: auto;
-  padding: var(--s6) var(--s5);
+  padding: var(--ds-space-7) var(--ds-space-6);
 }
 
 /* ---------- identity ---------- */
 .top {
   display: flex;
   align-items: flex-start;
-  gap: var(--s5);
+  gap: var(--ds-space-6);
   flex-wrap: wrap;
 }
 
@@ -26,7 +26,7 @@
   margin-inline-end: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--s1);
+  gap: var(--ds-space-2);
 }
 
 /* ---------- centre ---------- */
@@ -38,27 +38,27 @@
   /* Trimmed from s8/s7. The pitch measured 871px against the 780 a laptop
      gives — "one screen" was prose in CLAUDE.md that nothing checked, and it
      was false. There is an e2e test on it now. */
-  padding-block: var(--s6) var(--s5);
+  padding-block: var(--ds-space-7) var(--ds-space-6);
 }
 
 .sub {
-  margin-top: var(--s6);
+  margin-top: var(--ds-space-7);
 }
 
 .stats {
   display: flex;
-  gap: var(--s7);
+  gap: var(--ds-space-8);
   flex-wrap: wrap;
-  margin: var(--s6) 0 0;
+  margin: var(--ds-space-7) 0 0;
   padding: 0;
   list-style: none;
 }
 
 .cta {
   display: flex;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
   flex-wrap: wrap;
-  margin-top: var(--s6);
+  margin-top: var(--ds-space-7);
 }
 
 /* ---------- the claims ---------- */
@@ -72,5 +72,5 @@
    panel each, a line of prose, one switched frame — belongs to the presentation
    that draws them, and there are three of those under comparison. */
 .claims {
-  margin-top: var(--s7);
+  margin-top: var(--ds-space-8);
 }

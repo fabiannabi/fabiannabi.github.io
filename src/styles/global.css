@@ -8,23 +8,23 @@
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--dim);
-  font-family: var(--body);
+  background: var(--ds-surface);
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-sans);
   -webkit-font-smoothing: antialiased;
   transition:
-    background var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+    background var(--ds-duration) var(--ds-ease),
+    color var(--ds-duration) var(--ds-ease);
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--display);
-  color: var(--ink);
+  font-family: var(--ds-font-display);
+  color: var(--ds-text);
   margin: 0;
-  line-height: var(--lh-tight);
-  letter-spacing: var(--ls-tight);
+  line-height: var(--ds-leading-flush);
+  letter-spacing: var(--ds-tracking-heading);
 }
 
 p {
@@ -37,7 +37,7 @@ a {
 }
 
 code {
-  font-family: var(--mono);
+  font-family: var(--ds-font-mono);
   font-size: var(--ds-text-code-inline);
 }
 
@@ -49,7 +49,7 @@ button {
 /* One focus style, defined once. Removing an outline without replacing it is
    the second-most-common defect in a component library audit. */
 :where(a, button, [tabindex]):focus-visible {
-  outline: var(--focus-width) solid var(--accent);
-  outline-offset: var(--focus-offset);
-  border-radius: var(--radius-sm);
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+  border-radius: var(--ds-radius-sm);
 }

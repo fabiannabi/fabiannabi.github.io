@@ -1,62 +1,62 @@
 .entry {
   display: grid;
-  gap: var(--s2);
-  padding: var(--s4);
-  margin-inline: calc(var(--s4) * -1);
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-5);
+  margin-inline: calc(var(--ds-space-5) * -1);
   border: 1px solid transparent;
-  border-radius: var(--radius-lg);
+  border-radius: var(--ds-radius-lg);
   transition:
-    background var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease);
+    background var(--ds-duration) var(--ds-ease),
+    border-color var(--ds-duration) var(--ds-ease);
 }
 
 @media (min-width: 640px) {
   .entry {
     grid-template-columns: 112px 1fr;
-    gap: var(--s5);
+    gap: var(--ds-space-6);
   }
 }
 
 .entry:hover {
-  background: var(--bg-2);
-  border-color: var(--line);
+  background: var(--ds-surface-raised);
+  border-color: var(--ds-border);
 }
 
 /* The heading is a Heading now, so this reaches for the element rather than a
    class this file owns. An interaction state on a row belongs to the row. */
 .entry:hover h3 {
-  color: var(--accent);
+  color: var(--ds-accent);
 }
 
 /* Layout from here down. Every typographic value in this file moved into the
    components it belongs to when the audit ran. */
 .when {
-  padding-top: var(--s1);
+  padding-top: var(--ds-space-2);
   white-space: nowrap;
 }
 
 .entry h3 {
-  transition: color var(--dur-fast) var(--ease);
+  transition: color var(--ds-duration) var(--ds-ease);
 }
 
 .badgeSlot {
-  margin-inline-start: var(--s2);
+  margin-inline-start: var(--ds-space-3);
 }
 
 .note {
-  margin-top: var(--s1);
+  margin-top: var(--ds-space-2);
 }
 
 .description {
-  margin-top: var(--s3);
+  margin-top: var(--ds-space-4);
   max-width: 52ch;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s1);
-  margin: var(--s3) 0 0;
+  gap: var(--ds-space-2);
+  margin: var(--ds-space-4) 0 0;
   padding: 0;
   list-style: none;
 }

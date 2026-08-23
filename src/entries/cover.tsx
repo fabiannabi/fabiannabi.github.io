@@ -14,7 +14,6 @@ import { Cover } from "../pages/Cover/Cover";
 import "../styles/tokens.base.css";
 import "../ds/tokens/scale.css";
 import "../styles/tokens.cover.css";
-import "../styles/tokens.ds-bridge.css";
 import "../styles/global.css";
 import "../styles/page-cover.css";
 import "../ds/a11y/vision.css";

@@ -11,7 +11,7 @@ import {
   personalLine,
   sections,
   work,
-  writing,
+  practice,
 } from "../../data/content";
 import { Display } from "../../ds/components/Display/Display";
 import { Heading } from "../../ds/components/Heading/Heading";
@@ -144,13 +144,13 @@ export function Profile() {
             ))}
           </section>
 
-          <section id="writing" {...region("Writing")}>
+          <section id="practice" {...region("How I work")}>
             <div className={styles.sectionHead}>
               <Label size="sm" caps tone="default" as="h2">
-                Writing
+                How I work
               </Label>
             </div>
-            {writing.map((entry) => (
+            {practice.map((entry) => (
               <Entry key={entry.title} entry={entry} />
             ))}
           </section>

@@ -1,29 +1,121 @@
-/* Profile palette — two themes, same seven colour tokens.
-   Both are verified by scripts/audit-contrast.mjs. A theme that fails
-   contrast is not a theme. */
+/* ===========================================================
+   PROFILE PALETTE — near-monochrome, two themes.
+
+   Two layers, same as the cover, and this file is where the point of the split
+   is visible: the semantic names below are identical in both themes. Only what
+   they point at changes. --ds-surface is a near-black primitive in dark and a
+   near-white one in light, and no component or page stylesheet knows which.
+
+   Both themes are verified by scripts/audit-contrast.mjs. A theme that fails
+   contrast is not a theme.
+   =========================================================== */
+
 :root {
-  --bg: #0f1113;
-  --bg-2: #15181b;
-  --ink: #e8eae6;
-  --dim: #8c948e;
-  /* Lifted from #768077: the entry rows swap to --bg-2 on hover, and the old
-     value measured 4.35:1 against that surface. A hover state is not exempt. */
-  --dimmer: #7a847b;
-  --line: #22262a;
-  --accent: #7bd1a6;
-  --accent-line: #3e7a5e;
-  --wash: rgba(123, 209, 166, 0.09);
+  /* ---------- primitives · dark ---------- */
+
+  --profile-slate-950: #0f1113;
+  --profile-slate-900: #15181b;
+  --profile-slate-800: #22262a;
+
+  --profile-sage-50: #e8eae6;
+  --profile-sage-400: #8c948e;
+  /* Lifted from #768077: the entry rows swap to the raised surface on hover,
+     and the old value measured 4.35:1 against it. A hover state is not exempt
+     from contrast. */
+  --profile-sage-500: #7a847b;
+
+  --profile-mint-400: #7bd1a6;
+  --profile-mint-700: #3e7a5e;
+  --profile-mint-a09: rgba(123, 209, 166, 0.09);
+
+  /* ---------- primitives · light ---------- */
+
+  --profile-paper-50: #fbfaf8;
+  --profile-paper-100: #f2f1ed;
+  --profile-paper-200: #e2e1dc;
+
+  --profile-ink-900: #16181a;
+  --profile-ink-600: #575e59;
+  /* Darkened from #6d746e for the same hover reason as its dark counterpart. */
+  --profile-ink-500: #686f69;
+
+  --profile-forest-700: #0f6045;
+  --profile-forest-a07: rgba(15, 96, 69, 0.07);
+
+  /* ---------- semantic · dark ---------- */
+
+  --ds-surface: var(--profile-slate-950);
+  --ds-surface-raised: var(--profile-slate-900);
+  --ds-surface-overlay: var(--profile-slate-900);
+
+  --ds-text: var(--profile-sage-50);
+  --ds-text-muted: var(--profile-sage-400);
+  --ds-text-subtle: var(--profile-sage-500);
+
+  --ds-border: var(--profile-slate-800);
+  --ds-border-strong: var(--profile-sage-400);
+
+  --ds-accent: var(--profile-mint-400);
+  --ds-accent-hover: var(--profile-sage-50);
+  --ds-accent-surface: var(--profile-mint-a09);
+  --ds-accent-border: var(--profile-mint-700);
+  --ds-accent-contrast: var(--profile-slate-950);
+
+  /* No status ramp on this page either — see the note in tokens.cover.css. */
+  --ds-info: var(--profile-mint-400);
+  --ds-info-surface: var(--profile-slate-900);
+  --ds-info-border: var(--profile-slate-800);
+
+  --ds-success: var(--profile-mint-400);
+  --ds-success-surface: var(--profile-slate-900);
+  --ds-success-border: var(--profile-slate-800);
+
+  --ds-warning: var(--profile-sage-50);
+  --ds-warning-surface: var(--profile-slate-900);
+  --ds-warning-border: var(--profile-slate-800);
+
+  --ds-danger: var(--profile-sage-50);
+  --ds-danger-surface: var(--profile-slate-900);
+  --ds-danger-border: var(--profile-slate-800);
+  --ds-danger-contrast: var(--profile-slate-950);
 }
 
+/* ---------- semantic · light ----------
+
+   The same names, pointed somewhere else. That is the whole mechanism, and it
+   is why nothing below the token layer needs a light-mode branch. */
 [data-theme="light"] {
-  --bg: #fbfaf8;
-  --bg-2: #f2f1ed;
-  --ink: #16181a;
-  --dim: #575e59;
-  /* Darkened from #6d746e for the same reason. */
-  --dimmer: #686f69;
-  --line: #e2e1dc;
-  --accent: #0f6045;
-  --accent-line: #0f6045;
-  --wash: rgba(15, 96, 69, 0.07);
+  --ds-surface: var(--profile-paper-50);
+  --ds-surface-raised: var(--profile-paper-100);
+  --ds-surface-overlay: var(--profile-paper-100);
+
+  --ds-text: var(--profile-ink-900);
+  --ds-text-muted: var(--profile-ink-600);
+  --ds-text-subtle: var(--profile-ink-500);
+
+  --ds-border: var(--profile-paper-200);
+  --ds-border-strong: var(--profile-ink-600);
+
+  --ds-accent: var(--profile-forest-700);
+  --ds-accent-hover: var(--profile-ink-900);
+  --ds-accent-surface: var(--profile-forest-a07);
+  --ds-accent-border: var(--profile-forest-700);
+  --ds-accent-contrast: var(--profile-paper-50);
+
+  --ds-info: var(--profile-forest-700);
+  --ds-info-surface: var(--profile-paper-100);
+  --ds-info-border: var(--profile-paper-200);
+
+  --ds-success: var(--profile-forest-700);
+  --ds-success-surface: var(--profile-paper-100);
+  --ds-success-border: var(--profile-paper-200);
+
+  --ds-warning: var(--profile-ink-900);
+  --ds-warning-surface: var(--profile-paper-100);
+  --ds-warning-border: var(--profile-paper-200);
+
+  --ds-danger: var(--profile-ink-900);
+  --ds-danger-surface: var(--profile-paper-100);
+  --ds-danger-border: var(--profile-paper-200);
+  --ds-danger-contrast: var(--profile-paper-50);
 }

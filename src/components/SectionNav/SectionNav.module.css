@@ -1,5 +1,5 @@
 .nav {
-  margin-top: var(--s8);
+  margin-top: var(--ds-space-9);
   display: none;
 }
 
@@ -21,29 +21,29 @@
 .link {
   display: flex;
   align-items: center;
-  gap: var(--s4);
+  gap: var(--ds-space-5);
   /* 8px padding on 12px text clears the 24px target floor. */
-  padding: var(--s2) 0;
-  transition: color var(--dur-fast) var(--ease);
+  padding: var(--ds-space-3) 0;
+  transition: color var(--ds-duration) var(--ds-ease);
 }
 
 .marker {
   display: block;
   height: 1px;
   width: 28px;
-  background: var(--dimmer);
+  background: var(--ds-text-subtle);
   transition:
-    width var(--dur-fast) var(--ease),
-    background var(--dur-fast) var(--ease);
+    width var(--ds-duration) var(--ds-ease),
+    background var(--ds-duration) var(--ds-ease);
 }
 
 .link:hover,
 .active {
-  color: var(--ink);
+  color: var(--ds-text);
 }
 
 .link:hover .marker,
 .active .marker {
   width: 56px;
-  background: var(--ink);
+  background: var(--ds-text);
 }

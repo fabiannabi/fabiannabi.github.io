@@ -168,7 +168,7 @@ export function Reactive() {
 
         <p className={styles.badges}>
           <Badge tone="accent" shape="pill" dot>
-            Open to lead roles
+            Open for work
           </Badge>
           <Badge tone="danger" shape="pill" dot>
             Closed

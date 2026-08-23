@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { headline } from "../src/data/content";
 
 const noHorizontalScroll = async (page: import("@playwright/test").Page): Promise<boolean> =>
   page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
@@ -11,9 +12,11 @@ test.describe("Cover", () => {
   test("leads with the whole claim as one accessible sentence", async ({ page }) => {
     const heading = page.getByRole("heading", { level: 1 });
 
-    await expect(heading).toHaveAccessibleName(
-      "I build the design systems, component APIs, accessibility baselines, release pipelines and translation workflows other teams build on.",
-    );
+    // Read from content.ts rather than written out here. A copy of the sentence
+    // in the test is a second source of truth for one string: this one kept the
+    // old wording through an edit to the headline and failed on a page that was
+    // correct, which is the least useful way for a test to speak up.
+    await expect(heading).toHaveAccessibleName(headline.sentence);
   });
 
   test("reaches every action by keyboard, in reading order", async ({ page }) => {

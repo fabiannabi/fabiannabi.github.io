@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
-import { experience, sections, work, writing } from "../../data/content";
+import { experience, sections, work, practice } from "../../data/content";
 import { expectNoAxeViolations } from "../../test/axe";
 import { Profile } from "./Profile";
 
@@ -38,7 +38,7 @@ describe("Profile", () => {
   it("renders every entry from the content module", () => {
     render(<Profile />);
 
-    const total = experience.length + work.length + writing.length;
+    const total = experience.length + work.length + practice.length;
     expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(total);
   });
 

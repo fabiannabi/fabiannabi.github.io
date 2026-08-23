@@ -4,6 +4,6 @@ html {
 }
 
 body {
-  font-size: var(--fs-body);
-  line-height: var(--lh-body);
+  font-size: var(--ds-text-md);
+  line-height: var(--ds-leading-normal);
 }

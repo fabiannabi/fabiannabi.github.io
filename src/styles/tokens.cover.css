@@ -1,12 +1,81 @@
-/* Cover palette — synthwave. Six colour tokens; the page reads nothing else.
-   Verified by scripts/audit-contrast.mjs, which parses this file. */
+/* ===========================================================
+   COVER PALETTE — synthwave.
+
+   Two layers, and the file is split by them.
+
+   Primitives name what a colour IS. They exist so a theme is a different set of
+   values under the same names above: light is white where dark is black, and
+   both are called surface.
+
+   The semantic block is the design system's own vocabulary, pointed at those
+   primitives. It is not a translation of a second vocabulary — there is no
+   second vocabulary. Every stylesheet outside a token file reads --ds-* and
+   nothing else, so a page and the components it lays out cannot disagree about
+   what to call the same colour.
+
+   Verified by scripts/audit-contrast.mjs, which parses this file.
+   =========================================================== */
+
 :root {
-  --bg: #140b24;
-  --bg-2: #1e1033;
-  --ink: #f0e6ff;
-  --dim: #ac9ccb;
-  --line: #2c1d45;
-  --accent: #ff5ca8;
-  --accent-line: #8e2a5c;
-  --wash: rgba(255, 92, 168, 0.11);
+  /* ---------- primitives ---------- */
+
+  --cover-plum-950: #140b24;
+  --cover-plum-900: #1e1033;
+  --cover-plum-800: #2c1d45;
+
+  --cover-lilac-50: #f0e6ff;
+  --cover-lilac-400: #ac9ccb;
+
+  --cover-pink-400: #ff5ca8;
+  --cover-pink-800: #8e2a5c;
+  /* Translucent on purpose: it tints whatever it is laid over rather than
+     replacing it. The contrast audit flattens it against the surface before
+     measuring, which is the only honest way to check a tint. */
+  --cover-pink-a11: rgba(255, 92, 168, 0.11);
+
+  /* ---------- semantic ---------- */
+
+  --ds-surface: var(--cover-plum-950);
+  --ds-surface-raised: var(--cover-plum-900);
+  --ds-surface-overlay: var(--cover-plum-900);
+
+  --ds-text: var(--cover-lilac-50);
+  --ds-text-muted: var(--cover-lilac-400);
+  /* One screen of text does not need a third ink, so subtle and muted are the
+     same primitive here. The name still exists because a component may ask for
+     it, and a missing custom property renders as nothing at all. */
+  --ds-text-subtle: var(--cover-lilac-400);
+
+  --ds-border: var(--cover-plum-800);
+  /* The edge of an interactive control, gated at 3:1. The decorative rule does
+     not clear it on this palette; the muted ink does, and is what the page's
+     own controls already draw with. */
+  --ds-border-strong: var(--cover-lilac-400);
+
+  --ds-accent: var(--cover-pink-400);
+  --ds-accent-hover: var(--cover-lilac-50);
+  --ds-accent-surface: var(--cover-pink-a11);
+  --ds-accent-border: var(--cover-pink-800);
+  --ds-accent-contrast: var(--cover-plum-950);
+
+  /* This page paints no status, and inventing a status ramp for it would be a
+     second source of truth for colours nobody uses. The tones resolve to inks
+     that are legible on this palette, so a component reaching for one is
+     readable rather than invisible, and the contract stays complete. */
+  --ds-info: var(--cover-pink-400);
+  --ds-info-surface: var(--cover-plum-900);
+  --ds-info-border: var(--cover-plum-800);
+
+  --ds-success: var(--cover-pink-400);
+  --ds-success-surface: var(--cover-plum-900);
+  --ds-success-border: var(--cover-plum-800);
+
+  --ds-warning: var(--cover-lilac-50);
+  --ds-warning-surface: var(--cover-plum-900);
+  --ds-warning-border: var(--cover-plum-800);
+
+  --ds-danger: var(--cover-lilac-50);
+  --ds-danger-surface: var(--cover-plum-900);
+  --ds-danger-border: var(--cover-plum-800);
+  --ds-danger-contrast: var(--cover-plum-950);
 }

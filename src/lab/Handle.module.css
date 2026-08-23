@@ -7,11 +7,11 @@
      box, and the hit area has to grow. */
   display: inline-block;
   position: relative;
-  color: var(--accent);
+  color: var(--ds-accent);
   font-weight: var(--ds-weight-medium);
   white-space: nowrap;
   cursor: ew-resize;
-  border-block-end: 1px dashed var(--accent-line);
+  border-block-end: 1px dashed var(--ds-accent-border);
 
   /* WCAG 2.2 SC 2.5.8 wants 24x24 CSS px of target. An inline word at this size
      is about 21px tall, so the padding buys the rest and the negative margin
@@ -29,23 +29,23 @@
   /* A drag that selects the word instead of moving it reads as a bug. */
   user-select: none;
 
-  transition: border-color var(--dur-fast) var(--ease);
+  transition: border-color var(--ds-duration) var(--ds-ease);
 }
 
 .handle:hover,
 .handle:focus-visible {
   border-block-end-style: solid;
-  border-block-end-color: var(--accent);
+  border-block-end-color: var(--ds-accent);
 }
 
 /* The focus ring is not the underline. Losing the outline to a colour change is
    the oldest way to fail 2.4.7 while looking like you passed it. */
 .handle:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ds-accent);
   /* 2px, not 3: at 3 the ring reached into the space before the next word and
      read as a box drawn around a gap rather than around a control. */
   outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--ds-radius-sm);
 }
 
 /* Two chevrons' worth of "this moves", drawn rather than typed: an arrow glyph
@@ -56,6 +56,6 @@
   block-size: 8px;
   margin-inline-start: 5px;
   vertical-align: baseline;
-  background: var(--accent-line);
+  background: var(--ds-accent-border);
   clip-path: polygon(0 50%, 35% 0, 35% 100%, 65% 0, 100% 50%, 65% 100%);
 }

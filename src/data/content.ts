@@ -13,15 +13,15 @@ export const identity = {
   name: "Fabián Alcalá",
   role: "Senior User Interface Engineer",
   company: "Salesloft",
-  location: "Guadalajara, MX",
-  coverRole: "Senior User Interface Engineer · Salesloft · Guadalajara, MX",
-  status: "Open to lead roles",
-  statusWithLocation: "Open to lead roles · Guadalajara, MX",
+  location: "Aguascalientes, MX",
+  coverRole: "Senior User Interface Engineer · Salesloft · Aguascalientes, MX",
+  status: "Open for work",
+  statusWithLocation: "Open for work · Aguascalientes, MX",
   tagline: "I build design systems other teams actually adopt — accessible, localized, documented.",
 } as const;
 
 export const links = {
-  email: "mailto:fabian_alcala@outlook.com",
+  email: "mailto:fabian.alcala.dev@gmail.com",
   linkedin: "https://www.linkedin.com/in/fabianalcala/",
   github: "https://github.com/fabiannabi",
   profile: "/profile/",
@@ -38,7 +38,7 @@ export const links = {
  */
 export const headline = {
   before: "I build the",
-  after: "other teams build on.",
+  after: "other teams rely on.",
   rotating: [
     "design systems",
     "component APIs",
@@ -47,7 +47,7 @@ export const headline = {
     "translation workflows",
   ],
   sentence:
-    "I build the design systems, component APIs, accessibility baselines, release pipelines and translation workflows other teams build on.",
+    "I build the design systems, component APIs, accessibility baselines, release pipelines and translation workflows other teams rely on.",
 } as const;
 
 export const coverSub = {
@@ -130,7 +130,7 @@ export const sections: readonly Section[] = [
   { id: "about", label: "About" },
   { id: "experience", label: "Experience" },
   { id: "work", label: "Work" },
-  { id: "writing", label: "Writing" },
+  { id: "practice", label: "How I work" },
 ] as const;
 
 /**
@@ -210,12 +210,19 @@ export const experience: readonly Entry[] = [
       "Client projects end to end on Ruby on Rails and React. Three years shipping to other people's deadlines — where I learned what makes a component library worth adopting.",
     tags: ["React", "Ruby on Rails", "JavaScript", "SCSS"],
   },
+  /* The two years between the degree and the first paid engineering job. It is
+     a gap on the timeline and it is stated as what it was, because a CV that
+     smooths it over is the one claim on this site nobody could audit.
+
+     The six months of lab work after graduating had an entry of its own for a
+     while. It came out: a reader scanning for whether this person can own a
+     design system learns nothing from it, and a CV is a list of what is
+     relevant rather than a list of everything. */
   {
-    when: "2017 — 2020",
-    title: "Microbiology Analyst",
-    org: "Food industry",
+    when: "2018 — 2020",
+    title: "Self-directed study",
     description:
-      "Lab work in quality analysis. Taught myself development on nights and weekends through this period.",
+      "Two years of it, after six months of lab work out of the degree: JavaScript, then React, then the parts nobody puts in a tutorial. Nobody paid me for this period and it is the reason every line above it exists.",
   },
   {
     when: "2013 — 2017",
@@ -262,28 +269,40 @@ export const work: readonly Entry[] = [
   },
 ];
 
-export const writing: readonly Entry[] = [
+/**
+ * How the work gets done, which is the half of a lead role a list of projects
+ * cannot show.
+ *
+ * Three entries, and what each one had to survive is not repeating `about`.
+ * The obvious three — how a breaking change is negotiated, how adoption is
+ * measured, what is and is not delegated to a model — are all in that section
+ * already, at length. A second section restating them in a different shape is
+ * the filler this page has a word ceiling to prevent.
+ *
+ * What is left is the part nobody writes down: where the boundary of a system
+ * is, what it costs to be somebody else's dependency, and what review is for
+ * once the defect has been found.
+ */
+export const practice: readonly Entry[] = [
   {
-    when: "Draft",
-    title: "Why we left styled-components for CSS Modules",
-    badge: "to publish",
+    when: "The boundary",
+    title: "Most requests should not become components",
     description:
-      "The runtime cost, the RSC path, and the two ugly quarters of running both systems at once.",
+      "The test is not how many teams asked. It is whether the API encodes a situation: variant serves any product, org is one app's data model wearing the system's badge.",
   },
   {
-    when: "Draft",
-    title: "Six defects every component library audit finds",
-    badge: "to publish",
+    when: "Support",
+    title: "Shipping is the middle of the work",
     description:
-      "Contrast, removed outlines, divs pretending to be buttons, unnamed icon buttons, untrapped modals, motion that ignores the user's preference.",
+      "A shared library's real cost is downstream — triage, upgrade help, and the team stuck halfway through a migration. Budget for it or the next major never lands.",
   },
   {
-    when: "Draft",
-    title: "Mentions is the hardest easy component",
-    badge: "to publish",
-    description: "The combobox pattern, why the virtual cursor wins, and how to test it by keyboard only.",
+    when: "Mentoring",
+    title: "Teach the audit, not the fix",
+    description:
+      "Handing back a corrected pull request buys one component. Walking somebody through why the contrast pair failed buys every component they write after it.",
   },
 ];
 
 export const colophon =
-  "Built with React, TypeScript and CSS Modules. Every value resolves from a custom property, contrast is verified in CI rather than by eye, and the whole thing is keyboard navigable end to end. Set in Archivo, Inter and IBM Plex Mono.";
+  "Built with React, TypeScript and CSS Modules. Every value resolves from a token; contrast is verified in CI. Set in Archivo, Inter and IBM Plex Mono.";

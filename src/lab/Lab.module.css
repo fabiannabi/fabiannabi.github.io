@@ -3,12 +3,12 @@
 .page {
   max-width: 760px;
   margin-inline: auto;
-  padding: var(--s7) var(--s5) var(--s9);
+  padding: var(--ds-space-8) var(--ds-space-6) var(--ds-space-10);
   display: grid;
-  gap: var(--s8);
+  gap: var(--ds-space-9);
 }
 
 .head {
   display: grid;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
 }

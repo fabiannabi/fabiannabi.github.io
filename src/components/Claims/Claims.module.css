@@ -12,7 +12,7 @@
    not, and it is drawn from --accent-line exactly as the real one is. */
 .slot {
   position: relative;
-  color: var(--accent);
+  color: var(--ds-accent);
   white-space: nowrap;
 }
 
@@ -22,7 +22,7 @@
   inset-inline: 0;
   bottom: -3px;
   height: 2px;
-  background: var(--accent-line);
+  background: var(--ds-accent-border);
 }
 
 /* Everything the filter has to work on lives in here, so one element carries
@@ -30,38 +30,38 @@
 .palette {
   display: flex;
   align-items: center;
-  gap: var(--s4);
+  gap: var(--ds-space-5);
   flex-wrap: wrap;
 }
 
 .swatches {
   display: inline-flex;
-  gap: var(--s1);
+  gap: var(--ds-space-2);
 }
 
 .swatches i {
-  inline-size: var(--s4);
-  block-size: var(--s4);
-  border-radius: var(--radius-sm);
+  inline-size: var(--ds-space-5);
+  block-size: var(--ds-space-5);
+  border-radius: var(--ds-radius-sm);
 }
 
 .accent {
-  background: var(--accent);
+  background: var(--ds-accent);
 }
 
 .accentLine {
-  background: var(--accent-line);
+  background: var(--ds-accent-border);
 }
 
 .wash {
-  background: var(--wash);
-  border: 1px solid var(--accent-line);
+  background: var(--ds-accent-surface);
+  border: 1px solid var(--ds-accent-border);
 }
 
 .ink {
-  background: var(--ink);
+  background: var(--ds-text);
 }
 
 .dim {
-  background: var(--dim);
+  background: var(--ds-text-muted);
 }

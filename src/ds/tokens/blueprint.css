@@ -138,18 +138,16 @@
   --ds-danger-border: var(--xray-line-soft);
   --ds-danger-contrast: var(--xray-paper);
 
-  /* ----- the site's palette, for the cover and the profile ----- */
+  /* The site's own nine tokens were remapped here as well, because the cover
+     and the profile used to read a second vocabulary. They do not any more —
+     every stylesheet on every page reads --ds-*, so the block above is the
+     whole remap.
 
-  --bg: var(--xray-paper);
-  --bg-2: var(--xray-paper-raised);
-  --ink: var(--xray-ink);
-  --dim: var(--xray-ink-muted);
-  --dimmer: var(--xray-ink-subtle);
-  --line: var(--xray-line-soft);
-  --accent: var(--xray-accent);
-  --accent-line: var(--xray-line);
-
-  /* The cover's atmosphere. A blueprint has none — Glow reads this token and
-     paints nothing, without Glow being told the mode exists. */
-  --wash: transparent;
+     One thing went with it and is worth knowing before the x-ray comes back to
+     the cover: Glow read --wash, which this file set to transparent, so a
+     blueprint had no atmosphere without Glow being told the mode existed. Glow
+     reads --ds-accent-surface now, and that token has tinted surfaces of its
+     own to paint. The cover ships neither this file nor xray.css today, so
+     nothing is broken; if the mode returns there, Glow needs its own answer
+     rather than a token that happened to mean two things. */
 }

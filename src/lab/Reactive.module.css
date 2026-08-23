@@ -4,17 +4,17 @@
 
 .page {
   display: grid;
-  gap: var(--s5);
+  gap: var(--ds-space-6);
 }
 
 .head {
   display: grid;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
 }
 
 .main {
   display: grid;
-  gap: var(--s6);
+  gap: var(--ds-space-7);
 }
 
 /* The sentence the handles live in. Its line-height is opened up because the
@@ -25,12 +25,12 @@
 }
 
 .specimen {
-  padding-block: var(--s2);
+  padding-block: var(--ds-space-3);
 }
 
 .badges {
   display: flex;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
   flex-wrap: wrap;
 }
 
@@ -42,7 +42,7 @@
 .all,
 .noRule,
 .hueOnly {
-  color: var(--accent);
+  color: var(--ds-accent);
 }
 
 .all,
@@ -51,42 +51,42 @@
 }
 
 .all {
-  border-block-end: 2px solid var(--accent-line);
+  border-block-end: 2px solid var(--ds-accent-border);
 }
 
 /* ---------- the verdict ---------- */
 
 .verdict {
-  padding-inline-start: var(--s4);
-  border-inline-start: 2px solid var(--accent);
+  padding-inline-start: var(--ds-space-5);
+  border-inline-start: 2px solid var(--ds-accent);
 }
 
 /* ---------- the panels ---------- */
 
 .panel {
   display: grid;
-  gap: var(--s3);
-  padding: var(--s5);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--bg-2);
+  gap: var(--ds-space-4);
+  padding: var(--ds-space-6);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
 }
 
 .rows {
   display: grid;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
 }
 
 .row {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: var(--s2) var(--s3);
+  gap: var(--ds-space-3) var(--ds-space-4);
 }
 
 .notes {
   display: grid;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
   list-style: disc;
-  padding-inline-start: var(--s5);
+  padding-inline-start: var(--ds-space-6);
 }

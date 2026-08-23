@@ -61,7 +61,12 @@ test.describe("Profile", () => {
     await expect(page.getByRole("link", { name: "About" })).toHaveAttribute("aria-current", "true");
 
     await page.getByRole("heading", { level: 2, name: "Selected work" }).scrollIntoViewIfNeeded();
-    await expect(page.getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "true");
+    // exact, because getByRole matches a name by substring unless told
+    // otherwise, and the index gained a "How I work" that contains this one.
+    await expect(page.getByRole("link", { name: "Work", exact: true })).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
   });
 
   test.describe("follows the OS preference until told otherwise", () => {

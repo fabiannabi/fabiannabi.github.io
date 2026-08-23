@@ -46,7 +46,7 @@
 /* ---------- the paper ---------- */
 
 /* The field colour arrives through the token remap -- body already paints
-   var(--bg) / var(--ds-surface). Only the ruling is drawn here.
+   var(--ds-surface). Only the ruling is drawn here.
 
    On a pseudo-element rather than on body's own background, and that is not a
    preference. A background set on body with no background on the root

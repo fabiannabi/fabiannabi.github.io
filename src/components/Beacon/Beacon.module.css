@@ -9,7 +9,7 @@
    stylesheet insisting otherwise. Reserving the overhang as margin is what lets
    a caller space this correctly without having read this file. */
 .beacon {
-  --beacon-halo: var(--s3);
+  --beacon-halo: var(--ds-space-4);
   position: relative;
   display: inline-flex;
   margin: var(--beacon-halo);
@@ -25,10 +25,10 @@
 .glow {
   position: absolute;
   inset: calc(var(--beacon-halo) * -1);
-  border-radius: var(--radius-pill);
-  background: var(--wash);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-accent-surface);
   pointer-events: none;
-  transition: opacity var(--dur) var(--ease);
+  transition: opacity var(--ds-duration-slow) var(--ds-ease);
 }
 
 /* Exactly the control's box, growing out of it. Anything else reads as a
@@ -36,10 +36,10 @@
 .ring {
   position: absolute;
   inset: 0;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-pill);
+  border: 1px solid var(--ds-accent);
+  border-radius: var(--ds-radius-pill);
   pointer-events: none;
-  animation: beacon-pulse 9s var(--ease) infinite;
+  animation: beacon-pulse 9s var(--ds-ease) infinite;
 }
 
 /* Nine seconds of nothing and two of pulse. "Every so often" is the whole

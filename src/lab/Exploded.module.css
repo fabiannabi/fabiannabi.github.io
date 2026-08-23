@@ -2,7 +2,7 @@
 
 .wrap {
   display: grid;
-  gap: var(--s4);
+  gap: var(--ds-space-5);
 }
 
 /* The camera. Perspective belongs to the viewport the scene is seen through,
@@ -18,11 +18,11 @@
   display: grid;
   place-items: center;
   min-block-size: 420px;
-  padding: var(--s5);
+  padding: var(--ds-space-6);
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--bg-2);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
 }
 
 /* Everything inside keeps its children in the same 3D space. Without this at
@@ -41,7 +41,7 @@
   --dur-lift: 900ms;
 
   display: grid;
-  gap: var(--s5);
+  gap: var(--ds-space-6);
   max-inline-size: 400px;
   margin-inline: auto;
   /* Nudged down before the rotation: the plates all extend upward from their
@@ -53,9 +53,9 @@
 .stage [data-ds-component],
 .stage [data-ds-region] {
   position: relative;
-  outline: 1px solid var(--dim);
+  outline: 1px solid var(--ds-border-strong);
   outline-offset: 3px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--ds-radius-sm);
 }
 
 /* ---------- the separation, which is the whole animation ---------- */
@@ -82,7 +82,13 @@
    compounds through the DOM and is never computed. */
 .separating [data-ds-component],
 .separating [data-ds-region] {
-  animation: lift var(--dur-lift) var(--ease) both;
+  /* How many levels of nesting deep this box is. Exploded walks the tree and
+     writes it back; declared here with its starting value so the rule reads
+     whole — a var() whose only definition is a line of JavaScript is a rule
+     nobody can read all of. */
+  --depth: 0;
+
+  animation: lift var(--dur-lift) var(--ds-ease) both;
   animation-delay: calc(var(--depth, 0) * 110ms);
 }
 
@@ -102,16 +108,16 @@
    Accent is the system's, muted is this page's, dashed is markup that has not
    earned a component. */
 .stage [data-ds-component]:not([data-ds-local]) {
-  outline-color: var(--accent-line);
+  outline-color: var(--ds-accent-border);
 }
 
 .stage [data-ds-local] {
-  outline-color: var(--dim);
+  outline-color: var(--ds-border-strong);
 }
 
 .stage [data-ds-region] {
   outline-style: dashed;
-  outline-color: var(--line);
+  outline-color: var(--ds-border);
 }
 
 /* The name, on the plane it belongs to. Only ::after is taken — the flat x-ray
@@ -126,18 +132,18 @@
   font-family: var(--ds-font-mono);
   font-size: var(--ds-text-2xs);
   letter-spacing: var(--ds-tracking-caps);
-  color: var(--accent-line);
+  color: var(--ds-accent-border);
   text-transform: uppercase;
   pointer-events: none;
   white-space: nowrap;
 }
 
 .stage [data-ds-local]::after {
-  color: var(--dim);
+  color: var(--ds-text-muted);
 }
 
 .stage [data-ds-region]::after {
-  color: var(--dim);
+  color: var(--ds-text-muted);
 }
 
 /* A box that contains another box gets its plate lifted clear of the child's.
@@ -154,40 +160,40 @@
 .identity {
   display: grid;
   justify-items: start;
-  gap: var(--s2);
-  padding: var(--s4);
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-5);
 }
 
 .stats {
   display: flex;
-  gap: var(--s5);
-  padding: var(--s4);
+  gap: var(--ds-space-6);
+  padding: var(--ds-space-5);
 }
 
 .links {
   display: flex;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
   flex-wrap: wrap;
-  padding: var(--s4);
+  padding: var(--ds-space-5);
 }
 
 /* ---------- the numbers, which are the actual output ---------- */
 
 .census {
   display: flex;
-  gap: var(--s6);
+  gap: var(--ds-space-7);
   flex-wrap: wrap;
-  margin-block-start: var(--s3);
+  margin-block-start: var(--ds-space-4);
 }
 
 .figure {
   display: grid;
-  gap: var(--s1);
+  gap: var(--ds-space-2);
 }
 
 .notes {
   display: grid;
-  gap: var(--s3);
+  gap: var(--ds-space-4);
   list-style: disc;
-  padding-inline-start: var(--s5);
+  padding-inline-start: var(--ds-space-6);
 }

@@ -174,18 +174,26 @@ const check = (table, [name, fgTok, bgTok, need, advisory], palette = "") => {
 /* ================================================================ the site == */
 
 /* Each entry mirrors a real rule in the stylesheet. If you add a colour
-   combination to the CSS, add it here too — an unchecked pair is an unknown. */
+   combination to the CSS, add it here too — an unchecked pair is an unknown.
+
+   These are written in --ds-* like everything else. The site used to keep a
+   second vocabulary — --ink, --bg, --accent — and this list was written in it,
+   which meant the same pair was named twice and could be checked twice with
+   different answers. The palettes are themes now: they define primitives and
+   point the design system's semantic names at them, so one list covers every
+   palette. What stays here is only what the pages do and the system does not —
+   the hover surface swap, and the rail's opacity. */
 const SITE_CHECKS = [
-  ["h1 / stat numbers", "--ink", "--bg", AA_LARGE],
-  ["rotating slot", "--accent", "--bg", AA_LARGE],
-  ["body / sub / rail", "--dim", "--bg", AA_TEXT],
-  ["dates, nav, colophon", "--dimmer", "--bg", AA_TEXT],
-  ["headings, entry titles", "--ink", "--bg", AA_TEXT],
-  ["accent text", "--accent", "--bg", AA_TEXT],
-  ["focus ring", "--accent", "--bg", AA_UI],
-  ["body on hover surface", "--dim", "--bg-2", AA_TEXT],
-  ["entry title on hover", "--accent", "--bg-2", AA_TEXT],
-  ["dates on hover surface", "--dimmer", "--bg-2", AA_TEXT],
+  ["h1 / stat numbers", "--ds-text", "--ds-surface", AA_LARGE],
+  ["rotating slot", "--ds-accent", "--ds-surface", AA_LARGE],
+  ["body / sub / rail", "--ds-text-muted", "--ds-surface", AA_TEXT],
+  ["dates, nav, colophon", "--ds-text-subtle", "--ds-surface", AA_TEXT],
+  ["headings, entry titles", "--ds-text", "--ds-surface", AA_TEXT],
+  ["accent text", "--ds-accent", "--ds-surface", AA_TEXT],
+  ["focus ring", "--ds-accent", "--ds-surface", AA_UI],
+  ["body on hover surface", "--ds-text-muted", "--ds-surface-raised", AA_TEXT],
+  ["entry title on hover", "--ds-accent", "--ds-surface-raised", AA_TEXT],
+  ["dates on hover surface", "--ds-text-subtle", "--ds-surface-raised", AA_TEXT],
 ];
 
 const siteTargets = [
@@ -212,23 +220,30 @@ for (const { file, label, themes } of siteTargets) {
     for (const entry of SITE_CHECKS) check(t, entry, `${label} ${themeName}`);
 
     // Solid button: the page paints --bg-coloured text on an --accent fill.
-    report("primary button text", ratio(hex2rgb(t["--bg"]), hex2rgb(t["--accent"])), AA_TEXT);
+    report(
+      "primary button text",
+      ratio(hex2rgb(resolve(t["--ds-accent-contrast"], t)), hex2rgb(resolve(t["--ds-accent"], t))),
+      AA_TEXT,
+    );
 
-    // Status pill: --accent text on a translucent --wash over --bg.
-    const wash = t["--wash"]?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+    // Status pill: accent text on a translucent accent surface over the page.
+    const wash = resolve(t["--ds-accent-surface"], t)?.match(
+      /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/,
+    );
     if (wash) {
       const pill = flatten(
         [+wash[1], +wash[2], +wash[3]],
-        hex2rgb(t["--bg"]),
+        hex2rgb(resolve(t["--ds-surface"], t)),
         wash[4] === undefined ? 1 : +wash[4],
       );
-      report("status pill", ratio(hex2rgb(t["--accent"]), pill), AA_TEXT);
+      report("status pill", ratio(hex2rgb(resolve(t["--ds-accent"], t)), pill), AA_TEXT);
     }
 
     // The stack rail dims non-hovered items. Opacity is a contrast change.
     const RAIL_DIM = 0.85;
-    const dimmed = flatten(hex2rgb(t["--dim"]), hex2rgb(t["--bg"]), RAIL_DIM);
-    report(`rail dimmed @${RAIL_DIM}`, ratio(dimmed, hex2rgb(t["--bg"])), AA_TEXT);
+    const surface = hex2rgb(resolve(t["--ds-surface"], t));
+    const dimmed = flatten(hex2rgb(resolve(t["--ds-text-muted"], t)), surface, RAIL_DIM);
+    report(`rail dimmed @${RAIL_DIM}`, ratio(dimmed, surface), AA_TEXT);
   }
 }
 
@@ -263,27 +278,35 @@ const DS_CHECKS = [
   ["separator (decorative)", "--ds-border", "--ds-surface", AA_UI, ADVISORY],
   ["control edge", "--ds-border-strong", "--ds-surface", AA_UI],
 
+  /* A tonal Badge puts --ds-text on the tone's own surface and leaves the hue
+     to its dot, so every tone brings a text pair with it. The tone-on-its-own-
+     surface pairs below stay: an Alert still writes its title in the tone. */
   ["accent text", "--ds-accent", "--ds-surface", AA_TEXT],
   ["accent on raised", "--ds-accent", "--ds-surface-raised", AA_TEXT],
   ["focus ring", "--ds-accent", "--ds-surface", AA_UI],
   ["accent on its own surface", "--ds-accent", "--ds-accent-surface", AA_TEXT],
+  ["badge words on accent surface", "--ds-text", "--ds-accent-surface", AA_TEXT],
   ["accent border (decorative)", "--ds-accent-border", "--ds-surface", AA_UI, ADVISORY],
   ["solid button label", "--ds-accent-contrast", "--ds-accent", AA_TEXT],
 
   ["info text", "--ds-info", "--ds-surface", AA_TEXT],
   ["info on its own surface", "--ds-info", "--ds-info-surface", AA_TEXT],
+  ["badge words on info surface", "--ds-text", "--ds-info-surface", AA_TEXT],
   ["info border (decorative)", "--ds-info-border", "--ds-info-surface", AA_UI, ADVISORY],
 
   ["success text", "--ds-success", "--ds-surface", AA_TEXT],
   ["success on its own surface", "--ds-success", "--ds-success-surface", AA_TEXT],
+  ["badge words on success surface", "--ds-text", "--ds-success-surface", AA_TEXT],
   ["success border (decorative)", "--ds-success-border", "--ds-success-surface", AA_UI, ADVISORY],
 
   ["warning text", "--ds-warning", "--ds-surface", AA_TEXT],
   ["warning on its own surface", "--ds-warning", "--ds-warning-surface", AA_TEXT],
+  ["badge words on warning surface", "--ds-text", "--ds-warning-surface", AA_TEXT],
   ["warning border (decorative)", "--ds-warning-border", "--ds-warning-surface", AA_UI, ADVISORY],
 
   ["danger text", "--ds-danger", "--ds-surface", AA_TEXT],
   ["danger on its own surface", "--ds-danger", "--ds-danger-surface", AA_TEXT],
+  ["badge words on danger surface", "--ds-text", "--ds-danger-surface", AA_TEXT],
   ["danger border (decorative)", "--ds-danger-border", "--ds-danger-surface", AA_UI, ADVISORY],
   ["destructive button label", "--ds-danger-contrast", "--ds-danger", AA_TEXT],
 ];
@@ -307,26 +330,23 @@ for (const [selector, themeName] of [
 /* ============================================== the site, through the DS == */
 
 /**
- * The cover and the profile are built from the design system's components but
- * painted in their own palettes, which tokens.ds-bridge.css does by remapping
- * the semantic layer. That remap is a colour decision, so it is measured — the
- * same DS_CHECKS list, resolved through the bridge into whichever page palette
- * loaded underneath it.
+ * The cover and the profile are built from the design system's components and
+ * painted in their own palettes. There is no bridge between two vocabularies
+ * any more — each palette file defines primitives and points --ds-* at them, so
+ * a page palette is a theme in exactly the sense semantic.css means it.
  *
- * Without this the bridge would be the one layer in the stack nobody checked,
- * and it is the layer that decides what every component on two of the three
- * pages is painted with.
+ * That is what lets the full DS_CHECKS list run against them: every pair the
+ * design system promises is re-measured in the palette the page actually
+ * paints. A component that is legible in the system's dark theme and not on the
+ * cover is a broken promise, and this is where it would surface.
  */
-const bridgeCss = load("src/styles/tokens.ds-bridge.css");
-failures += assertAscii(bridgeCss, "src/styles/tokens.ds-bridge.css");
-const bridge = tokensIn(bridgeCss, ":root");
 
 /** rgba() over the page background, resolved to the literal it actually shows. */
 const flattenWash = (table) => {
   const wash = resolve(table["--ds-accent-surface"], table);
   const parts = wash?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
   if (!parts) return table;
-  const bg = hex2rgb(resolve(table["--bg"], table));
+  const bg = hex2rgb(resolve(table["--ds-surface"], table));
   const flat = flatten([+parts[1], +parts[2], +parts[3]], bg, parts[4] === undefined ? 1 : +parts[4]);
   return { ...table, "--ds-accent-surface": `#${flat.map((c) => c.toString(16).padStart(2, "0")).join("")}` };
 };
@@ -336,7 +356,7 @@ for (const { file, label, themes } of siteTargets) {
   const base = tokensIn(css, ":root");
 
   for (const [selector, themeName] of themes) {
-    const t = flattenWash({ ...base, ...tokensIn(css, selector), ...bridge });
+    const t = flattenWash({ ...base, ...tokensIn(css, selector) });
     console.log(`\n${label} · ${themeName} · through the design system`);
     for (const entry of DS_CHECKS) check(t, entry, `${label} ${themeName} via ds`);
   }

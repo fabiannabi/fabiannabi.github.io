@@ -9,8 +9,14 @@
 }
 
 .slot {
+  /* Measured and written back by the component: the slot's width follows the
+     word currently in it. Declared here with a starting value so the stylesheet
+     is complete on its own — a var() whose only definition is a line of
+     JavaScript is a rule nobody can read the whole of. */
+  --w: 0px;
+
   display: block;
-  color: var(--accent);
+  color: var(--ds-accent);
   position: relative;
   white-space: nowrap;
 }
@@ -25,15 +31,15 @@
   bottom: -0.06em;
   height: 3px;
   width: var(--w, 0);
-  background: var(--accent-line);
+  background: var(--ds-accent-border);
 }
 
 .word {
   display: inline-block;
-  animation: enter var(--dur) var(--ease) both;
+  animation: enter var(--ds-duration-slow) var(--ds-ease) both;
   transition:
-    opacity var(--dur) ease,
-    transform var(--dur) ease;
+    opacity var(--ds-duration-slow) ease,
+    transform var(--ds-duration-slow) ease;
 }
 
 .leaving {

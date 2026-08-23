@@ -16,6 +16,12 @@
   --ds-space-6: 24px;
   --ds-space-7: 32px;
   --ds-space-8: 48px;
+  /* The ramp keeps going at roughly 1.5x. These two exist because a page needs
+     to put air between whole sections, which is a different job from spacing a
+     control, and inventing them at the page was the old way of admitting the
+     scale stopped too early. */
+  --ds-space-9: 72px;
+  --ds-space-10: 104px;
 
   /* Radius */
   --ds-radius-sm: 4px;

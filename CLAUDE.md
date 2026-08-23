@@ -12,7 +12,7 @@ Three entry points, deployed to GitHub Pages at `https://fabiannabi.github.io`:
 - `index.html` → `src/pages/Cover` — the cover. One screen, ~80 words. Its only
   job is to earn ten seconds and a click through.
 - `profile/index.html` → `src/pages/Profile` — about, experience, selected work,
-  writing. ~610 words.
+  how I work. ~640 words.
 - `design/index.html` → `src/pages/Design` — **Blueprint**, the design system:
   fourteen components, live examples, props, accessibility notes and guidance.
   Storybook builds alongside it at `/storybook/`.
@@ -125,28 +125,60 @@ pretend otherwise.
    the shared chunks its imports drag in are listed separately. That mistake was
    made in this repo and the number was reported to the author before anyone
    checked it.
-2. **Three token layers, and components may only read the middle one.**
-   `--ds-violet-400` (primitive) → `--ds-accent` (semantic) → `--button-bg`
-   (component). A component reaching straight for a primitive is what makes a
-   design system impossible to re-theme later. The primitive ramps are
-   **generated** — edit `scripts/generate-palette.mjs` and re-run `pnpm palette`,
-   never `src/ds/tokens/primitives.css` by hand.
+2. **Two token layers, and one vocabulary.** Primitives say what a colour IS
+   (`--ds-violet-400`, `--cover-pink-400`). Semantic tokens say what it is FOR
+   (`--ds-accent`), and they are the only names any stylesheet outside the token
+   layer may read. A theme is the same semantic names pointed at different
+   primitives: `--ds-surface` is a near-black in one and a near-white in
+   another, and nothing below the token layer knows which. The design system's
+   primitive ramps are **generated** — edit `scripts/generate-palette.mjs` and
+   re-run `pnpm palette`, never `src/ds/tokens/primitives.css` by hand.
 
-   Three different things now remap that middle layer, and none of them touches
-   a component stylesheet. That is the only evidence the indirection is real:
+   A component may parameterise itself with properties of its own —
+   `--button-bg`, `--badge-dot`, `--beacon-halo` — defined and read inside its
+   own module. That is not a third layer: nothing outside the file reads them,
+   so they publish no vocabulary. It is what lets one variant change without
+   touching the others.
+
+   Three things remap the semantic layer, and none of them touches a component
+   stylesheet. That is the only evidence the indirection is real:
 
    - `[data-ds-theme]` in `semantic.css` — light and dark on `/design/`
-   - `tokens.ds-bridge.css` — the site's own palettes, so Blueprint's components
-     wear synthwave on the cover and the profile's near-monochrome on the CV
+   - `tokens.cover.css` and `tokens.profile.css` — the site's own palettes, each
+     defining its primitives and pointing `--ds-*` at them, so Blueprint's
+     components wear synthwave on the cover and the profile's near-monochrome on
+     the CV
    - `[data-xray]` in `blueprint.css` — the cyanotype the x-ray prints in
 
-   Every one of them is measured by the contrast audit. Eight palettes, and a
-   new remap means a new section in `scripts/audit-contrast.mjs`.
+   Every one of them is measured by the contrast audit, and because the pages
+   are themes rather than translations, the **same** `DS_CHECKS` list runs
+   against all of them. A pair the system promises is re-measured in every
+   palette that ships.
 
-   **A theme adds primitives, never semantics.** `--ds-surface` is called
-   `--ds-surface` in every theme; what changes underneath is which primitive it
-   points at. The blueprint owns `--xray-paper` and `--xray-line`, and remaps
-   `--ds-surface` and `--ds-border-strong` onto them — it does not introduce a
+   **This was broken for months and the fix is what the rule above is written
+   from.** The site kept a second vocabulary — `--bg`, `--ink`, `--accent`,
+   `--line`, plus its own `--s1..--s9` scale — and a `tokens.ds-bridge.css`
+   whose entire content was `--ds-text: var(--ink)`: the same colour with two
+   names, aliased to itself. The damage was not the extra file. App components
+   read one vocabulary (92 uses against 2) and the page stylesheets laying them
+   out read the other (119 against 44), so two files opened side by side
+   disagreed about what to call the same value — and the scales had drifted
+   apart, `--s3` being 12px while `--ds-space-3` was 8px. 212 substitutions
+   later there is one vocabulary, and
+   `conventions.test.ts` fails the build on a `var()` that is neither `--ds-*`,
+   nor `--xray-*` (the blueprint's own drawing scale, which has no semantic
+   equivalent — a grid step is not a colour role), nor a property the file
+   defines itself.
+
+   A corollary worth stating: **a custom property written from JavaScript still
+   has to be declared where it is read.** `RotatingHeadline` measures a width
+   and `Exploded` measures a depth, and both used to exist only as a
+   `setProperty` call. A `var()` whose only definition is a line of JS is a rule
+   nobody can read the whole of.
+
+   **A theme adds primitives, never semantics.** The blueprint owns
+   `--xray-paper` and `--xray-line`, and remaps `--ds-surface` and
+   `--ds-border-strong` onto them — it does not introduce a
    `--ds-blueprint-surface` for components to learn about. `xray.css` broke this
    for a while by reading `--xray-line` directly, which tied the drawing to one
    particular theme; it reads the semantic layer now, so the x-ray would draw
@@ -176,7 +208,17 @@ pretend otherwise.
 6. **Keep the word counts low** on the cover and the profile. Ceilings are
    asserted: 100 words and 660 words. Getting past one means cutting something.
    The design system page is documentation and is not under a ceiling.
-7. **Copy for the cover and profile lives in `src/data/content.ts`**; component
+7. A **Writing** section shipped for a while with three drafts and a "to publish"
+badge, and came out: a CV listing things its author has not written yet spends
+the reader's attention on the one part of the page with nothing behind it.
+**How I work** replaced it, and what those three entries had to survive is not
+repeating `about`. The obvious three — how a breaking change is negotiated, how
+adoption is measured, what is and is not delegated to a model — are all in that
+section already, at length. A second section restating them in a different shape
+is exactly the filler the word ceiling exists to prevent, and the first draft of
+this one did it three times out of three.
+
+**Copy for the cover and profile lives in `src/data/content.ts`**; component
    guidance lives in `*.docs.ts` next to each component. Neither belongs in JSX.
 
 ## The design system
@@ -600,8 +642,6 @@ designed, and nothing about it should carry Salesloft branding or values.
 - [ ] Write the one personal line in `src/data/content.ts` (`personalLine`,
       rendered with a dashed underline). Still a placeholder. Flip
       `isPlaceholder` to `false` when it is real.
-- [ ] The three `writing` entries are drafts with a "to publish" badge. When a
-      post goes live, link it and drop the badge.
 - [ ] **Decide whether the x-ray stays at all.** It is off the built site as of
       August 2026 — both switches removed, the `X` shortcut behind
       `import.meta.env.DEV` — because the question is no longer whether the

@@ -12,7 +12,7 @@ import {
   personalLine,
   stats,
   work,
-  writing,
+  practice,
 } from "../data/content";
 
 /**
@@ -87,6 +87,45 @@ describe("no raw typography outside the token files", () => {
         .filter((value) => value !== "" && !ALLOWED.test(value));
 
       expect(found, "every type value resolves from a token in ds/tokens/scale.css").toEqual([]);
+    },
+  );
+});
+
+/**
+ * Two layers of token vocabulary, and no third.
+ *
+ * Primitives say what a colour IS and live in a token file. Semantic tokens say
+ * what it is FOR, are named --ds-*, and are the only vocabulary any stylesheet
+ * outside the token layer may read. A theme is the same semantic names pointed
+ * at different primitives: --ds-surface is a near-black in one and a near-white
+ * in another, and nothing below the token layer knows which.
+ *
+ * This test exists because the site broke that rule for months without anyone
+ * noticing. It kept a second vocabulary — --bg, --ink, --accent, --line — and a
+ * bridge file whose entire content was `--ds-text: var(--ink)`: the same colour
+ * with two names, aliased to itself. The damage was not the extra file. It was
+ * that app components read one vocabulary (92 uses against 2) and the page
+ * stylesheets that laid them out read the other (119 against 44), so two files
+ * opened side by side disagreed about what to call the same value. The scales
+ * had drifted apart too — --s3 was 12px and --ds-space-3 was 8px.
+ *
+ * Allowed: --ds-*, --xray-* (the blueprint's own drawing scale, which has no
+ * semantic equivalent — a grid step is not a colour role), and any custom
+ * property the file defines itself, which is how a component parameterises its
+ * own variants without publishing a vocabulary anyone else reads.
+ */
+describe("two token layers, and no third vocabulary", () => {
+  it.each(cssFiles().filter((path) => !isTokenFile(path)).map((p) => [label(p), p]))(
+    "%s",
+    (_name, path) => {
+      const css = read(path);
+      const defined = new Set([...css.matchAll(/(?:^|[;{\s])(--[a-z0-9-]+)\s*:/gm)].map((m) => m[1]));
+      const foreign = [...css.matchAll(/var\(\s*(--[a-z0-9-]+)/g)]
+        .map((m) => m[1] as string)
+        .filter((name) => !name.startsWith("--ds-") && !name.startsWith("--xray-"))
+        .filter((name) => !defined.has(name));
+
+      expect([...new Set(foreign)], "read --ds-* or a property this file defines").toEqual([]);
     },
   );
 });
@@ -227,7 +266,7 @@ describe("word counts stay low", () => {
       ...about.flat(),
       ...experience.map((entry) => `${entry.note ?? ""} ${entry.description ?? ""}`),
       ...work.map((entry) => entry.description ?? ""),
-      ...writing.map((entry) => entry.description ?? ""),
+      ...practice.map((entry) => entry.description ?? ""),
       personalLine.text,
       colophon,
     );

@@ -45,7 +45,8 @@ export const badgeDoc: ComponentDoc = {
     "The dot is aria-hidden. It decorates the words, and announcing it would add noise and no meaning.",
     "Renders as inert text, with no role and no tab stop — it is content, not a control.",
     "The label carries the meaning and the tone reinforces it. A badge whose text is a bare number, distinguished only by its colour, would fail SC 1.4.1.",
-    "Every tone's text and tinted surface are checked as a pair, in both themes, by the contrast audit.",
+    "The tone colours the dot and the border, never the words. Saturated colour at a small size in a mono face reads badly at ratios that pass the check: the cover's status badge measured 5.81:1, which is a pass and was still hard to read. The words are --ds-text and clear 13:1 in every palette.",
+    "Every tone's words and tinted surface are checked as a pair, across all eight palettes and through three colour vision deficiencies, by the contrast audit.",
   ],
   guidance: {
     do: [
