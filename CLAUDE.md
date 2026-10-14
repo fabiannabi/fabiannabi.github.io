@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Personal site for Fabián Alcalá — User Interface Engineer at Salesloft, targeting
+Personal site for Fabián Alcalá — Senior User Interface Engineer at Salesloft, targeting
 frontend platform / design systems lead roles.
 
 **The first two pages are the job application.** `index` is the cover letter; the
@@ -643,9 +643,6 @@ designed, and nothing about it should carry Salesloft branding or values.
 
 ## Open items
 
-- [ ] Write the one personal line in `src/data/content.ts` (`personalLine`,
-      rendered with a dashed underline). Still a placeholder. Flip
-      `isPlaceholder` to `false` when it is real.
 - [ ] **Decide whether the x-ray stays at all.** It is off the built site as of
       August 2026 — both switches removed, and the development-only `X` key
       removed in September — because the question is no longer whether the

@@ -164,11 +164,10 @@ export const about: readonly RichParagraph[] = [
   ],
 ];
 
-/** Still a placeholder. Every portfolio that lands has one human line. */
+/** The one human line. */
 export const personalLine = {
-  text: "Outside work — one honest personal line goes here.",
-  hint: "Replace with something true: hobbies, family, weekends. Every portfolio that lands has one human line.",
-  isPlaceholder: true,
+  text: "Outside work: hobbyist, gamer, and dog lover.",
+  isPlaceholder: false,
 } as const;
 
 export type Entry = {

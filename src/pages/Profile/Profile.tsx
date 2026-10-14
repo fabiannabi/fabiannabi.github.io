@@ -116,7 +116,6 @@ export function Profile() {
               className={
                 personalLine.isPlaceholder ? `${styles.personal} ${styles.todo}` : styles.personal
               }
-              title={personalLine.hint}
             >
               <Text tone="muted">{personalLine.text}</Text>
             </div>
