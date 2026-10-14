@@ -1,5 +1,3 @@
-import { Alert } from "../../ds/components/Alert/Alert";
-import { Code } from "../../ds/components/Code/Code";
 import { Heading } from "../../ds/components/Heading/Heading";
 import { Label } from "../../ds/components/Label/Label";
 import { Link } from "../../ds/components/Link/Link";
@@ -87,24 +85,16 @@ export function Design() {
         </header>
 
         <main className={styles.main}>
-          <section id="overview" className={styles.overview}>
+          <section id="overview" className={styles.overview} {...region("Overview")}>
             <Heading level={2} size="xl">
               Components you can take apart
             </Heading>
 
             <Text size="lg" tone="muted" measure>
-              Eight components, their real props, and the accessibility decisions behind them. Every
-              example on this page is the live component — not a screenshot — so it responds to the
-              theme, to your keyboard, and to the x-ray.
+              {registry.length} components, their real props, and the accessibility decisions behind
+              them. Every example on this page is the live component — not a screenshot — so it
+              responds to the theme and to your keyboard.
             </Text>
-
-            <Alert tone="info" title="Try the x-ray">
-              Press <Code>X</Code>, or use the toggle, to print this page as a blueprint: the whole
-              palette collapses to one cyanotype, every component is drawn as a named frame on ruled
-              paper, and the gap between the two boxes is the padding the browser actually computed.
-              It is a theme, not an overlay — no component stylesheet knows the mode exists. It works
-              on the cover and the profile too.
-            </Alert>
 
             <div className={styles.principles} {...region("Principles")}>
               <div>

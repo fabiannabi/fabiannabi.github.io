@@ -226,9 +226,11 @@ this one did it three times out of three.
 **The docs page is the system's first consumer**, which is the cheapest way to
 find out a component is missing. Its own chrome — not the examples it renders,
 which use each component once by definition — is built from `Text`, `Label`,
-`Heading`, `Code`, `Badge`, `Alert`, `Link` and `Table`. What is left as raw
-markup there is `ul`/`li` (a list is a list) and a handful of `aria-hidden`
-swatches.
+`Heading`, `Code`, `Badge`, `Link` and `Table`. `Alert` was in that list until
+the page's one use of it — a panel telling readers to press `X` — went out with
+the x-ray's last entry point. What is left as raw markup there is `ul`/`li` (a
+list is a list) and a handful of `aria-hidden` swatches, all of it inside a
+`region()` so the blueprint blanks it.
 
 `Table` came out of that exercise: the props tables were hand-built markup that
 already carried a caption, `scope` on every header and a focusable scroll
@@ -354,24 +356,26 @@ same rule that keeps `Glow` overscanned and hides it while the simulation runs.
 
 ### The x-ray
 
-**It is off the built site, and it is a work in progress.** Both switches are
-out of the pages and the `X` shortcut is development-only, so `pnpm dev` still
-has the whole mode and a visitor has no way into it. That is deliberate rather
-than a deletion: the code, the stylesheets, the provider and the unit tests are
-all still here and still typechecked, and `e2e/xray.spec.ts` skips the two
-blocks that need the mode on — the stamps have their own block that keeps
-running, because `data-ds-component` and `data-ds-local` are inert markup that
-ships either way and the site's claim about being built from its own system
-rides on them. Put a `Toggle` back on a page, drop the `import.meta.env.DEV`
-guard in `XRayProvider`, and un-skip the file.
+**It is off every page, including `pnpm dev`, and it is a work in progress.**
+Both switches are out and the development-only `X` key came out after them, so
+nothing can turn the mode on any more. That is deliberate rather than a
+deletion: the code, the stylesheets, the provider and the unit tests are all
+still here and still typechecked, and `e2e/xray.spec.ts` skips the two blocks
+that need the mode on — the stamps have their own block that keeps running,
+because `data-ds-component` and `data-ds-local` are inert markup that ships
+either way and the site's claim about being built from its own system rides on
+them. Put a `Toggle` back on a page and un-skip the file — `toggle` on the
+context is still the one way in, so nothing else has to be rebuilt. The unit
+tests for the shortcut went out with the shortcut, because that coverage belongs
+to the entry point rather than to the provider.
 
 What follows describes the mode as it works.
 
-Toggled by the button or the `X` key, on the profile and the design system. Not
-on the cover — see above. It prints the page as
-a blueprint: the palette collapses to one cyanotype, the page is ruled like graph
-paper, and every component is reduced to a named box at the size it really
-occupies. It is a wireframe of the live page, not an inspector on top of it.
+Toggled by a button, on the profile and the design system. Not on the cover —
+see above. It prints the page as a blueprint: the palette collapses to one
+cyanotype, the page is ruled like graph paper, and every component is reduced to
+a named box at the size it really occupies. It is a wireframe of the live page,
+not an inspector on top of it.
 
 **It is split in two, and the split is the argument.**
 
@@ -643,8 +647,8 @@ designed, and nothing about it should carry Salesloft branding or values.
       rendered with a dashed underline). Still a placeholder. Flip
       `isPlaceholder` to `false` when it is real.
 - [ ] **Decide whether the x-ray stays at all.** It is off the built site as of
-      August 2026 — both switches removed, the `X` shortcut behind
-      `import.meta.env.DEV` — because the question is no longer whether the
+      August 2026 — both switches removed, and the development-only `X` key
+      removed in September — because the question is no longer whether the
       animation is right but whether a cover letter and a CV are served by the
       mode existing. Nothing is deleted. Two things are waiting on the answer:
       `src/components/Beacon` has no caller left, since the halo went out with

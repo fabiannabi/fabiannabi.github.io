@@ -157,10 +157,6 @@ function clearMeasurements(root: ParentNode): void {
   }
 }
 
-const isTypingTarget = (target: EventTarget | null): boolean =>
-  target instanceof HTMLElement &&
-  (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
-
 export function XRayProvider({ children }: { children: ReactNode }) {
   const reduced = usePrefersReducedMotion();
   const [enabled, setEnabled] = useState(false);
@@ -214,25 +210,17 @@ export function XRayProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("resize", onResize);
   }, [enabled]);
 
-  /* The X key is the only way into the blueprint now that both switches are
-     out, and on a built page that is a trap rather than a shortcut: a reader
-     who presses it by accident gets a page redrawn as a wireframe with nothing
-     visible to press to get back. So it is the development server only, which
-     is what makes this a work in progress rather than a hidden feature. Delete
-     the guard and put a Toggle back and the mode returns whole. */
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
+  /* There was an X key here, bound on the development server only, and it was
+     the last way into the blueprint after both switches came out. It is gone
+     too: the mode is shelved while the question of whether a cover letter and a
+     CV are served by it at all is open, and a shortcut nobody can discover is
+     not a smaller version of a feature — it is the same feature, kept where
+     only its author trips over it.
 
-    const onKey = (event: KeyboardEvent): void => {
-      if (event.key !== "x" && event.key !== "X") return;
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-      if (isTypingTarget(event.target)) return;
-      event.preventDefault();
-      toggle();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [toggle]);
+     Nothing else was deleted. The provider still measures, still holds the
+     leaving state, and `toggle` is still the only way the mode is turned on, so
+     putting a Toggle on a page — or binding a key again — brings it back whole.
+     That is what makes this a pause rather than a removal. */
 
   const value = useMemo(() => ({ enabled, toggle, animating }), [enabled, toggle, animating]);
 

@@ -4,6 +4,7 @@ import { Heading } from "../../ds/components/Heading/Heading";
 import { Label } from "../../ds/components/Label/Label";
 import { Text } from "../../ds/components/Text/Text";
 import type { ComponentDoc } from "../../ds/docs/types";
+import { region } from "../../ds/xray/instrument";
 import { PropsTable } from "./PropsTable";
 import styles from "./ComponentSection.module.css";
 
@@ -14,7 +15,12 @@ type Props = {
 
 export function ComponentSection({ doc, example }: Props) {
   return (
-    <section id={doc.slug} className={styles.section} aria-labelledby={`${doc.slug}-title`}>
+    <section
+      id={doc.slug}
+      className={styles.section}
+      aria-labelledby={`${doc.slug}-title`}
+      {...region(doc.name)}
+    >
       <header className={styles.header}>
         <div className={styles.titleRow}>
           <Heading level={2} size="lg">
@@ -27,7 +33,9 @@ export function ComponentSection({ doc, example }: Props) {
         </Text>
       </header>
 
-      <div className={styles.demo}>{example}</div>
+      <div className={styles.demo} {...region("Demo")}>
+        {example}
+      </div>
 
       {doc.anatomy ? (
         <div className={styles.sub}>
@@ -73,7 +81,7 @@ export function ComponentSection({ doc, example }: Props) {
           Best practices
         </Label>
         <div className={styles.guidance}>
-          <div className={styles.do}>
+          <div className={styles.do} {...region("Do")}>
             <Label size="sm" caps tone="accent">
               Do
             </Label>
@@ -87,7 +95,7 @@ export function ComponentSection({ doc, example }: Props) {
               ))}
             </ul>
           </div>
-          <div className={styles.dont}>
+          <div className={styles.dont} {...region("Don't")}>
             <Label size="sm" caps tone="danger">
               Don&rsquo;t
             </Label>

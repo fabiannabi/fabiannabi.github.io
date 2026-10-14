@@ -2,6 +2,7 @@ import { Code } from "../../ds/components/Code/Code";
 import { Heading } from "../../ds/components/Heading/Heading";
 import { Label } from "../../ds/components/Label/Label";
 import { Text } from "../../ds/components/Text/Text";
+import { region } from "../../ds/xray/instrument";
 import styles from "./Tokens.module.css";
 
 /** Semantic tokens, grouped the way a consumer reaches for them. */
@@ -20,7 +21,12 @@ const SPACE = ["1", "2", "3", "4", "5", "6", "7", "8"] as const;
 
 export function Tokens() {
   return (
-    <section id="tokens" className={styles.section} aria-labelledby="tokens-title">
+    <section
+      id="tokens"
+      className={styles.section}
+      aria-labelledby="tokens-title"
+      {...region("Tokens")}
+    >
       <Heading level={2} size="lg">
         <span id="tokens-title">Tokens</span>
       </Heading>

@@ -99,13 +99,13 @@ for (const [path, label] of PAGES) {
 /**
  * Skipped, and not because anything here is failing.
  *
- * The blueprint's switch is off both pages and its keyboard shortcut is
- * development-only while the mode is being reconsidered, so on a built page
- * there is no way into it and every test below would be asserting against a
- * page that cannot enter the state. The mode itself, its stylesheets and its
- * provider are all still here and still typechecked. Put a Toggle back and drop
- * the guard in XRayProvider and this whole file runs again — it is the coverage
- * that goes with the entry point, not with the code.
+ * The blueprint has no entry point at all while the mode is being reconsidered:
+ * both switches are off the pages and the development-only X key has been taken
+ * out too, so no page can enter the state and every test below would be
+ * asserting against one that cannot. The mode itself, its stylesheets and its
+ * provider are all still here and still typechecked. Put a Toggle back on a page
+ * and this whole file runs again — it is the coverage that goes with the entry
+ * point, not with the code.
  */
 test.describe.skip("X-ray blueprint", () => {
   test.use({ colorScheme: "dark" });

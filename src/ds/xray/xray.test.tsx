@@ -90,31 +90,12 @@ describe("XRayToggle", () => {
   });
 });
 
-describe("keyboard shortcut", () => {
-  it("toggles on X", async () => {
-    const user = userEvent.setup();
-    render(<Harness />);
-
-    await user.keyboard("x");
-
-    expect(root().dataset["xray"]).toBe("on");
-  });
-
-  it("stays out of the way while the user is typing", async () => {
-    const user = userEvent.setup();
-    render(
-      <XRayProvider>
-        <input aria-label="Search" />
-      </XRayProvider>,
-    );
-
-    await user.click(screen.getByLabelText("Search"));
-    await user.keyboard("xyz");
-
-    expect(root().dataset["xray"]).toBeUndefined();
-    expect(screen.getByLabelText("Search")).toHaveValue("xyz");
-  });
-});
+/* There was a "keyboard shortcut" block here, covering the X key and its
+   refusal to fire while somebody is typing. The key is gone — the mode is
+   shelved and has no entry point on any page — so the tests went with it rather
+   than being kept green against a binding that no longer exists. Bind a key
+   again and they come back with it; the coverage belongs to the entry point,
+   not to the provider. */
 
 describe("turning it off", () => {
   /* Real timers on purpose. The exit is 360ms, which is cheap to wait out, and
