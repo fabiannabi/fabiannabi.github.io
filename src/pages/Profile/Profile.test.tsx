@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 import { experience, sections, work, practice } from "../../data/content";
@@ -8,6 +8,7 @@ import { Profile } from "./Profile";
 describe("Profile", () => {
   afterEach(() => {
     delete document.documentElement.dataset["theme"];
+    delete document.documentElement.dataset["themeSwitching"];
     localStorage.clear();
   });
 
@@ -52,6 +53,27 @@ describe("Profile", () => {
 
     expect(document.documentElement.dataset["theme"]).toBe("light");
     expect(localStorage.getItem("theme")).toBe("light");
+  });
+
+  /* Real timers, and the flag is held for 200ms — long enough to assert without
+     faking a clock, which deadlocks user-event's own waits. */
+  it("cross-fades between the palettes instead of snapping", async () => {
+    const user = userEvent.setup();
+    render(<Profile />);
+
+    /* Not on load. A blocking script has already applied a palette by the time
+       React runs, so fading the one on screen would be a flash of its own. */
+    expect(document.documentElement.dataset["themeSwitching"]).toBeUndefined();
+
+    await user.click(screen.getByRole("button", { name: /switch to light theme/i }));
+
+    // global.css hangs one colour transition off this, on every element.
+    expect(document.documentElement.dataset["themeSwitching"]).toBe("");
+
+    // And takes it off again, so nothing carries that transition at rest.
+    await waitFor(() =>
+      expect(document.documentElement.dataset["themeSwitching"]).toBeUndefined(),
+    );
   });
 
   it("remembers the choice rather than re-asking the OS", async () => {

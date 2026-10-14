@@ -46,6 +46,63 @@ button {
   color: inherit;
 }
 
+/* ---------- changing the theme ---------- */
+
+/* One cross-fade of the whole page, done by the compositor.
+
+   The browser holds a snapshot of the page as it was, lets useThemeAttribute
+   swap the palette, snapshots it again, and blends the two — two textures, no
+   layout, no per-element paint. That is why the duration can be tuned by taste
+   rather than by what the page can afford: /design/ instruments 599 components
+   and it costs the same there as on the cover.
+
+   Linear because an ease curve holds the midpoint, and the midpoint of two
+   palettes is the low-contrast frame — near-white and near-black text meeting
+   in the middle over backgrounds doing the same. It is crossed, not dwelt on. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--ds-duration);
+  animation-timing-function: linear;
+}
+
+/* The view-transition pseudo-elements live outside the document tree, so the
+   `*` rule in tokens.base.css never reaches them. The hook skips the transition
+   entirely when the flag is set; this covers a change that starts anyway. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+/* The fallback, for Firefox before 144 and Safari before 18, and the only rule
+   in the codebase that reaches every element.
+
+   It is scoped to the change itself: useThemeAttribute stamps
+   data-theme-switching on the root for exactly one duration and takes it off
+   again, so nothing on the page carries a colour transition at rest. Left on
+   permanently this would animate every hover and focus a component already owns
+   an opinion about — and !important would win those arguments too.
+
+   Why every element at all: body has faded its own background for a long time
+   and nothing else did, so switching to light darkened the field under cards,
+   borders and type that had already snapped to the new palette. A theme is a
+   remap of one vocabulary, and everything reading that vocabulary has to move
+   together or the page tears.
+
+   Three properties and 200ms, and both numbers are what this costs without the
+   compositor: every element repainting on every frame. Eight properties over
+   360ms was measurably the page labouring rather than a palette changing. */
+:root[data-theme-switching],
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  transition:
+    background-color var(--ds-duration) linear,
+    border-color var(--ds-duration) linear,
+    color var(--ds-duration) linear !important;
+}
+
 /* One focus style, defined once. Removing an outline without replacing it is
    the second-most-common defect in a component library audit. */
 :where(a, button, [tabindex]):focus-visible {
