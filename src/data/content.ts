@@ -47,30 +47,22 @@ export const projects: readonly Project[] = [
 /* ---------------------------------------------------------------- cover ---- */
 
 /**
- * The rotating slot. `headlineSentence` is what a screen reader gets — the full
- * claim, every term, in one grammatical sentence. Without it the rotation
- * announces "I build the other teams build on."
+ * The headline: what I do at work, and what I build on my own with it. The slot
+ * keeps the rotating component's shape (a line before, an underlined slot, a
+ * line after) with one phrase in it, so it does not rotate: the claim is one
+ * thing now, not a list. `sentence` is what a screen reader gets.
  */
 export const headline = {
-  before: "I build the",
-  after: "other teams rely on.",
-  rotating: [
-    "design systems",
-    "component APIs",
-    "accessibility baselines",
-    "release pipelines",
-    "translation workflows",
-  ],
-  sentence:
-    "I build the design systems, component APIs, accessibility baselines, release pipelines and translation workflows other teams rely on.",
+  before: "I build design systems",
+  after: "that build with them.",
+  rotating: ["and the AI agents"],
+  sentence: "I build design systems and the AI agents that build with them.",
 } as const;
 
 export const coverSub = {
-  lead: "Six years in software.",
-  emphasis:
-    "Components, accessibility, localization and the telemetry that proves any of it is being used",
-  tail:
-    "— shipped as semver packages from a pnpm monorepo, with AI as an accelerator, never an authority.",
+  lead: "Six years in software, shipping accessible component libraries other teams adopt.",
+  emphasis: "On my own, Forge: agent teams that turn tickets into reviewed pull requests",
+  tail: "— in throwaway containers, under a budget, and a human merges every one.",
 } as const;
 
 /**
@@ -109,7 +101,7 @@ export type Stat = { readonly value: string; readonly label: string };
 
 export const stats: readonly Stat[] = [
   { value: "6 years", label: "in software" },
-  { value: "14 months", label: "associate → engineer" },
+  { value: "2 promotions", label: "associate → senior since 2023" },
   { value: "WCAG 2.2", label: "baseline I own" },
 ] as const;
 
