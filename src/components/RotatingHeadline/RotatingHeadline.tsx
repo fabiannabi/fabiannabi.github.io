@@ -1,8 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Heading } from "../../ds/components/Heading/Heading";
-import { VisuallyHidden } from "../../ds/components/VisuallyHidden/VisuallyHidden";
-import { local } from "../../ds/xray/instrument";
-import { usePrefersReducedMotion } from "../../ds/hooks/usePrefersReducedMotion";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { VisuallyHidden } from "@fabiannabi/blueprint/components/VisuallyHidden/VisuallyHidden";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
+import { usePrefersReducedMotion } from "@fabiannabi/blueprint/hooks/usePrefersReducedMotion";
 import styles from "./RotatingHeadline.module.css";
 
 const CYCLE_MS = 3400;

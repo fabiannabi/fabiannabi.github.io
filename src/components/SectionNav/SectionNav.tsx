@@ -1,5 +1,5 @@
-import { Label } from "../../ds/components/Label/Label";
-import { local } from "../../ds/xray/instrument";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
 import styles from "./SectionNav.module.css";
 
 /* Owned here, not imported from the site's content module — see Entry. */

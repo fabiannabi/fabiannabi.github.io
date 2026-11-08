@@ -311,10 +311,10 @@ const DS_CHECKS = [
   ["destructive button label", "--ds-danger-contrast", "--ds-danger", AA_TEXT],
 ];
 
-const primitivesCss = load("src/ds/tokens/primitives.css");
-const semanticCss = load("src/ds/tokens/semantic.css");
-failures += assertAscii(primitivesCss, "src/ds/tokens/primitives.css");
-failures += assertAscii(semanticCss, "src/ds/tokens/semantic.css");
+const primitivesCss = load("packages/blueprint/src/tokens/primitives.css");
+const semanticCss = load("packages/blueprint/src/tokens/semantic.css");
+failures += assertAscii(primitivesCss, "packages/blueprint/src/tokens/primitives.css");
+failures += assertAscii(semanticCss, "packages/blueprint/src/tokens/semantic.css");
 
 const primitives = tokensIn(primitivesCss, ":root");
 
@@ -374,8 +374,8 @@ for (const { file, label, themes } of siteTargets) {
  * temporary, nobody reads a blueprint for long. None of which is an argument a
  * success criterion accepts.
  */
-const blueprintCss = load("src/ds/tokens/blueprint.css");
-failures += assertAscii(blueprintCss, "src/ds/tokens/blueprint.css");
+const blueprintCss = load("packages/blueprint/src/tokens/blueprint.css");
+failures += assertAscii(blueprintCss, "packages/blueprint/src/tokens/blueprint.css");
 
 {
   const t = { ...tokensIn(blueprintCss, ":root"), ...tokensIn(blueprintCss, "\\[data-xray\\]") };

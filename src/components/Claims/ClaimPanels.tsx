@@ -1,6 +1,6 @@
-import { Label } from "../../ds/components/Label/Label";
-import { Text } from "../../ds/components/Text/Text";
-import { local } from "../../ds/xray/instrument";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
 import type { ClaimModel } from "./model";
 import styles from "./ClaimPanels.module.css";
 

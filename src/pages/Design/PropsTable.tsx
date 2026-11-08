@@ -1,7 +1,7 @@
-import { Badge } from "../../ds/components/Badge/Badge";
-import { Code } from "../../ds/components/Code/Code";
-import { Table, type TableColumn } from "../../ds/components/Table/Table";
-import type { PropDoc } from "../../ds/docs/types";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Code } from "@fabiannabi/blueprint/components/Code/Code";
+import { Table, type TableColumn } from "@fabiannabi/blueprint/components/Table/Table";
+import type { PropDoc } from "@fabiannabi/blueprint/docs/types";
 import styles from "./PropsTable.module.css";
 
 type Props = {

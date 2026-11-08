@@ -1,8 +1,8 @@
-import { Code } from "../../ds/components/Code/Code";
-import { Heading } from "../../ds/components/Heading/Heading";
-import { Label } from "../../ds/components/Label/Label";
-import { Text } from "../../ds/components/Text/Text";
-import { region } from "../../ds/xray/instrument";
+import { Code } from "@fabiannabi/blueprint/components/Code/Code";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
+import { region } from "@fabiannabi/blueprint/xray/instrument";
 import styles from "./Tokens.module.css";
 
 /** Semantic tokens, grouped the way a consumer reaches for them. */

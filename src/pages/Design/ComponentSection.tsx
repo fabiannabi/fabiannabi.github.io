@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
-import { Badge } from "../../ds/components/Badge/Badge";
-import { Heading } from "../../ds/components/Heading/Heading";
-import { Label } from "../../ds/components/Label/Label";
-import { Text } from "../../ds/components/Text/Text";
-import type { ComponentDoc } from "../../ds/docs/types";
-import { region } from "../../ds/xray/instrument";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
+import type { ComponentDoc } from "@fabiannabi/blueprint/docs/types";
+import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { PropsTable } from "./PropsTable";
 import styles from "./ComponentSection.module.css";
 

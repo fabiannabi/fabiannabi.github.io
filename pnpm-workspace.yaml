@@ -2,5 +2,8 @@
 # and treats an unapproved script as an error under --frozen-lockfile.
 # esbuild's postinstall links its platform binary — it is a dependency of Vite
 # and Storybook, and the build does not work without it.
+packages:
+  - packages/*
+
 allowBuilds:
   esbuild: true

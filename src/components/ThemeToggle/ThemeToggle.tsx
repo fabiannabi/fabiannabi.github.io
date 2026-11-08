@@ -1,5 +1,5 @@
-import { Toggle } from "../../ds/components/Toggle/Toggle";
-import type { Theme } from "../../ds/hooks/useThemeAttribute";
+import { Toggle } from "@fabiannabi/blueprint/components/Toggle/Toggle";
+import type { Theme } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 
 type Props = {
   theme: Theme;

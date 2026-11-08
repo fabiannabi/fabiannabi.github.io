@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { local } from "../../ds/xray/instrument";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
 import styles from "./Beacon.module.css";
 
 type Props = {

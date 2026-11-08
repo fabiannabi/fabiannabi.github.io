@@ -1,11 +1,11 @@
-import { Heading } from "../../ds/components/Heading/Heading";
-import { Label } from "../../ds/components/Label/Label";
-import { Link } from "../../ds/components/Link/Link";
-import { Text } from "../../ds/components/Text/Text";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Link } from "@fabiannabi/blueprint/components/Link/Link";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
-import { byCategory, registry } from "../../ds/docs/registry";
-import { useThemeAttribute } from "../../ds/hooks/useThemeAttribute";
-import { region } from "../../ds/xray/instrument";
+import { byCategory, registry } from "@fabiannabi/blueprint/docs/registry";
+import { useThemeAttribute } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
+import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { ComponentSection } from "./ComponentSection";
 import { EXAMPLES } from "./examples";

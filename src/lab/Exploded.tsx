@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Badge } from "../ds/components/Badge/Badge";
-import { Button } from "../ds/components/Button/Button";
-import { Display } from "../ds/components/Display/Display";
-import { Heading } from "../ds/components/Heading/Heading";
-import { Label } from "../ds/components/Label/Label";
-import { Text } from "../ds/components/Text/Text";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Button } from "@fabiannabi/blueprint/components/Button/Button";
+import { Display } from "@fabiannabi/blueprint/components/Display/Display";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { Stat } from "../components/Stat/Stat";
-import { region } from "../ds/xray/instrument";
+import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import styles from "./Exploded.module.css";
 

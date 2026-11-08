@@ -1,4 +1,4 @@
-export { usePrefersReducedMotion } from "../ds/hooks/usePrefersReducedMotion";
+export { usePrefersReducedMotion } from "@fabiannabi/blueprint/hooks/usePrefersReducedMotion";
 
 /**
  * A thin re-export, the same shape as useTheme over useThemeAttribute.

@@ -1,0 +1,22 @@
+{
+  "name": "@fabiannabi/blueprint",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Blueprint — an accessible React design system: three-layer tokens, fourteen documented components, contrast audited in CI.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Fabián Alcalá",
+  "sideEffects": ["**/*.css"],
+  "exports": {
+    "./*.css": "./src/*.css",
+    "./*": "./src/*.tsx",
+    "./docs/*": "./src/docs/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./utils/*": "./src/utils/*.ts",
+    "./manifest.json": "./dist/manifest.json"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

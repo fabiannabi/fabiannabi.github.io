@@ -18,6 +18,10 @@ export default defineConfig({
   // User site (fabiannabi.github.io) is served from the domain root.
   base: "/",
   plugins: [react()],
+  resolve: {
+    /* The design system is a workspace package; the site imports it by name. */
+    alias: [{ find: /^@fabiannabi\/blueprint\/(.*)$/, replacement: `${resolve(here, "packages/blueprint/src")}/$1` }],
+  },
   build: {
     target: "es2022",
     rollupOptions: {
@@ -39,10 +43,10 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
     css: true,
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}", "packages/*/src/**/*.test.{ts,tsx}", "packages/*/test/**/*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
-      include: ["src/**/*.{ts,tsx}"],
+      include: ["src/**/*.{ts,tsx}", "packages/*/src/**/*.{ts,tsx}"],
       exclude: ["src/**/*.test.{ts,tsx}", "src/test/**", "src/**/main.tsx"],
     },
   },

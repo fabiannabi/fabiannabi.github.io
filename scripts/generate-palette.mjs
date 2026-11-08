@@ -11,7 +11,7 @@
  * degrades gracefully at the ends of the ramp rather than clipping to a
  * different colour than the one requested.
  *
- *   node scripts/generate-palette.mjs > src/ds/tokens/primitives.css
+ *   node scripts/generate-palette.mjs > packages/blueprint/src/tokens/primitives.css
  */
 
 /** Perceptual lightness for each step. Shared by every family. */

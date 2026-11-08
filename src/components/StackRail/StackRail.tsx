@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { local } from "../../ds/xray/instrument";
-import { usePrefersReducedMotion } from "../../ds/hooks/usePrefersReducedMotion";
-import { Label } from "../../ds/components/Label/Label";
-import { VisuallyHidden } from "../../ds/components/VisuallyHidden/VisuallyHidden";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
+import { usePrefersReducedMotion } from "@fabiannabi/blueprint/hooks/usePrefersReducedMotion";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { VisuallyHidden } from "@fabiannabi/blueprint/components/VisuallyHidden/VisuallyHidden";
 import styles from "./StackRail.module.css";
 
 const BASE_SPEED = 26; // px per second
