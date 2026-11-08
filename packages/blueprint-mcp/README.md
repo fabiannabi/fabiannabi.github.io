@@ -35,27 +35,34 @@ comment above each token as its "what it is for". The server ships that `manifes
 
 ## Use it
 
-```bash
-pnpm build:mcp                                  # from the repo root
-```
-
 Claude Code:
 
 ```bash
-claude mcp add blueprint -- node /path/to/packages/blueprint-mcp/dist/cli.js
+claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.0
 ```
 
 Any MCP client (Cursor, Windsurf, Claude Desktop):
 
 ```json
-{ "mcpServers": { "blueprint": { "command": "node", "args": ["/path/to/packages/blueprint-mcp/dist/cli.js"] } } }
+{ "mcpServers": { "blueprint": { "command": "npx", "args": ["-y", "@fabiannabi/blueprint-mcp@0.1.0"] } } }
 ```
+
+Pinning the version means a new release only reaches you when you choose it.
 
 The linter also runs without MCP — in CI, or as an eval grader:
 
 ```bash
-node dist/cli.js lint src/Toolbar.tsx           # JSON report, exit 1 on errors
+npx @fabiannabi/blueprint-mcp lint src/Toolbar.tsx   # JSON report, exit 1 on errors
 ```
+
+From this repo, `pnpm build:mcp` at the root builds it and `node packages/blueprint-mcp/dist/cli.js` runs it.
+
+## Security
+
+Read-only by construction: the server answers from its bundled manifest and never touches files,
+the network or a shell, and never runs the code it lints. Inputs are size-bounded and the scanners are
+tested against worst-case input. Releases come only from GitHub Actions through npm trusted publishing,
+with provenance. See [SECURITY.md](SECURITY.md).
 
 ## Tests
 

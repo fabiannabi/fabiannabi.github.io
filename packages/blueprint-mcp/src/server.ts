@@ -10,6 +10,14 @@ const fail = (message: string) => ({ content: [{ type: "text" as const, text: me
 const READ_ONLY = { readOnlyHint: true, openWorldHint: false } as const;
 
 /**
+ * Input caps. The server only reads its bundled manifest — no file system, network or shell — so the
+ * remaining risk is an agent (or a prompt injected into one) sending huge inputs to stall it.
+ * Bounds keep every tool fast, and nothing a caller sends is ever executed.
+ */
+export const LIMITS = { name: 100, intent: 200, colour: 64, code: 200_000 } as const;
+const quote = (s: string) => JSON.stringify(s.length > 60 ? `${s.slice(0, 60)}…` : s);
+
+/**
  * Blueprint as an MCP server. Every tool is read-only and answers from the
  * manifest, so an agent gets the same answer the docs page would give.
  */
@@ -35,12 +43,12 @@ export function createBlueprintServer(m: Manifest, version = "0.1.0"): McpServer
     {
       title: "Get a component",
       description: "Props (with allowed values), anatomy, accessibility guarantees, do / don't guidance and the import path for one component.",
-      inputSchema: { name: z.string().describe('Component name or slug, e.g. "Button"') },
+      inputSchema: { name: z.string().max(LIMITS.name).describe('Component name or slug, e.g. "Button"') },
       annotations: READ_ONLY,
     },
     async ({ name }) => {
       const c = getComponent(m, name);
-      return c ? json(c) : fail(`No component "${name}". Available: ${m.components.map((x) => x.name).join(", ")}`);
+      return c ? json(c) : fail(`No component ${quote(name)}. Available: ${m.components.map((x) => x.name).join(", ")}`);
     },
   );
 
@@ -51,7 +59,7 @@ export function createBlueprintServer(m: Manifest, version = "0.1.0"): McpServer
       description:
         'The token for an intent, e.g. "error text", "card background", "espacio entre secciones". Semantic tokens rank first; primitives are only for the semantic layer itself.',
       inputSchema: {
-        intent: z.string().describe("What the value is for, in English or Spanish"),
+        intent: z.string().max(LIMITS.intent).describe("What the value is for, in English or Spanish"),
         limit: z.number().int().min(1).max(20).optional(),
       },
       annotations: READ_ONLY,
@@ -60,7 +68,7 @@ export function createBlueprintServer(m: Manifest, version = "0.1.0"): McpServer
       const matches = findToken(m, intent, limit ?? 5);
       return matches.length
         ? json({ intent, matches: matches.map(({ score: _s, ...t }) => ({ ...t, use: `var(${t.name})` })) })
-        : fail(`No token matches "${intent}". Try words like text, surface, border, accent, danger, space, radius.`);
+        : fail(`No token matches ${quote(intent)}. Try words like text, surface, border, accent, danger, space, radius.`);
     },
   );
 
@@ -70,8 +78,8 @@ export function createBlueprintServer(m: Manifest, version = "0.1.0"): McpServer
       title: "Check contrast",
       description: "WCAG 2.2 contrast between two colours — token names or hex — in a theme. Reports 1.4.3 (text), 1.4.11 (UI edges) and 1.4.6 (AAA).",
       inputSchema: {
-        foreground: z.string().describe('Token (e.g. "--ds-text-muted") or hex'),
-        background: z.string().describe('Token (e.g. "--ds-surface-raised") or hex'),
+        foreground: z.string().max(LIMITS.colour).describe('Token (e.g. "--ds-text-muted") or hex'),
+        background: z.string().max(LIMITS.colour).describe('Token (e.g. "--ds-surface-raised") or hex'),
         theme: z.enum(["dark", "light"]).optional(),
       },
       annotations: READ_ONLY,
@@ -91,7 +99,7 @@ export function createBlueprintServer(m: Manifest, version = "0.1.0"): McpServer
       title: "Lint UI code",
       description:
         "Checks TSX/JSX/CSS against Blueprint: raw colours, primitive or unknown tokens, bare spacing, unknown props, invalid prop values and icon-only controls without a label. Returns findings with suggested fixes.",
-      inputSchema: { code: z.string().describe("The UI code to check") },
+      inputSchema: { code: z.string().max(LIMITS.code).describe("The UI code to check (up to 200,000 characters)") },
       annotations: READ_ONLY,
     },
     async ({ code }) => json(lintUi(m, code)),

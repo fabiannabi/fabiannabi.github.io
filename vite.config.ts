@@ -21,6 +21,8 @@ export default defineConfig({
   resolve: {
     /* The design system is a workspace package; the site imports it by name. */
     alias: [{ find: /^@fabiannabi\/blueprint\/(.*)$/, replacement: `${resolve(here, "packages/blueprint/src")}/$1` }],
+    // One React for the site and the package, however their node_modules links are spelled (Windows paths are case-insensitive).
+    dedupe: ["react", "react-dom"],
   },
   build: {
     target: "es2022",

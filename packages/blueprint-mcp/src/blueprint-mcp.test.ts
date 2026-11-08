@@ -4,9 +4,9 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { beforeAll, describe, expect, it } from "vitest";
 import { findToken, getComponent, listComponents } from "./catalog.js";
 import { checkContrast, ratio } from "./contrast.js";
-import { lintUi } from "./lint.js";
+import { lintUi, MAX_FINDINGS } from "./lint.js";
 import { loadManifest, type Manifest } from "./manifest.js";
-import { createBlueprintServer } from "./server.js";
+import { createBlueprintServer, LIMITS } from "./server.js";
 
 /* The manifest is generated from the real registry and token files (pnpm test
    builds it first), so these tests also prove the generator reads them right. */
@@ -129,5 +129,78 @@ describe("MCP server", () => {
     const missing = await client.callTool({ name: "get_component", arguments: { name: "Carousel" } });
     expect(missing.isError).toBe(true);
     await client.close();
+  });
+});
+
+describe("hostile input", () => {
+  async function connect() {
+    const server = createBlueprintServer(m);
+    const [a, b] = InMemoryTransport.createLinkedPair();
+    const client = new Client({ name: "test", version: "1.0.0" });
+    await Promise.all([server.connect(a), client.connect(b)]);
+    return client;
+  }
+
+  it("rejects inputs over the limits instead of processing them", async () => {
+    const client = await connect();
+    const big = await client.callTool({ name: "lint_ui", arguments: { code: "a".repeat(LIMITS.code + 1) } });
+    expect(big.isError).toBe(true);
+    const intent = await client.callTool({ name: "find_token", arguments: { intent: "x".repeat(LIMITS.intent + 1) } });
+    expect(intent.isError).toBe(true);
+    const colour = await client.callTool({ name: "check_contrast", arguments: { foreground: "#".repeat(500), background: "#000" } });
+    expect(colour.isError).toBe(true);
+    await client.close();
+  });
+
+  it("does not echo long input back in errors", async () => {
+    const client = await connect();
+    const res = await client.callTool({ name: "get_component", arguments: { name: "Z".repeat(LIMITS.name) } });
+    const text = (res.content as { text: string }[])[0]?.text ?? "";
+    expect(text).not.toContain("Z".repeat(61));
+    await client.close();
+  });
+
+  // Worst cases for the scanners at the size limit: one giant tag full of attributes,
+  // unclosed comments and quotes, long spacing declarations. Each must stay fast.
+  it.each([
+    ["one tag with thousands of attributes", `<Button ${"a ".repeat(LIMITS.code / 2 - 10)}`],
+    ["unclosed quotes inside a tag", `<Button x="${'"'.repeat(LIMITS.code - 20)}`],
+    ["an unclosed block comment", `/*${"*".repeat(LIMITS.code - 2)}`],
+    ["repeated spacing declarations", "padding: 1 2 3 4;".repeat(Math.floor(LIMITS.code / 17))],
+    ["deep nesting of tags", "<Button>".repeat(Math.floor(LIMITS.code / 8))],
+    // found by probing the live server: the first hung forever, the others were quadratic
+    ["an unclosed quote in an attribute", `<Button x="abc`],
+    ["thousands of unclosed tags with an open brace", "<Button {".repeat(Math.floor(LIMITS.code / 9))],
+    ["thousands of unclosed tags with an open template quote", "<Button `".repeat(Math.floor(LIMITS.code / 9))],
+    ["thousands of tags that never close", "<Button a ".repeat(Math.floor(LIMITS.code / 10))],
+    ["one tag with endless braces", `<Button x=${"{".repeat(LIMITS.code - 20)}`],
+  ])("lints %s in under 2s", (_label, code) => {
+    const start = performance.now();
+    lintUi(m, code);
+    expect(performance.now() - start).toBeLessThan(2000);
+  });
+});
+
+describe("malformed tags", () => {
+  it("skips a tag that never closes, and keeps reading the ones after it", () => {
+    const rep = lintUi(m, `<Button variant="primary />
+<Chip x={ <Button variant="primary" />`);
+    expect(rep.errors).toBeGreaterThanOrEqual(0);
+    expect(lintUi(m, `<Button {
+<Button variant="primary" />`).findings.some((f) => f.rule === "invalid-prop-value")).toBe(true);
+  });
+
+  it("reads components passed as props inside braces", () => {
+    const rep = lintUi(m, `<Alert action={<Button variant="primary">Retry</Button>} />`);
+    expect(rep.findings.some((f) => f.rule === "invalid-prop-value")).toBe(true);
+  });
+});
+
+describe("output size", () => {
+  it("caps the findings list but keeps the counts exact", () => {
+    const rep = lintUi(m, "#fff ".repeat(1000));
+    expect(rep.findings).toHaveLength(MAX_FINDINGS);
+    expect(rep.errors).toBeGreaterThan(MAX_FINDINGS * 4);
+    expect(rep.omitted).toBe(rep.errors + rep.warnings - MAX_FINDINGS);
   });
 });

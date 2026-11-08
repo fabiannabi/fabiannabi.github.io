@@ -1,0 +1,68 @@
+name: Publish blueprint-mcp
+
+# Runs only when a maintainer pushes a tag such as blueprint-mcp-v0.1.1.
+# Publishing uses npm trusted publishing (OIDC): no npm token is stored in this repo,
+# and every release carries a provenance statement linking it to this workflow run.
+on:
+  push:
+    tags: ["blueprint-mcp-v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-mcp
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Test, probe and publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # check out the tagged commit
+      id-token: write # OIDC for npm trusted publishing and provenance
+    environment: npm # add required reviewers to this environment for a manual approval
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false # the job never pushes; don't leave a token in .git/config
+
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          # Node 24 bundles npm 11 (trusted publishing needs 11.5.1+), so nothing is installed ad hoc.
+          node-version: 24
+          # No dependency cache in a release job: a poisoned cache from another workflow could reach the tarball.
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org
+
+      - name: npm is new enough for trusted publishing
+        run: node -e "const [a,b]=process.argv[1].split('.').map(Number); if (a<11||(a===11&&b<5)) process.exit(1)" "$(npm --version)"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Tag matches package version
+        run: |
+          version=$(node -p "require('./packages/blueprint-mcp/package.json').version")
+          test "${GITHUB_REF_NAME}" = "blueprint-mcp-v${version}" || {
+            echo "Tag ${GITHUB_REF_NAME} does not match version ${version}"; exit 1; }
+
+      - name: Tests (includes the injection scan and the pinned tool surface)
+        run: pnpm test
+
+      - name: Dependency audit
+        run: pnpm audit --prod --filter @fabiannabi/blueprint-mcp
+
+      - name: Build
+        run: pnpm --filter @fabiannabi/blueprint-mcp build
+
+      - name: Probe the built server over stdio
+        run: pnpm --filter @fabiannabi/blueprint-mcp probe
+
+      - name: Check the tarball
+        run: pnpm --filter @fabiannabi/blueprint-mcp check:pack
+
+      - name: Publish
+        working-directory: packages/blueprint-mcp
+        run: npm publish --provenance --access public --ignore-scripts # already built and checked above

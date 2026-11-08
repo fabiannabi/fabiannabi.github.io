@@ -1,0 +1,137 @@
+{
+  "instructions": "Blueprint is an accessible React design system. Before writing UI: call list_components / get_component to use an existing component, find_token for every colour, space or radius (never raw values or primitive tokens), check_contrast for any new colour pairing, and run lint_ui on the code you wrote before returning it.",
+  "tools": [
+    {
+      "name": "list_components",
+      "title": "List components",
+      "description": "Every Blueprint component with its category and a one-line summary.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_component",
+      "title": "Get a component",
+      "description": "Props (with allowed values), anatomy, accessibility guarantees, do / don't guidance and the import path for one component.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Component name or slug, e.g. \"Button\""
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "find_token",
+      "title": "Find a token",
+      "description": "The token for an intent, e.g. \"error text\", \"card background\", \"espacio entre secciones\". Semantic tokens rank first; primitives are only for the semantic layer itself.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "intent": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "What the value is for, in English or Spanish"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          }
+        },
+        "required": [
+          "intent"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "check_contrast",
+      "title": "Check contrast",
+      "description": "WCAG 2.2 contrast between two colours — token names or hex — in a theme. Reports 1.4.3 (text), 1.4.11 (UI edges) and 1.4.6 (AAA).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "foreground": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Token (e.g. \"--ds-text-muted\") or hex"
+          },
+          "background": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Token (e.g. \"--ds-surface-raised\") or hex"
+          },
+          "theme": {
+            "type": "string",
+            "enum": [
+              "dark",
+              "light"
+            ]
+          }
+        },
+        "required": [
+          "foreground",
+          "background"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "lint_ui",
+      "title": "Lint UI code",
+      "description": "Checks TSX/JSX/CSS against Blueprint: raw colours, primitive or unknown tokens, bare spacing, unknown props, invalid prop values and icon-only controls without a label. Returns findings with suggested fixes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 200000,
+            "description": "The UI code to check (up to 200,000 characters)"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "rules",
+      "title": "Blueprint rules",
+      "uri": "blueprint://rules",
+      "description": "The rules every Blueprint consumer follows.",
+      "mimeType": "text/markdown"
+    }
+  ]
+}

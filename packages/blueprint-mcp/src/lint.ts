@@ -21,7 +21,12 @@ export type LintReport = {
   warnings: number;
   componentsUsed: string[];
   tokensUsed: string[];
+  /** Findings left out of the list once it reached MAX_FINDINGS; the counts above still include them. */
+  omitted?: number;
 };
+
+/** The list stops here so a pathological file cannot flood an agent's context; counts stay exact. */
+export const MAX_FINDINGS = 200;
 
 const lineOf = (code: string, index: number): number => code.slice(0, index).split("\n").length;
 
@@ -65,6 +70,9 @@ const UNIVERSAL = new Set([
   "href", "target", "rel", "disabled", "form", "htmlFor", "lang", "dir", "hidden", "autoFocus", "placeholder",
 ]);
 
+/** Longest opening tag the scanner reads; real ones are a few hundred characters. */
+const MAX_TAG = 4_000;
+
 type Tag = { name: string; index: number; attrs: { name: string; value: string | null }[] };
 
 /** A small JSX tag scanner: enough to read <Button variant="ghost" iconOnly aria-label={x}> without a parser. */
@@ -78,14 +86,20 @@ function jsxTags(code: string, names: Set<string>): Tag[] {
     let depth = 0;
     let quote: string | null = null;
     const start = i;
-    for (; i < code.length; i++) {
+    // A tag longer than MAX_TAG is malformed. The cap keeps the scan linear: without it,
+    // thousands of unclosed "<Button {" would each be read to the end of the input.
+    const stop = Math.min(code.length, start + MAX_TAG);
+    let closed = false;
+    for (; i < stop; i++) {
       const c = code[i];
       if (quote) { if (c === quote) quote = null; continue; }
       if (c === '"' || c === "'" || c === "`") { quote = c; continue; }
       if (c === "{") depth++;
-      else if (c === "}") depth--;
-      else if (c === ">" && depth === 0) break;
+      else if (c === "}") depth = Math.max(0, depth - 1);
+      else if (c === ">" && depth === 0) { closed = true; break; }
+      else if (c === "<" && depth === 0) break; // a new tag starts: this one was never closed
     }
+    if (!closed) continue;
     const body = code.slice(start, i).replace(/\/$/, "");
     tags.push({ name, index: m.index ?? 0, attrs: attributes(body) });
   }
@@ -113,6 +127,7 @@ function attributes(body: string): { name: string; value: string | null }[] {
     const q = body[i];
     if (q === '"' || q === "'") {
       const end = body.indexOf(q, i + 1);
+      if (end === -1) { out.push({ name, value: body.slice(i + 1) }); break; } // unclosed quote: rest of the tag
       out.push({ name, value: body.slice(i + 1, end) });
       i = end + 1;
     } else if (q === "{") {
@@ -230,7 +245,8 @@ export function lintUi(m: Manifest, source: string): LintReport {
 
   findings.sort((a, b) => a.line - b.line);
   return {
-    findings,
+    findings: findings.slice(0, MAX_FINDINGS),
+    ...(findings.length > MAX_FINDINGS ? { omitted: findings.length - MAX_FINDINGS } : {}),
     errors: findings.filter((f) => f.severity === "error").length,
     warnings: findings.filter((f) => f.severity === "warning").length,
     componentsUsed: [...usedComponents].sort(),
