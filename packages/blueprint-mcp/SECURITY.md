@@ -52,7 +52,7 @@ client approved cannot drift between releases.
 - No install scripts. Two runtime dependencies, pinned to exact versions.
 - The published tarball contains only `dist/`, `README.md`, `SECURITY.md`, `LICENSE` and `package.json`.
 
-Pin a version when you configure the server, for example `npx -y @fabiannabi/blueprint-mcp@0.1.0`, so
+Pin a version when you configure the server, for example `npx -y @fabiannabi/blueprint-mcp@0.1.1`, so
 a new release only reaches you when you choose it.
 
 ## Reporting a vulnerability

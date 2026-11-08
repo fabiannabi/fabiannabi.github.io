@@ -38,13 +38,13 @@ comment above each token as its "what it is for". The server ships that `manifes
 Claude Code:
 
 ```bash
-claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.0
+claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.1
 ```
 
 Any MCP client (Cursor, Windsurf, Claude Desktop):
 
 ```json
-{ "mcpServers": { "blueprint": { "command": "npx", "args": ["-y", "@fabiannabi/blueprint-mcp@0.1.0"] } } }
+{ "mcpServers": { "blueprint": { "command": "npx", "args": ["-y", "@fabiannabi/blueprint-mcp@0.1.1"] } } }
 ```
 
 Pinning the version means a new release only reaches you when you choose it.
