@@ -3,17 +3,19 @@ import { Button } from "@fabiannabi/blueprint/components/Button/Button";
 import { Glow } from "../../components/Glow/Glow";
 import { RotatingHeadline } from "../../components/RotatingHeadline/RotatingHeadline";
 import { StackRail } from "../../components/StackRail/StackRail";
-import { Claims } from "../../components/Claims/Claims";
+import { ProjectCard } from "../../components/ProjectCard/ProjectCard";
 import {
   coverSub,
   headline,
   identity,
   links,
+  projects,
   stack,
   stats,
 } from "../../data/content";
 import { Display } from "@fabiannabi/blueprint/components/Display/Display";
 import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Link } from "@fabiannabi/blueprint/components/Link/Link";
 import { Stat } from "../../components/Stat/Stat";
 import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { region } from "@fabiannabi/blueprint/xray/instrument";
@@ -32,11 +34,11 @@ import styles from "./Cover.module.css";
  * stylesheet holds layout and nothing else. The split is the point: the page
  * decides where things go, the system decides what they look like.
  *
- * The blueprint is not here. It draws every page as named boxes, which is the
- * honest way to show the site is built from the system rather than beside it —
- * and that is an argument for the CV and the design system to make. A cover
- * letter has one job, and a second instrument on it was a curiosity competing
- * with the thing the page is actually selling.
+ * No instruments here. The x-ray went to the CV and the design system, and the
+ * colour-vision simulator followed it to /design/: a cover letter has one job,
+ * and a control competing with the pitch was a curiosity, not evidence. What
+ * replaced it is the work — three project cards — and the six buttons became
+ * one action plus a line of contact links.
  */
 export function Cover() {
   return (
@@ -94,26 +96,37 @@ export function Cover() {
             <Button href={links.profile} size="lg" iconEnd="→">
               Read the full profile
             </Button>
-            <Button href={links.design} size="lg" variant="outline">
-              Design system
-            </Button>
-            <Button href={links.mcp} size="lg" variant="outline">
-              Blueprint MCP
-            </Button>
-            <Button href={links.email} size="lg" variant="outline">
-              Email
-            </Button>
-            <Button href={links.linkedin} size="lg" variant="outline">
-              LinkedIn
-            </Button>
-            <Button href={links.github} size="lg" variant="outline">
-              GitHub
-            </Button>
+            {/* Contact is a line of text, not three more buttons: one action
+                gets the weight, the rest are where to find me. */}
+            <nav className={styles.contact} aria-label="Contact">
+              <Link href={links.linkedin} font="mono" tone="muted">
+                LinkedIn
+              </Link>
+              <Link href={links.github} font="mono" tone="muted">
+                GitHub
+              </Link>
+              <Link href={links.email} font="mono" tone="muted">
+                Email
+              </Link>
+            </nav>
           </div>
 
-          <div className={styles.claims} {...region("Claims")}>
-            <Claims />
-          </div>
+          {/* What the pitch is about, as things to open. The colour-vision
+              simulator sat here and moved to /design/, where it belongs with
+              the system it audits: a cover letter shows the work, it does not
+              demonstrate an instrument. */}
+          <section className={styles.projects} aria-labelledby="projects-title" {...region("Projects")}>
+            <Label size="sm" caps tone="subtle" as="h2">
+              <span id="projects-title">Projects</span>
+            </Label>
+            <ul className={styles.cards}>
+              {projects.map((project) => (
+                <li key={project.title}>
+                  <ProjectCard project={project} />
+                </li>
+              ))}
+            </ul>
+          </section>
         </main>
 
         <footer>

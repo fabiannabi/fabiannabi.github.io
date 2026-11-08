@@ -8,6 +8,8 @@ Personal site and a small design system.
 - **/design/** — *Blueprint*, a design system: its components with live
   examples, props, accessibility notes and guidance, and how to use it from a
   coding agent.
+- **/forge/** — a static, read-only showcase of Forge, the author's agent
+  orchestration platform (its repo is private; this is an export of its dashboard).
 - **/mcp/** — what the Blueprint MCP is for: the problem it solves, its five
   tools, a before/after, how to install it, and what it does not do.
 - **/storybook/** — the same components in Storybook, with generated props tables.

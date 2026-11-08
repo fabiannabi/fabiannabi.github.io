@@ -24,20 +24,16 @@ test.describe("Cover", () => {
     // It has now caught the same move four times.
     const expected = [
       "Read the full profile",
-      "Design system",
-      "Blueprint MCP",
-      "Email",
+      // Contact sits in the action row, as text: where to find me, after the
+      // one thing to do.
       "LinkedIn",
       "GitHub",
-      // The instruments are last because the claim they settle is last. They
-      // were in the header for a while, ahead of everything, which put a
-      // control a reader had no sentence for in front of the pitch.
-      "Protan",
-      "Deutan",
-      "Tritan",
-      // Each chip applies on press, so the row needs one control the chips
-      // cannot be: the way back.
-      "Back to normal",
+      "Email",
+      // Then the work, in the order the pitch earns it: the system, the MCP
+      // that makes it readable to agents, the platform those agents run on.
+      "Blueprint",
+      "Blueprint MCP",
+      "Forge",
     ];
 
     for (const name of expected) {
@@ -78,53 +74,6 @@ test.describe("Cover", () => {
 
       expect(box, `the actions should be laid out at ${width}x${height}`).not.toBeNull();
       expect(box!.y + box!.height, `the pitch overflows at ${width}x${height}`).toBeLessThan(height);
-    }
-  });
-
-  test("does not move the page when the simulation changes", async ({ page }) => {
-    // Two separate bugs, both caught here. The verdict is one line at rest and
-    // two once a deficiency is running, and the first version reserved a single
-    // line for it; the box is sized by a hidden copy of every line it can hold
-    // now. The larger one was Glow: a filtered ancestor becomes the containing
-    // block for its fixed descendants, so the wash stopped being viewport-sized
-    // and started being document-sized, and the page grew 330px the moment
-    // anyone pressed a chip.
-
-    /* The web fonts are blocked for this test, and that is the point rather
-       than a shortcut. The cover reflows by 29 to 64px as the display face
-       lands on an 88px headline, which flaked every attempt to establish a
-       baseline — first `document.fonts.ready`, which resolves before the reflow
-       finishes, then a settle loop, which reads the same fallback value twice
-       inside 160ms and calls it stable. A font swap is not the page moving
-       under the reader, so it is removed rather than waited out. */
-    await page.route(/fonts\.(googleapis|gstatic)\.com/, (route) => route.abort());
-
-    for (const width of [1280, 380]) {
-      await page.setViewportSize({ width, height: 900 });
-      await page.goto("/");
-
-      // Document-relative: focusing a chip below the fold scrolls the page, and
-      // a scroll is not the page moving under the reader.
-      const railTop = () =>
-        page.evaluate(() =>
-          Math.round(
-            document.querySelector("footer")!.getBoundingClientRect().top + window.scrollY,
-          ),
-        );
-      // The document's own height, which is what a reader actually notices: the
-      // bug that prompted this test showed up as a scrollbar appearing on the
-      // first press, not as text reflowing.
-      const docHeight = () => page.evaluate(() => document.documentElement.scrollHeight);
-
-      for (const name of ["Protan", "Deutan", "Tritan", "Back to normal"]) {
-        const before = await railTop();
-        const beforeHeight = await docHeight();
-
-        await page.getByRole("button", { name: new RegExp(`^${name}`) }).click();
-
-        expect(await railTop(), `${name} moved the page at ${width}px`).toBe(before);
-        expect(await docHeight(), `${name} grew the page at ${width}px`).toBe(beforeHeight);
-      }
     }
   });
 

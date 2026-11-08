@@ -27,8 +27,12 @@ test.describe("Blueprint MCP page", () => {
   });
 
   test("shares its theme with the design system page", async ({ page }) => {
+    const html = page.locator("html");
+    const before = await html.getAttribute("data-ds-theme");
     await page.getByRole("button", { name: /switch to (light|dark) theme/i }).click();
-    const theme = await page.locator("html").getAttribute("data-ds-theme");
+    // The attribute is set in an effect: wait for it to flip rather than read it mid-render.
+    await expect(html).not.toHaveAttribute("data-ds-theme", before ?? "");
+    const theme = await html.getAttribute("data-ds-theme");
     await page.goto("/design/");
     await expect(page.locator("html")).toHaveAttribute("data-ds-theme", theme ?? "");
   });

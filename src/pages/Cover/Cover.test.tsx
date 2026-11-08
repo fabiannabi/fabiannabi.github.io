@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { headline, links } from "../../data/content";
+import { headline, links, projects } from "../../data/content";
 import { expectNoAxeViolations } from "../../test/axe";
 import { REDUCED_MOTION, setMediaQuery } from "../../test/media";
 import { Cover } from "./Cover";
@@ -43,34 +43,41 @@ describe("Cover", () => {
     expect(github.getAttribute("href")).not.toMatch(/replace/i);
   });
 
-  it("opens external links without handing over the opener", () => {
+  it("keeps external links in the same tab, so there is no opener to hand over", () => {
     render(<Cover />);
 
-    const github = screen.getByRole("link", { name: "GitHub" });
-    expect(github).toHaveAttribute("rel", expect.stringContaining("noopener"));
+    // Contact moved from buttons (which open a new tab, with noopener) to plain
+    // links. A link that does not open a window cannot leak window.opener.
+    for (const name of ["GitHub", "LinkedIn"]) {
+      expect(screen.getByRole("link", { name })).not.toHaveAttribute("target");
+    }
   });
 
   it("keeps the cover to one screen's worth of claims", () => {
     render(<Cover />);
 
-    // Three stats and six actions. Adding a fourth stat or a seventh link is a
-    // design decision, not a content edit, so it should break a test. The fifth
-    // link — the design system — was added deliberately when that page shipped;
-    // the sixth — the Blueprint MCP page — when the system was published as a
-    // package other people can install.
-    expect(screen.getAllByRole("listitem")).toHaveLength(3);
-    expect(screen.getAllByRole("link")).toHaveLength(6);
+    // Three stats, three projects, one action and three ways to reach me. Adding
+    // a fourth of anything is a design decision, not a content edit, so it should
+    // break a test. The redesign that set these numbers took six buttons down to
+    // one and put the work — Blueprint, its MCP, Forge — where a simulator was.
+    expect(screen.getAllByRole("listitem")).toHaveLength(6);
+    expect(screen.getAllByRole("link")).toHaveLength(7);
   });
 
-  it("offers the simulator without spending a link on it", () => {
+  it("shows the three projects, each one link to its page", () => {
     render(<Cover />);
 
-    // Buttons, not links: they change how this page renders rather than
-    // navigating anywhere. The blueprint's switch used to be here as well and
-    // moved to the profile and the design system — a cover letter gets one
-    // instrument, and this is the one with something to prove about the page.
-    expect(screen.getByRole("button", { name: /^Deutan/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Back to normal" })).toBeInTheDocument();
+    for (const project of projects) {
+      const card = screen.getByRole("link", { name: (name) => name.includes(project.title) && name.includes(project.line) });
+      expect(card).toHaveAttribute("href", project.href);
+    }
+    expect(projects.map((p) => p.href)).toEqual(["/design/", "/mcp/", "/forge/"]);
+  });
+
+  it("carries no instrument: the simulator lives on /design/ now", () => {
+    render(<Cover />);
+
+    expect(screen.queryByRole("button", { name: /^Deutan/ })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /x-ray/i })).not.toBeInTheDocument();
   });
 });

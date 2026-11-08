@@ -27,8 +27,22 @@ export const links = {
   profile: "/profile/",
   design: "/design/",
   mcp: "/mcp/",
+  forge: "/forge/",
   cover: "/",
 } as const;
+
+/**
+ * The cover's three projects. Each is one line, because the cover's word ceiling
+ * counts them: a project that needs a paragraph to make sense belongs on the
+ * profile. The kicker says what kind of thing it is; the line says why it exists.
+ */
+export type Project = { readonly kicker: string; readonly title: string; readonly line: string; readonly href: string };
+
+export const projects: readonly Project[] = [
+  { kicker: "Design system", title: "Blueprint", line: "Accessible React components, documented live.", href: links.design },
+  { kicker: "npm · MCP server", title: "Blueprint MCP", line: "Lets coding agents build on-system UI.", href: links.mcp },
+  { kicker: "Agent platform", title: "Forge", line: "Agent teams that turn tickets into reviewed PRs.", href: links.forge },
+];
 
 /* ---------------------------------------------------------------- cover ---- */
 

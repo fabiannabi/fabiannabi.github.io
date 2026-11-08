@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Forge · Agent Teams</title>
+    <meta name="description" content="Forge: a personal AI agent orchestration platform with Experts, parallel workflows, triggers, shared memory, evals and human approval gates — built on the Blueprint design system." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script>
+      /* Before first paint, as Blueprint's own pages do: deciding the theme in
+         React costs a frame of the wrong palette. */
+      (() => {
+        try {
+          const saved = localStorage.getItem("forge-ds-theme");
+          const system = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.dataset.dsTheme = saved === "light" || saved === "dark" ? saved : system;
+        } catch {
+          document.documentElement.dataset.dsTheme = "dark";
+        }
+      })();
+    </script>
+    <script src="./data.js"></script>
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

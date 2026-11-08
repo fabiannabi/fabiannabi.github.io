@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   about,
   claims,
+  projects,
   colophon,
   coverSub,
   experience,
@@ -243,9 +244,10 @@ describe("word counts stay low", () => {
       coverSub.emphasis,
       coverSub.tail,
       ...stats.map((stat) => `${stat.value} ${stat.label}`),
+      ...projects.map((project) => project.line),
     );
 
-    // 79 at the time of writing. The ceiling is close enough that a new sentence
+    // 79 at the time of writing, 98 once the three project lines joined it. The ceiling is close enough that a new sentence
     // or a fourth stat has to displace something rather than just being added.
     expect(words).toBeLessThanOrEqual(100);
   });
