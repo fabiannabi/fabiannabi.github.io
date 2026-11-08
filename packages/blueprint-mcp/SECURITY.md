@@ -38,6 +38,8 @@ client approved cannot drift between releases.
 - Released only from GitHub Actions on a `blueprint-mcp-v*` tag, through npm trusted publishing:
   no npm token exists in the repository, and each version has a provenance statement you can verify
   on npmjs.com or with `npm audit signatures`.
+- The workflow can only *stage* a version. It goes live when the maintainer approves it on npmjs.com
+  with a hardware security key, so a compromised GitHub account or workflow cannot ship on its own.
 - Before publishing, the job runs every test, `pnpm audit`, the stdio probe (`scripts/probe.mjs`, 36
   hostile inputs) and a tarball check (`scripts/check-pack.mjs`: exact file list, no install hooks,
   no secrets, no local paths).
