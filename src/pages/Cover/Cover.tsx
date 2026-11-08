@@ -98,7 +98,7 @@ export function Cover() {
               Design system
             </Button>
             <Button href={links.mcp} size="lg" variant="outline">
-              MCP on npm
+              Blueprint MCP
             </Button>
             <Button href={links.email} size="lg" variant="outline">
               Email

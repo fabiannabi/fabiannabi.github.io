@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blueprint MCP — a design system for coding agents</title>
+    <meta
+      name="description"
+      content="What the Blueprint MCP server does: it lets coding agents build UI with the Blueprint design system and check their own work — components, tokens, contrast and a linter."
+    />
+    <meta property="og:title" content="Blueprint MCP — a design system for coding agents" />
+    <meta
+      property="og:description"
+      content="An MCP server on npm that lets coding agents look up components and tokens, check WCAG contrast and lint the UI they write."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fabiannabi.github.io/mcp/" />
+    <link rel="canonical" href="https://fabiannabi.github.io/mcp/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      /* Before first paint. Deciding the theme in React costs a frame of the
+         wrong palette on every load, and the flash is the bug. Stored under its
+         own key so /design/ can be read in light while the profile stays dark. */
+      (() => {
+        try {
+          const saved = localStorage.getItem("ds-theme");
+          const system = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          document.documentElement.dataset.dsTheme =
+            saved === "light" || saved === "dark" ? saved : system;
+        } catch {
+          document.documentElement.dataset.dsTheme = "dark";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/entries/mcp.tsx"></script>
+  </body>
+</html>

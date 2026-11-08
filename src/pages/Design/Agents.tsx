@@ -19,6 +19,7 @@ const TOOLS: ReadonlyArray<{ name: string; does: string }> = [
 ];
 
 const LINKS: ReadonlyArray<{ label: string; href: string }> = [
+  { label: "What it is for", href: "/mcp/" },
   { label: "npm", href: `https://www.npmjs.com/package/${PACKAGE}` },
   { label: "Source", href: `${REPO}/tree/main/packages/blueprint-mcp` },
   { label: "Security", href: `${REPO}/blob/main/packages/blueprint-mcp/SECURITY.md` },

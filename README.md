@@ -8,6 +8,8 @@ Personal site and a small design system.
 - **/design/** — *Blueprint*, a design system: its components with live
   examples, props, accessibility notes and guidance, and how to use it from a
   coding agent.
+- **/mcp/** — what the Blueprint MCP is for: the problem it solves, its five
+  tools, a before/after, how to install it, and what it does not do.
 - **/storybook/** — the same components in Storybook, with generated props tables.
 
 React, TypeScript and CSS Modules on Vite. Three HTML entry points rather than a
@@ -52,6 +54,7 @@ claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.2
 
 | | |
 |---|---|
+| What it is for | [fabiannabi.github.io/mcp](https://fabiannabi.github.io/mcp/) |
 | Docs and live components | [fabiannabi.github.io/design](https://fabiannabi.github.io/design/#agents) |
 | Storybook | [fabiannabi.github.io/storybook](https://fabiannabi.github.io/storybook/) |
 | npm | [@fabiannabi/blueprint-mcp](https://www.npmjs.com/package/@fabiannabi/blueprint-mcp) |

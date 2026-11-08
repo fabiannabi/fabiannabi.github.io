@@ -111,6 +111,10 @@ export function Design() {
               </Badge>
               <Text size="sm" tone="muted">
                 Blueprint is also an MCP server, so coding agents get the same answers.{" "}
+                <Link href="/mcp/" size="sm">
+                  What it is for
+                </Link>{" "}
+                ·{" "}
                 <Link href="#agents" size="sm">
                   How to use it
                 </Link>{" "}
