@@ -16,6 +16,8 @@ export type EntryData = {
   readonly description?: string;
   readonly tags?: readonly string[];
   readonly badge?: string;
+  /** Where the work can be seen. The title becomes the link. */
+  readonly href?: string;
 };
 
 type Props = { entry: EntryData };
@@ -26,7 +28,7 @@ type Props = { entry: EntryData };
  * data, not the markup.
  */
 export function Entry({ entry }: Props) {
-  const { when, title, org, note, description, tags, badge } = entry;
+  const { when, title, org, note, description, tags, badge, href } = entry;
 
   return (
     <div
@@ -40,7 +42,13 @@ export function Entry({ entry }: Props) {
       </div>
       <div>
         <Heading level={3} size="sm">
-          {title}
+          {href ? (
+            <a className={styles.titleLink} href={href}>
+              {title}
+            </a>
+          ) : (
+            title
+          )}
           {org ? (
             <Text as="span" size="inherit" tone="muted" weight="medium">
               {" · "}

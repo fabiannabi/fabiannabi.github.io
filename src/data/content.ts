@@ -178,6 +178,7 @@ export type Entry = {
   readonly description?: string;
   readonly tags?: readonly string[];
   readonly badge?: string;
+  readonly href?: string;
 };
 
 export const experience: readonly Entry[] = [
@@ -231,6 +232,13 @@ export const experience: readonly Entry[] = [
 ];
 
 export const work: readonly Entry[] = [
+  {
+    when: "Open source",
+    title: "Blueprint MCP",
+    href: "https://www.npmjs.com/package/@fabiannabi/blueprint-mcp",
+    description: "Blueprint as an MCP server for coding agents.",
+    tags: ["MCP", "TypeScript", "npm", "Prompt-injection tests"],
+  },
   {
     when: "Salesloft",
     title: "Design system accessibility audit",

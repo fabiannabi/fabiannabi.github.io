@@ -7,12 +7,13 @@ import { byCategory, registry } from "@fabiannabi/blueprint/docs/registry";
 import { useThemeAttribute } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { useActiveSection } from "../../hooks/useActiveSection";
+import { Agents } from "./Agents";
 import { ComponentSection } from "./ComponentSection";
 import { EXAMPLES } from "./examples";
 import { Tokens } from "./Tokens";
 import styles from "./Design.module.css";
 
-const SECTION_IDS = ["overview", "tokens", ...registry.map((doc) => doc.slug)];
+const SECTION_IDS = ["overview", "tokens", "agents", ...registry.map((doc) => doc.slug)];
 
 export function Design() {
   const { theme, toggle } = useThemeAttribute({ attribute: "dsTheme", storageKey: "ds-theme" });
@@ -52,6 +53,13 @@ export function Design() {
               aria-current={active === "tokens" ? "true" : undefined}
             >
               Tokens
+            </a>
+            <a
+              href="#agents"
+              className={active === "agents" ? `${styles.navLink} ${styles.navActive}` : styles.navLink}
+              aria-current={active === "agents" ? "true" : undefined}
+            >
+              For coding agents
             </a>
 
             {byCategory().map(([category, docs]) => (
@@ -131,6 +139,8 @@ export function Design() {
           </section>
 
           <Tokens />
+
+          <Agents />
 
           {registry.map((doc) => (
             <ComponentSection key={doc.slug} doc={doc} example={EXAMPLES[doc.slug]} />
