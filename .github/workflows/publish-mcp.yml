@@ -3,6 +3,9 @@ name: Publish blueprint-mcp
 # Runs only when a maintainer pushes a tag such as blueprint-mcp-v0.1.1.
 # Publishing uses npm trusted publishing (OIDC): no npm token is stored in this repo,
 # and every release carries a provenance statement linking it to this workflow run.
+# The job only *stages* the release. It goes live when the maintainer approves it on
+# npmjs.com (Staged Packages) with their security key, so a compromised GitHub account
+# or workflow still cannot ship a version on its own.
 on:
   push:
     tags: ["blueprint-mcp-v*"]
@@ -31,14 +34,14 @@ jobs:
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          # Node 24 bundles npm 11 (trusted publishing needs 11.5.1+), so nothing is installed ad hoc.
           node-version: 24
           # No dependency cache in a release job: a poisoned cache from another workflow could reach the tarball.
           package-manager-cache: false
           registry-url: https://registry.npmjs.org
 
-      - name: npm is new enough for trusted publishing
-        run: node -e "const [a,b]=process.argv[1].split('.').map(Number); if (a<11||(a===11&&b<5)) process.exit(1)" "$(npm --version)"
+      # `npm stage publish` needs npm 11.20+. Exact version, released 2026-09-22.
+      - name: Install npm 11.20.0
+        run: npm install -g npm@11.20.0 # zizmor: ignore[adhoc-packages] pinned exact version, needed for npm stage
 
       - run: pnpm install --frozen-lockfile
 
@@ -63,6 +66,6 @@ jobs:
       - name: Check the tarball
         run: pnpm --filter @fabiannabi/blueprint-mcp check:pack
 
-      - name: Publish
+      - name: Stage the release (approve it on npmjs.com → Staged Packages)
         working-directory: packages/blueprint-mcp
-        run: npm publish --provenance --access public --ignore-scripts # already built and checked above
+        run: npm stage publish --provenance --access public --ignore-scripts # already built and checked above
