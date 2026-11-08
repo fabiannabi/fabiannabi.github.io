@@ -7,7 +7,7 @@ import { region } from "@fabiannabi/blueprint/xray/instrument";
 import styles from "./Agents.module.css";
 
 const PACKAGE = "@fabiannabi/blueprint-mcp";
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 const REPO = "https://github.com/fabiannabi/fabiannabi.github.io";
 
 const TOOLS: ReadonlyArray<{ name: string; does: string }> = [

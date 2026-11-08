@@ -47,7 +47,7 @@ answer the docs page gives:
 - `lint_ui` — raw colours, primitive or unknown tokens, bare spacing, invalid props, unlabeled icon buttons
 
 ```bash
-claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.1
+claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.2
 ```
 
 | | |
