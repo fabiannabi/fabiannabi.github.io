@@ -61,4 +61,24 @@
   list-style: none;
 }
 
+/* The title is the link when the work can be seen somewhere: same type as an
+   unlinked title, underlined so it does not rely on colour alone. */
+.titleLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--ds-border-strong);
+  transition: color var(--ds-duration-fast) var(--ds-ease);
+}
 
+.titleLink:hover {
+  color: var(--ds-accent);
+  text-decoration-color: currentColor;
+}
+
+.titleLink:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-accent);
+  outline-offset: var(--ds-focus-offset);
+  border-radius: var(--ds-radius-sm);
+}

@@ -5,6 +5,12 @@ coding agents. An agent writing UI can ask which component to use, which token m
 whether a colour pair passes WCAG, and whether the code it just wrote is on-system — and get the same
 answers the docs page gives, because both read the same source.
 
+**[npm](https://www.npmjs.com/package/@fabiannabi/blueprint-mcp)** ·
+**[Docs](https://fabiannabi.github.io/design/#agents)** ·
+**[Storybook](https://fabiannabi.github.io/storybook/)** ·
+**[Source](https://github.com/fabiannabi/fabiannabi.github.io/tree/main/packages/blueprint-mcp)** ·
+**[Security](SECURITY.md)**
+
 ## Tools
 
 | Tool | What it answers |

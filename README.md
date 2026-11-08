@@ -5,8 +5,9 @@ Personal site and a small design system.
 
 - **/** — the cover.
 - **/profile/** — the full profile.
-- **/design/** — *Blueprint*, a design system: eight components with live
-  examples, props, accessibility notes and guidance.
+- **/design/** — *Blueprint*, a design system: its components with live
+  examples, props, accessibility notes and guidance, and how to use it from a
+  coding agent.
 - **/storybook/** — the same components in Storybook, with generated props tables.
 
 React, TypeScript and CSS Modules on Vite. Three HTML entry points rather than a
@@ -35,8 +36,9 @@ The design system lives in its own workspace package, `packages/blueprint`, and 
 by name (`@fabiannabi/blueprint/components/Button/Button`). It has a second consumer outside this
 repo: the dashboard of Forge, the author's agent-orchestration platform, is built entirely from it.
 
-`packages/blueprint-mcp` makes the system legible to coding agents. It answers from a manifest
-generated out of the docs registry and the token files (`pnpm manifest`), so an agent gets the same
+`packages/blueprint-mcp` makes the system legible to coding agents, and is published on npm as
+**[`@fabiannabi/blueprint-mcp`](https://www.npmjs.com/package/@fabiannabi/blueprint-mcp)**. It answers
+from a manifest generated out of the docs registry and the token files, so an agent gets the same
 answer the docs page gives:
 
 - `get_component` — props with allowed values, accessibility, do / don't, import path
@@ -45,11 +47,20 @@ answer the docs page gives:
 - `lint_ui` — raw colours, primitive or unknown tokens, bare spacing, invalid props, unlabeled icon buttons
 
 ```bash
-pnpm build:mcp
-claude mcp add blueprint -- node packages/blueprint-mcp/dist/cli.js
+claude mcp add blueprint -- npx -y @fabiannabi/blueprint-mcp@0.1.1
 ```
 
-See [`packages/blueprint-mcp/README.md`](packages/blueprint-mcp/README.md).
+| | |
+|---|---|
+| Docs and live components | [fabiannabi.github.io/design](https://fabiannabi.github.io/design/#agents) |
+| Storybook | [fabiannabi.github.io/storybook](https://fabiannabi.github.io/storybook/) |
+| npm | [@fabiannabi/blueprint-mcp](https://www.npmjs.com/package/@fabiannabi/blueprint-mcp) |
+| Source, usage and tests | [`packages/blueprint-mcp`](packages/blueprint-mcp/README.md) |
+| Threat model | [`SECURITY.md`](packages/blueprint-mcp/SECURITY.md) |
+
+Releases are cut by pushing a `blueprint-mcp-vX.Y.Z` tag: `publish-mcp.yml` runs the tests, the
+prompt-injection scan, a hostile-input probe and a tarball check, then stages the version on npm
+through trusted publishing; it goes live when the maintainer approves it with a security key.
 
 ## The x-ray
 
