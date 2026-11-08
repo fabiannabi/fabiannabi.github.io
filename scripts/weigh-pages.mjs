@@ -39,8 +39,11 @@ import { join } from "node:path";
  * what the cover fetches went up by 0.24 kB, almost all of it one more request.
  * The old number was the one hiding code, so the ceiling moved to the honest
  * figure plus a sliver, not to whatever the next feature needs.
+ *
+ * **8.75 → 8 when the simulator left the cover** for /design/: own JS fell to
+ * 6.7 kB. The ceiling goes back down because the reason it went up is gone.
  */
-const COVER_BUDGET_KB = 8.75;
+const COVER_BUDGET_KB = 8;
 
 /** Anything this large is the framework, not a decision made here. */
 const VENDOR_BYTES = 100_000;

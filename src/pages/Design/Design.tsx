@@ -8,13 +8,14 @@ import { byCategory, registry } from "@fabiannabi/blueprint/docs/registry";
 import { useThemeAttribute } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { useActiveSection } from "../../hooks/useActiveSection";
+import { Claims } from "../../components/Claims/Claims";
 import { Agents } from "./Agents";
 import { ComponentSection } from "./ComponentSection";
 import { EXAMPLES } from "./examples";
 import { Tokens } from "./Tokens";
 import styles from "./Design.module.css";
 
-const SECTION_IDS = ["overview", "tokens", "agents", ...registry.map((doc) => doc.slug)];
+const SECTION_IDS = ["overview", "tokens", "vision", "agents", ...registry.map((doc) => doc.slug)];
 
 export function Design() {
   const { theme, toggle } = useThemeAttribute({ attribute: "dsTheme", storageKey: "ds-theme" });
@@ -54,6 +55,13 @@ export function Design() {
               aria-current={active === "tokens" ? "true" : undefined}
             >
               Tokens
+            </a>
+            <a
+              href="#vision"
+              className={active === "vision" ? `${styles.navLink} ${styles.navActive}` : styles.navLink}
+              aria-current={active === "vision" ? "true" : undefined}
+            >
+              Colour vision
             </a>
             <a
               href="#agents"
@@ -160,6 +168,19 @@ export function Design() {
           </section>
 
           <Tokens />
+
+          {/* The colour-vision simulator, moved from the cover: it audits the
+              system's palette, so it lives with the system. */}
+          <section id="vision" className={styles.vision} aria-labelledby="vision-title" {...region("Colour vision")}>
+            <Heading level={2} size="lg">
+              <span id="vision-title">Colour vision</span>
+            </Heading>
+            <Text tone="muted" measure>
+              Every status in Blueprint carries a shape, a weight or a word as well as a hue. Simulate the three
+              colour vision deficiencies on this whole page and check that nothing goes missing.
+            </Text>
+            <Claims />
+          </section>
 
           <Agents />
 

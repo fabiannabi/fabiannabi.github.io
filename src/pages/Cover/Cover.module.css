@@ -56,21 +56,49 @@
 
 .cta {
   display: flex;
-  gap: var(--ds-space-4);
+  align-items: center;
+  gap: var(--ds-space-6);
   flex-wrap: wrap;
   margin-top: var(--ds-space-7);
 }
 
-/* ---------- the claims ---------- */
+.contact {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-5);
+  flex-wrap: wrap;
+}
 
-/* Their own moment, after the actions and before the rail: the pitch, then what
-   to do about it, then two things you can check. Squeezed into the header row
-   the instruments read as a second set of buttons, which is what they looked
-   like and is not what they are.
+/* ---------- projects ---------- */
 
-   Spacing and nothing else. How the claims are arranged inside this box — a
-   panel each, a line of prose, one switched frame — belongs to the presentation
-   that draws them, and there are three of those under comparison. */
-.claims {
+/* After the action, before the rail: the pitch, what to do about it, then the
+   work it is about. Three cards in a row from tablet width up, one column below. */
+.projects {
   margin-top: var(--ds-space-8);
+}
+
+.projects > h2 {
+  margin-block-end: var(--ds-space-4);
+}
+
+.cards {
+  display: grid;
+  gap: var(--ds-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 760px) {
+  .cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cards > li {
+  display: flex;
+}
+
+.cards > li > a {
+  flex: 1;
 }

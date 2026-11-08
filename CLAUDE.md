@@ -7,10 +7,12 @@ frontend platform / design systems lead roles.
 profile is the extended CV. There is no separate document to keep in sync — a
 copy edit there is a CV edit.
 
-Four entry points, deployed to GitHub Pages at `https://fabiannabi.github.io`:
+Four entry points plus one static app, deployed to GitHub Pages at `https://fabiannabi.github.io`:
 
-- `index.html` → `src/pages/Cover` — the cover. One screen, ~80 words. Its only
-  job is to earn ten seconds and a click through.
+- `index.html` → `src/pages/Cover` — the cover. One screen, ~100 words. Its only
+  job is to earn ten seconds and a click through: one action (the profile),
+  contact as a line of text, and three project cards (Blueprint, Blueprint MCP,
+  Forge). The colour-vision simulator lives on `/design/` now.
 - `profile/index.html` → `src/pages/Profile` — about, experience, selected work,
   how I work. ~640 words.
 - `design/index.html` → `src/pages/Design` — **Blueprint**, the design system:
@@ -20,6 +22,10 @@ Four entry points, deployed to GitHub Pages at `https://fabiannabi.github.io`:
   is for, for a reader who has not used one. Same stylesheet and theme key as
   `/design/`; documentation, so not under a word ceiling. The before/after sample
   in `mcp.data.ts` is real linter output — re-run the linter if either side changes.
+- `public/forge/` — the static showcase of Forge, the author's agent platform. Its
+  repo is private; this is an export (`forge showcase --out <this repo>/public/forge`)
+  that hides private repos and local paths. Vite copies it as is. `e2e/forge.spec.ts`
+  checks it loads, names nothing private and passes axe on every view.
 
 ## What belongs in the system, and what does not
 
@@ -121,7 +127,7 @@ pretend otherwise.
    retired: all three pages are built from Blueprint. What replaces it is a
    budget, and the budget is **measured, not asserted** — `pnpm weigh` walks each
    entry HTML and sums what the browser is actually told to fetch, and `pnpm
-   verify` fails if the cover's own gzipped JS passes 8.75 kB (8 until /mcp/ re-attributed the vision simulator out of the React chunk — see the script).
+   verify` fails if the cover's own gzipped JS passes 8 kB (it was 8.75 while the vision simulator lived on the cover — see the script).
 
    Do not read page weight off the `vite build` list. It reports chunks, not
    pages, and names each chunk after whichever module happens to be inside it —

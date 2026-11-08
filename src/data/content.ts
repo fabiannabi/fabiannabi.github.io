@@ -27,36 +27,44 @@ export const links = {
   profile: "/profile/",
   design: "/design/",
   mcp: "/mcp/",
+  forge: "/forge/",
   cover: "/",
 } as const;
+
+/**
+ * The cover's three projects. Each is one line, because the cover's word ceiling
+ * counts them: a project that needs a paragraph to make sense belongs on the
+ * profile. The kicker says what kind of thing it is; the line says why it exists.
+ */
+export type Project = { readonly kicker: string; readonly title: string; readonly line: string; readonly href: string };
+
+export const projects: readonly Project[] = [
+  { kicker: "Design system", title: "Blueprint", line: "Accessible React components, documented live.", href: links.design },
+  { kicker: "npm · MCP server", title: "Blueprint MCP", line: "Lets coding agents build on-system UI.", href: links.mcp },
+  { kicker: "Agent platform", title: "Forge", line: "Agent teams that turn tickets into reviewed PRs.", href: links.forge },
+];
 
 /* ---------------------------------------------------------------- cover ---- */
 
 /**
- * The rotating slot. `headlineSentence` is what a screen reader gets — the full
- * claim, every term, in one grammatical sentence. Without it the rotation
- * announces "I build the other teams build on."
+ * The rotating slot: what I build, one thing at a time, ending on the word the
+ * agent work is about — trust. `sentence` is what a screen reader gets: every
+ * term, in one grammatical sentence, so the rotation never reads as a fragment.
+ * Every term has to fit a 360px screen on one line — the slot does not wrap —
+ * and e2e/cover.spec.ts measures each one. "agentic automation" and "accessibility
+ * baselines" did not, and pushed the page sideways on a phone.
  */
 export const headline = {
-  before: "I build the",
-  after: "other teams rely on.",
-  rotating: [
-    "design systems",
-    "component APIs",
-    "accessibility baselines",
-    "release pipelines",
-    "translation workflows",
-  ],
-  sentence:
-    "I build the design systems, component APIs, accessibility baselines, release pipelines and translation workflows other teams rely on.",
+  before: "I build",
+  after: "teams can trust.",
+  rotating: ["design systems", "AI automation", "expert agents", "agent guardrails", "MCP servers"],
+  sentence: "I build design systems, AI automation, expert agents, agent guardrails and MCP servers teams can trust.",
 } as const;
 
 export const coverSub = {
-  lead: "Six years in software.",
-  emphasis:
-    "Components, accessibility, localization and the telemetry that proves any of it is being used",
-  tail:
-    "— shipped as semver packages from a pnpm monorepo, with AI as an accelerator, never an authority.",
+  lead: "Six years in software, shipping accessible component libraries other teams adopt.",
+  emphasis: "On my own, Forge: agent teams that turn tickets into reviewed pull requests",
+  tail: "— in throwaway containers, under a budget, and a human merges every one.",
 } as const;
 
 /**
@@ -95,7 +103,7 @@ export type Stat = { readonly value: string; readonly label: string };
 
 export const stats: readonly Stat[] = [
   { value: "6 years", label: "in software" },
-  { value: "14 months", label: "associate → engineer" },
+  { value: "1 MCP server", label: "published on npm" },
   { value: "WCAG 2.2", label: "baseline I own" },
 ] as const;
 

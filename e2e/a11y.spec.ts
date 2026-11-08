@@ -32,6 +32,7 @@ const PAGES = [
   ["/profile/", "profile"],
   ["/design/", "design system"],
   ["/mcp/", "Blueprint MCP"],
+  ["/forge/", "Forge showcase"],
 ] as const;
 
 const WIDTHS = [1280, 380] as const;
@@ -70,7 +71,7 @@ for (const [path, label] of PAGES) {
 }
 
 test("simulates colour vision deficiency in linear light", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/design/");
 
   // A chip is a choice that takes effect: pressing it filters the page rather
   // than staging a value for some other control to apply.
@@ -98,18 +99,20 @@ test("simulates colour vision deficiency in linear light", async ({ page }) => {
 
 test("the claim survives losing the accent hue", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /^Deutan/ }).click();
 
   // The rotating slot is the one place the cover leans on colour, and it carries
-  // an underline for exactly this reason (SC 1.4.1). Simulating the most common
-  // deficiency must not take the emphasis away with the hue.
-  const rule = await page.evaluate(() => {
-    const slot = document.querySelector("[data-ds-component='RotatingHeadline'] span span");
-    return slot ? getComputedStyle(slot, "::after").width : null;
-  });
-
-  expect(rule).not.toBe("0px");
-  expect(rule).not.toBeNull();
+  // an underline for exactly this reason (SC 1.4.1). The simulator that used to
+  // prove it here moved to /design/; the underline is what the proof rested on.
+  // Polled: the rule draws in as the headline settles, so an instant read can
+  // catch it at 0px on a busy machine.
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const slot = document.querySelector("[data-ds-component='RotatingHeadline'] span span");
+        return slot ? getComputedStyle(slot, "::after").width : null;
+      }),
+    )
+    .toMatch(/^[1-9][\d.]*px$/);
 });
 
 test("every interactive target clears 24x24 CSS px", async ({ page }) => {
