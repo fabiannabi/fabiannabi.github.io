@@ -47,16 +47,18 @@ export const projects: readonly Project[] = [
 /* ---------------------------------------------------------------- cover ---- */
 
 /**
- * The headline: what I do at work, and what I build on my own with it. The slot
- * keeps the rotating component's shape (a line before, an underlined slot, a
- * line after) with one phrase in it, so it does not rotate: the claim is one
- * thing now, not a list. `sentence` is what a screen reader gets.
+ * The rotating slot: what I build, one thing at a time, ending on the word the
+ * agent work is about — trust. `sentence` is what a screen reader gets: every
+ * term, in one grammatical sentence, so the rotation never reads as a fragment.
+ * Every term has to fit a 360px screen on one line — the slot does not wrap —
+ * and e2e/cover.spec.ts measures each one. "agentic automation" and "accessibility
+ * baselines" did not, and pushed the page sideways on a phone.
  */
 export const headline = {
-  before: "I build design systems",
-  after: "that build with them.",
-  rotating: ["and the AI agents"],
-  sentence: "I build design systems and the AI agents that build with them.",
+  before: "I build",
+  after: "teams can trust.",
+  rotating: ["design systems", "AI automation", "expert agents", "agent guardrails", "MCP servers"],
+  sentence: "I build design systems, AI automation, expert agents, agent guardrails and MCP servers teams can trust.",
 } as const;
 
 export const coverSub = {
@@ -101,7 +103,7 @@ export type Stat = { readonly value: string; readonly label: string };
 
 export const stats: readonly Stat[] = [
   { value: "6 years", label: "in software" },
-  { value: "2 promotions", label: "associate → senior since 2023" },
+  { value: "1 MCP server", label: "published on npm" },
   { value: "WCAG 2.2", label: "baseline I own" },
 ] as const;
 

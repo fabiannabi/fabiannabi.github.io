@@ -77,6 +77,24 @@ test.describe("Cover", () => {
     }
   });
 
+  test("every headline term fits a 360px phone on one line", async ({ page }) => {
+    // The slot does not wrap, so a term wider than the heading pushes the whole
+    // page sideways on a phone. Two shipped that way before this test existed.
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    const result = await page.evaluate((terms) => {
+      const word = document.querySelector("[data-ds-component='RotatingHeadline'] span span span")!;
+      const style = getComputedStyle(word);
+      const ctx = document.createElement("canvas").getContext("2d")!;
+      ctx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+      ctx.letterSpacing = style.letterSpacing;
+      const room = word.closest("h1")!.getBoundingClientRect().width;
+      return terms.map((t) => ({ t, w: Math.ceil(ctx.measureText(t).width), room: Math.floor(room) }));
+    }, [...headline.rotating]);
+    for (const { t, w, room } of result) expect(w, `"${t}" is ${w}px in ${room}px`).toBeLessThanOrEqual(room);
+  });
+
   test("shows a focus ring on the focused control", async ({ page }) => {
     await page.keyboard.press("Tab");
 
