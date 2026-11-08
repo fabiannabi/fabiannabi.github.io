@@ -26,6 +26,7 @@ export const links = {
   github: "https://github.com/fabiannabi",
   profile: "/profile/",
   design: "/design/",
+  mcp: "https://www.npmjs.com/package/@fabiannabi/blueprint-mcp",
   cover: "/",
 } as const;
 
@@ -119,6 +120,7 @@ export const stack: readonly string[] = [
   "LaunchDarkly",
   "Native web APIs",
   "AI-assisted workflows",
+  "MCP servers",
   "Codemods",
 ] as const;
 

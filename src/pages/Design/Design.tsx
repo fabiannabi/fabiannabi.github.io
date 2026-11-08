@@ -1,3 +1,4 @@
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
 import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
 import { Label } from "@fabiannabi/blueprint/components/Label/Label";
 import { Link } from "@fabiannabi/blueprint/components/Link/Link";
@@ -103,6 +104,22 @@ export function Design() {
               them. Every example on this page is the live component — not a screenshot — so it
               responds to the theme and to your keyboard.
             </Text>
+
+            <div className={styles.agents} {...region("For agents")}>
+              <Badge tone="accent" shape="pill" dot>
+                New
+              </Badge>
+              <Text size="sm" tone="muted">
+                Blueprint is also an MCP server, so coding agents get the same answers.{" "}
+                <Link href="#agents" size="sm">
+                  How to use it
+                </Link>{" "}
+                ·{" "}
+                <Link href="https://www.npmjs.com/package/@fabiannabi/blueprint-mcp" size="sm">
+                  npm
+                </Link>
+              </Text>
+            </div>
 
             <div className={styles.principles} {...region("Principles")}>
               <div>

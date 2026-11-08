@@ -43,6 +43,12 @@ export const chipDoc: ComponentDoc = {
       description:
         "Extra context appended to the accessible name, for a chip whose visible label is an abbreviation. Appended, never substituted.",
     },
+    {
+      name: "icon",
+      type: "ReactNode",
+      description:
+        "Decorative glyph before the label. Never the only thing that tells one chip from another.",
+    },
   ],
   accessibility: [
     "`description` is appended to the visible label rather than replacing it. An aria-label that discards the visible text breaks SC 2.5.3: someone using voice control says the words they can see, and the control has to answer to them.",

@@ -8,9 +8,10 @@ export const textDoc: ComponentDoc = {
   props: [
     {
       name: "size",
-      type: '"xs" | "sm" | "md" | "lg"',
+      type: '"xs" | "sm" | "md" | "lead" | "fluid" | "lg" | "inherit"',
       default: '"md"',
-      description: "Steps on the type scale. There is no arbitrary size.",
+      description:
+        "Steps on the type scale. There is no arbitrary size. fluid scales with the viewport for a page's lead paragraph; inherit takes the parent's size, for a span inside a sentence.",
     },
     {
       name: "tone",

@@ -25,6 +25,7 @@ test.describe("Cover", () => {
     const expected = [
       "Read the full profile",
       "Design system",
+      "MCP on npm",
       "Email",
       "LinkedIn",
       "GitHub",
