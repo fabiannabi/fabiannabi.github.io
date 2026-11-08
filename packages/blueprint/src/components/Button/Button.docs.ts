@@ -33,6 +33,12 @@ export const buttonDoc: ComponentDoc = {
       description: "Decorative leading glyph. The label carries the meaning, never the icon alone.",
     },
     {
+      name: "iconEnd",
+      type: "ReactNode",
+      description:
+        "Decorative trailing glyph, nudged on hover. For the arrow on a call to action: it points where the control goes.",
+    },
+    {
       name: "loading",
       type: "boolean",
       default: "false",

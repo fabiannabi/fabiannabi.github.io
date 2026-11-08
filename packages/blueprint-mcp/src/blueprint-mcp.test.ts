@@ -204,3 +204,19 @@ describe("output size", () => {
     expect(rep.omitted).toBe(rep.errors + rep.warnings - MAX_FINDINGS);
   });
 });
+
+describe("false positives found by linting this repo", () => {
+  it("does not read compound parts as props of the root", () => {
+    const code = `<Tabs value="a" onChange={f}>\n<Tabs.List label="Steps">\n<Tabs.Tab value="a">A</Tabs.Tab>\n</Tabs.List>\n</Tabs>`;
+    expect(lintUi(m, code).findings.filter((f) => f.rule === "unknown-prop")).toEqual([]);
+  });
+
+  it("does not treat a token name built at runtime as an unknown token", () => {
+    const code = "style={{ inlineSize: `var(--ds-space-${step})` }}\n<span>--ds-space-{step}</span>";
+    expect(lintUi(m, code).findings).toEqual([]);
+  });
+
+  it("still flags a real unknown token", () => {
+    expect(lintUi(m, "color: var(--ds-nope);").findings.map((f) => f.rule)).toContain("unknown-token");
+  });
+});

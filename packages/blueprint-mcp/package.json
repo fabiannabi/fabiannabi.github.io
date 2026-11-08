@@ -1,6 +1,6 @@
 {
   "name": "@fabiannabi/blueprint-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server that makes the Blueprint design system legible to coding agents: components, tokens, contrast and a UI linter.",
   "keywords": [
     "mcp",

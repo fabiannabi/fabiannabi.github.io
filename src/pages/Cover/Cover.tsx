@@ -97,6 +97,9 @@ export function Cover() {
             <Button href={links.design} size="lg" variant="outline">
               Design system
             </Button>
+            <Button href={links.mcp} size="lg" variant="outline">
+              MCP on npm
+            </Button>
             <Button href={links.email} size="lg" variant="outline">
               Email
             </Button>

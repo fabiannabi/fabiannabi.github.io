@@ -78,7 +78,8 @@ type Tag = { name: string; index: number; attrs: { name: string; value: string |
 /** A small JSX tag scanner: enough to read <Button variant="ghost" iconOnly aria-label={x}> without a parser. */
 function jsxTags(code: string, names: Set<string>): Tag[] {
   const tags: Tag[] = [];
-  const open = /<([A-Z][A-Za-z0-9]*)\b/g;
+  // Dotted names are compound parts (<Tabs.List>, <Tabs.Tab>): their props are not the root's.
+  const open = /<([A-Z][A-Za-z0-9]*(?:\.[A-Za-z0-9]+)*)\b/g;
   for (const m of code.matchAll(open)) {
     const name = m[1] ?? "";
     if (!names.has(name)) continue;
@@ -176,6 +177,9 @@ export function lintUi(m: Manifest, source: string): LintReport {
   // 2. tokens: primitives and unknown names
   const used = new Set<string>();
   for (const match of code.matchAll(/--ds-[a-z0-9-]+/g)) {
+    // `--ds-space-${n}` or `--ds-space-{n}` builds the name at runtime: the prefix alone is not a token.
+    const next = code[(match.index ?? 0) + match[0].length];
+    if (match[0].endsWith("-") && (next === "$" || next === "{")) continue;
     const name = match[0].replace(/-+$/, "");
     used.add(name);
     const line = lineOf(code, match.index ?? 0);
