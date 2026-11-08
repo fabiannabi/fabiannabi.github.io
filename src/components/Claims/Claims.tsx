@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useVision } from "../../ds/a11y/useVision";
-import { VisionToggle } from "../../ds/a11y/VisionToggle";
-import type { Vision } from "../../ds/a11y/VisionContext";
-import { Badge } from "../../ds/components/Badge/Badge";
-import { Button } from "../../ds/components/Button/Button";
-import { Display } from "../../ds/components/Display/Display";
+import { useVision } from "@fabiannabi/blueprint/a11y/useVision";
+import { VisionToggle } from "@fabiannabi/blueprint/a11y/VisionToggle";
+import type { Vision } from "@fabiannabi/blueprint/a11y/VisionContext";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Button } from "@fabiannabi/blueprint/components/Button/Button";
+import { Display } from "@fabiannabi/blueprint/components/Display/Display";
 import { claims as copy } from "../../data/content";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import { ClaimPanels } from "./ClaimPanels";

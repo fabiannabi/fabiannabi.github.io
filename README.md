@@ -22,10 +22,34 @@ src/
   hooks/       usePrefersReducedMotion, useTheme, useActiveSection
   data/        every word on the cover and the profile, typed
   styles/      the site's palettes and the only global rules
-  ds/          the design system — tokens, components, docs, x-ray
+packages/
+  blueprint/      the design system (@fabiannabi/blueprint) — tokens, components, docs, x-ray
+  blueprint-mcp/  Blueprint as an MCP server, for coding agents
 scripts/       palette generator, contrast audit
 e2e/           Playwright
 ```
+
+## Blueprint is a package — and an MCP server
+
+The design system lives in its own workspace package, `packages/blueprint`, and the site imports it
+by name (`@fabiannabi/blueprint/components/Button/Button`). It has a second consumer outside this
+repo: the dashboard of Forge, the author's agent-orchestration platform, is built entirely from it.
+
+`packages/blueprint-mcp` makes the system legible to coding agents. It answers from a manifest
+generated out of the docs registry and the token files (`pnpm manifest`), so an agent gets the same
+answer the docs page gives:
+
+- `get_component` — props with allowed values, accessibility, do / don't, import path
+- `find_token` — the semantic token for an intent ("error text", "color de fondo")
+- `check_contrast` — WCAG 2.2 for two tokens or colours, per theme
+- `lint_ui` — raw colours, primitive or unknown tokens, bare spacing, invalid props, unlabeled icon buttons
+
+```bash
+pnpm build:mcp
+claude mcp add blueprint -- node packages/blueprint-mcp/dist/cli.js
+```
+
+See [`packages/blueprint-mcp/README.md`](packages/blueprint-mcp/README.md).
 
 ## The x-ray
 

@@ -1,0 +1,54 @@
+{
+  "name": "@fabiannabi/blueprint-mcp",
+  "version": "0.1.0",
+  "description": "MCP server that makes the Blueprint design system legible to coding agents: components, tokens, contrast and a UI linter.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "design-system",
+    "design-tokens",
+    "accessibility",
+    "wcag",
+    "lint",
+    "react",
+    "ai-agents"
+  ],
+  "homepage": "https://fabiannabi.github.io/design/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabiannabi/fabiannabi.github.io.git",
+    "directory": "packages/blueprint-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/fabiannabi/fabiannabi.github.io/issues"
+  },
+  "license": "MIT",
+  "author": "Fabián Alcalá",
+  "type": "module",
+  "bin": {
+    "blueprint-mcp": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.js",
+    "SECURITY.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "manifest": "node ../blueprint/scripts/build-manifest.mjs",
+    "build": "pnpm manifest && tsc -p tsconfig.build.json && node scripts/copy-manifest.mjs",
+    "start": "node dist/cli.js",
+    "prepack": "pnpm build",
+    "probe": "node scripts/probe.mjs",
+    "check:pack": "node scripts/check-pack.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "4.6.7"
+  }
+}

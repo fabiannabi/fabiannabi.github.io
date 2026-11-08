@@ -28,11 +28,15 @@ import {
 /* Vitest rewrites import.meta.url to a non-file scheme, so it cannot be used to
    locate the source tree. The runner's cwd is the project root. */
 const SRC = join(process.cwd(), "src");
+/* The design system is its own workspace package; the same rules hold there. */
+const DS = join(process.cwd(), "packages", "blueprint", "src");
 
 const cssFiles = (): string[] =>
-  readdirSync(SRC, { recursive: true, encoding: "utf8" })
-    .filter((entry) => entry.endsWith(".css"))
-    .map((entry) => join(SRC, entry));
+  [SRC, DS].flatMap((dir) =>
+    readdirSync(dir, { recursive: true, encoding: "utf8" })
+      .filter((entry) => entry.endsWith(".css"))
+      .map((entry) => join(dir, entry)),
+  );
 
 /**
  * Token files are the one place a colour literal is allowed to live: the site's
@@ -40,13 +44,14 @@ const cssFiles = (): string[] =>
  * every CSS Module, every page stylesheet — must resolve through them.
  */
 const isTokenFile = (path: string): boolean =>
-  /tokens\.[\w-]+\.css$/.test(path) || /[\\/]ds[\\/]tokens[\\/]/.test(path);
+  /tokens\.[\w-]+\.css$/.test(path) || /[\\/]blueprint[\\/]src[\\/]tokens[\\/]/.test(path);
 
 const stripComments = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, "");
 
 const read = (path: string): string => stripComments(readFileSync(path, "utf8"));
 
-const label = (path: string): string => relative(SRC, path).replace(/\\/g, "/");
+const label = (path: string): string =>
+  (path.startsWith(DS) ? `blueprint/${relative(DS, path)}` : relative(SRC, path)).replace(/\\/g, "/");
 
 const countWords = (...parts: string[]): number =>
   parts
@@ -86,7 +91,7 @@ describe("no raw typography outside the token files", () => {
         .map((match) => match[1]?.trim() ?? "")
         .filter((value) => value !== "" && !ALLOWED.test(value));
 
-      expect(found, "every type value resolves from a token in ds/tokens/scale.css").toEqual([]);
+      expect(found, "every type value resolves from a token in blueprint/tokens/scale.css").toEqual([]);
     },
   );
 });
@@ -184,7 +189,7 @@ describe("reduced motion is honoured globally", () => {
     // system, because every animated component in it reads the flag and the
     // system has to work in an app that has never heard of this site; src/hooks
     // re-exports it so page code still imports from one place.
-    const hook = readFileSync(join(SRC, "ds", "hooks", "usePrefersReducedMotion.ts"), "utf8");
+    const hook = readFileSync(join(DS, "hooks", "usePrefersReducedMotion.ts"), "utf8");
 
     expect(hook).toContain("prefers-reduced-motion: reduce");
   });
@@ -197,7 +202,7 @@ describe("reduced motion is honoured globally", () => {
  * convention that is worth anything.
  */
 describe("every design system component is tested against its own claims", () => {
-  const COMPONENTS = join(SRC, "ds", "components");
+  const COMPONENTS = join(DS, "components");
 
   const componentNames = (): string[] =>
     readdirSync(COMPONENTS, { encoding: "utf8" }).filter((entry) =>

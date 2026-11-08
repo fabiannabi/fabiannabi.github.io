@@ -1,4 +1,4 @@
-import { useThemeAttribute, type Theme } from "../ds/hooks/useThemeAttribute";
+import { useThemeAttribute, type Theme } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 
 export type { Theme };
 

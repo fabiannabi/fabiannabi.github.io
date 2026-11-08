@@ -22,7 +22,7 @@ Three entry points, deployed to GitHub Pages at `https://fabiannabi.github.io`:
 There are two layers of component and the line between them is the single most
 load-bearing decision in this repo.
 
-- **`src/ds`** — the system. Fourteen components, every one of them generic.
+- **`packages/blueprint` (`@fabiannabi/blueprint`)** — the system. Fourteen components, every one of them generic.
 - **`src/components`** — the app. Nine, every one of them composed from the
   system.
 
@@ -132,7 +132,7 @@ pretend otherwise.
    primitives: `--ds-surface` is a near-black in one and a near-white in
    another, and nothing below the token layer knows which. The design system's
    primitive ramps are **generated** — edit `scripts/generate-palette.mjs` and
-   re-run `pnpm palette`, never `src/ds/tokens/primitives.css` by hand.
+   re-run `pnpm palette`, never `packages/blueprint/src/tokens/primitives.css` by hand.
 
    A component may parameterise itself with properties of its own —
    `--button-bg`, `--badge-dot`, `--beacon-halo` — defined and read inside its
@@ -243,19 +243,19 @@ nobody applied any more and every section head lost its bottom margin. Spacing
 around a component belongs to the page and is set on the element (`.sub > h3`),
 never by reaching into the component.
 
-`src/ds/` is written to be liftable into its own package: it owns its tokens, its
+`packages/blueprint/src/` is written to be liftable into its own package: it owns its tokens, its
 hooks, and the x-ray. The site consumes it, not the other way round — which is
-why `src/hooks/useTheme.ts` is a thin wrapper over `src/ds/hooks/useThemeAttribute.ts`.
+why `src/hooks/useTheme.ts` is a thin wrapper over `packages/blueprint/src/hooks/useThemeAttribute.ts`.
 
 Each component ships four files: the implementation, its CSS Module, a
 `.docs.ts` describing the API and the guidance, and a `.stories.tsx`. The docs
 page and the props tables render from the `.docs.ts`; Storybook generates its own
 tables from the TypeScript via react-docgen. **Add a component to
-`src/ds/docs/registry.ts` or it will not appear on the docs page.**
+`packages/blueprint/src/docs/registry.ts` or it will not appear on the docs page.**
 
 ### Simulating colour vision deficiency
 
-`src/ds/a11y/` renders the page as a dichromat sees it — protanopia,
+`packages/blueprint/src/a11y/` renders the page as a dichromat sees it — protanopia,
 deuteranopia, tritanopia — from the Machado, Oliveira & Fernandes (2009)
 matrices at severity 1.0. The controls are on the cover, in the claim they
 settle.
@@ -379,11 +379,11 @@ not an inspector on top of it.
 
 **It is split in two, and the split is the argument.**
 
-- The colour half is `src/ds/tokens/blueprint.css` — a *theme*, a remap of the
+- The colour half is `packages/blueprint/src/tokens/blueprint.css` — a *theme*, a remap of the
   semantic layer, exactly like `[data-ds-theme="light"]` is. Nothing in
   `xray.css` sets a colour. If it did, the token architecture would be a story
   rather than a fact.
-- The drawing half is `src/ds/xray/xray.css` — the ruling, the developing pass,
+- The drawing half is `packages/blueprint/src/xray/xray.css` — the ruling, the developing pass,
   the frames, the registration marks and the name plates.
 
 Details that are load-bearing:

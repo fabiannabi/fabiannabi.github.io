@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Badge } from "../../ds/components/Badge/Badge";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
 import { expectNoAxeViolations } from "../../test/axe";
 import { ClaimPanels } from "./ClaimPanels";
 import type { ClaimModel } from "./model";

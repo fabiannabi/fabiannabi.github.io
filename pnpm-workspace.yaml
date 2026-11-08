@@ -2,5 +2,18 @@
 # and treats an unapproved script as an error under --frozen-lockfile.
 # esbuild's postinstall links its platform binary — it is a dependency of Vite
 # and Storybook, and the build does not work without it.
+packages:
+  - packages/*
+
 allowBuilds:
   esbuild: true
+
+# Supply-chain guards (the 2025 npm compromises were caught within hours to days):
+# - a version must be 3 days old before pnpm will resolve it, so a hijacked release
+#   is usually found and pulled before it can reach this repo;
+# - fail if a package that used to publish with provenance suddenly publishes without it,
+#   which is what a stolen token looks like;
+# - transitive dependencies may only come from the registry, never from git or a tarball URL.
+minimumReleaseAge: 4320
+trustPolicy: no-downgrade
+blockExoticSubdeps: true

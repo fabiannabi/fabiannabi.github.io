@@ -1,5 +1,5 @@
-import { Badge } from "../../ds/components/Badge/Badge";
-import { Button } from "../../ds/components/Button/Button";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Button } from "@fabiannabi/blueprint/components/Button/Button";
 import { Glow } from "../../components/Glow/Glow";
 import { RotatingHeadline } from "../../components/RotatingHeadline/RotatingHeadline";
 import { StackRail } from "../../components/StackRail/StackRail";
@@ -12,11 +12,11 @@ import {
   stack,
   stats,
 } from "../../data/content";
-import { Display } from "../../ds/components/Display/Display";
-import { Label } from "../../ds/components/Label/Label";
+import { Display } from "@fabiannabi/blueprint/components/Display/Display";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
 import { Stat } from "../../components/Stat/Stat";
-import { Text } from "../../ds/components/Text/Text";
-import { region } from "../../ds/xray/instrument";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
+import { region } from "@fabiannabi/blueprint/xray/instrument";
 import styles from "./Cover.module.css";
 
 /**

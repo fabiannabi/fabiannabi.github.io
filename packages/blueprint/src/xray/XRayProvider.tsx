@@ -1,5 +1,5 @@
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
+import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { XRayContext } from "./XRayContext";
 
 /** Must match --ds-duration-slow in scale.css. */

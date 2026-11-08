@@ -1,6 +1,6 @@
 import { Entry } from "../../components/Entry/Entry";
 import { SectionNav } from "../../components/SectionNav/SectionNav";
-import { Badge } from "../../ds/components/Badge/Badge";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import {
   about,
@@ -13,12 +13,12 @@ import {
   work,
   practice,
 } from "../../data/content";
-import { Display } from "../../ds/components/Display/Display";
-import { Heading } from "../../ds/components/Heading/Heading";
-import { Label } from "../../ds/components/Label/Label";
-import { Link } from "../../ds/components/Link/Link";
-import { Text } from "../../ds/components/Text/Text";
-import { region } from "../../ds/xray/instrument";
+import { Display } from "@fabiannabi/blueprint/components/Display/Display";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Link } from "@fabiannabi/blueprint/components/Link/Link";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
+import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { useActiveSection } from "../../hooks/useActiveSection";
 import { useTheme } from "../../hooks/useTheme";
 import styles from "./Profile.module.css";

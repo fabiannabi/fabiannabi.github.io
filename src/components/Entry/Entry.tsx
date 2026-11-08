@@ -1,8 +1,8 @@
-import { Badge } from "../../ds/components/Badge/Badge";
-import { Heading } from "../../ds/components/Heading/Heading";
-import { Label } from "../../ds/components/Label/Label";
-import { Text } from "../../ds/components/Text/Text";
-import { local } from "../../ds/xray/instrument";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
 import styles from "./Entry.module.css";
 
 /* Owned here rather than imported from the site's content module. A design

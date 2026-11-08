@@ -1,11 +1,11 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
-import { XRayProvider } from "../src/ds/xray/XRayProvider";
+import { XRayProvider } from "@fabiannabi/blueprint/xray/XRayProvider";
 
-import "../src/ds/tokens/primitives.css";
-import "../src/ds/tokens/scale.css";
-import "../src/ds/tokens/semantic.css";
+import "@fabiannabi/blueprint/tokens/primitives.css";
+import "@fabiannabi/blueprint/tokens/scale.css";
+import "@fabiannabi/blueprint/tokens/semantic.css";
 import "./storybook.css";
-import "../src/ds/xray/xray.css";
+import "@fabiannabi/blueprint/xray/xray.css";
 
 /**
  * Every story runs inside the x-ray provider, so pressing X in the canvas turns

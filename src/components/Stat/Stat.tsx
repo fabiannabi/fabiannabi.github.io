@@ -1,7 +1,7 @@
-import { cx } from "../../ds/utils/cx";
-import { local } from "../../ds/xray/instrument";
-import { Display } from "../../ds/components/Display/Display";
-import { Label } from "../../ds/components/Label/Label";
+import { cx } from "@fabiannabi/blueprint/utils/cx";
+import { local } from "@fabiannabi/blueprint/xray/instrument";
+import { Display } from "@fabiannabi/blueprint/components/Display/Display";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
 import styles from "./Stat.module.css";
 
 type Props = {

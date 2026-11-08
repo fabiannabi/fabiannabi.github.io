@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useVision } from "../ds/a11y/useVision";
-import type { Vision } from "../ds/a11y/VisionContext";
-import { Badge } from "../ds/components/Badge/Badge";
-import { Code } from "../ds/components/Code/Code";
-import { Display } from "../ds/components/Display/Display";
-import { Heading } from "../ds/components/Heading/Heading";
-import { Label } from "../ds/components/Label/Label";
-import { Text } from "../ds/components/Text/Text";
+import { useVision } from "@fabiannabi/blueprint/a11y/useVision";
+import type { Vision } from "@fabiannabi/blueprint/a11y/VisionContext";
+import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
+import { Code } from "@fabiannabi/blueprint/components/Code/Code";
+import { Display } from "@fabiannabi/blueprint/components/Display/Display";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { Handle, type Step } from "./Handle";
 import styles from "./Reactive.module.css";
 

@@ -1,6 +1,6 @@
-import { Heading } from "../ds/components/Heading/Heading";
-import { Label } from "../ds/components/Label/Label";
-import { Text } from "../ds/components/Text/Text";
+import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
+import { Label } from "@fabiannabi/blueprint/components/Label/Label";
+import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { Exploded } from "./Exploded";
 import { Reactive } from "./Reactive";
 import styles from "./Lab.module.css";

@@ -22,7 +22,11 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+
+    "paths": {
+      "@fabiannabi/blueprint/*": ["./packages/blueprint/src/*"]
+    }
   },
-  "include": ["src", "e2e", ".storybook", "vite.config.ts", "playwright.config.ts"]
+  "include": ["src", "packages/*/src", "packages/*/test", "packages/*/scripts", "e2e", ".storybook", "vite.config.ts", "playwright.config.ts"]
 }
