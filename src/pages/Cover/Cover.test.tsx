@@ -56,7 +56,7 @@ describe("Cover", () => {
     // Three stats and six actions. Adding a fourth stat or a seventh link is a
     // design decision, not a content edit, so it should break a test. The fifth
     // link — the design system — was added deliberately when that page shipped;
-    // the sixth — the Blueprint MCP on npm — when the system was published as a
+    // the sixth — the Blueprint MCP page — when the system was published as a
     // package other people can install.
     expect(screen.getAllByRole("listitem")).toHaveLength(3);
     expect(screen.getAllByRole("link")).toHaveLength(6);

@@ -26,7 +26,7 @@ export const links = {
   github: "https://github.com/fabiannabi",
   profile: "/profile/",
   design: "/design/",
-  mcp: "https://www.npmjs.com/package/@fabiannabi/blueprint-mcp",
+  mcp: "/mcp/",
   cover: "/",
 } as const;
 
@@ -237,7 +237,7 @@ export const work: readonly Entry[] = [
   {
     when: "Open source",
     title: "Blueprint MCP",
-    href: "https://www.npmjs.com/package/@fabiannabi/blueprint-mcp",
+    href: "/mcp/",
     description: "Blueprint as an MCP server for coding agents.",
     tags: ["MCP", "TypeScript", "npm", "Prompt-injection tests"],
   },

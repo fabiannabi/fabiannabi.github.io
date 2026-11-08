@@ -31,6 +31,7 @@ const PAGES = [
   ["/", "cover"],
   ["/profile/", "profile"],
   ["/design/", "design system"],
+  ["/mcp/", "Blueprint MCP"],
 ] as const;
 
 const WIDTHS = [1280, 380] as const;

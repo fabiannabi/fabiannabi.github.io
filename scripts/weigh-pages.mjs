@@ -32,8 +32,15 @@ import { join } from "node:path";
  * by about 2.3 kB: the blueprint's CSS went, and code that had been hiding
  * inside a >100 kB chunk got re-attributed to the page. Read the whole row, not
  * the budget column.
+ *
+ * **8 → 8.75 when /mcp/ shipped, and it is not new weight.** A fourth entry that
+ * does not use the vision simulator made Rollup split the simulator's ~0.9 kB
+ * out of the React chunk it had been riding in. Own JS went from 7.70 to 8.61;
+ * what the cover fetches went up by 0.24 kB, almost all of it one more request.
+ * The old number was the one hiding code, so the ceiling moved to the honest
+ * figure plus a sliver, not to whatever the next feature needs.
  */
-const COVER_BUDGET_KB = 8;
+const COVER_BUDGET_KB = 8.75;
 
 /** Anything this large is the framework, not a decision made here. */
 const VENDOR_BYTES = 100_000;
@@ -42,6 +49,7 @@ const PAGES = [
   ["cover", "index.html"],
   ["profile", "profile/index.html"],
   ["design", "design/index.html"],
+  ["mcp", "mcp/index.html"],
 ];
 
 const kb = (bytes) => (bytes / 1024).toFixed(2).padStart(6);
