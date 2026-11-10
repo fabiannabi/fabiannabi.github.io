@@ -55,6 +55,23 @@ client approved cannot drift between releases.
 Pin a version when you configure the server, for example `npx -y @fabiannabi/blueprint-mcp@0.1.2`, so
 a new release only reaches you when you choose it.
 
+## Unbreakable rules
+
+What this server will never do, each one held by a test in `src/security.test.ts` or by
+`scripts/check-pack.mjs`, not just by this text:
+
+1. **Never read the environment.** The server code does not touch `process.env`; only the CLI
+   reads one variable, `BLUEPRINT_MANIFEST`, to choose the manifest file.
+2. **Never read a file but its own manifest**, except the one file `lint <file>` is pointed at.
+3. **Never open the network, spawn a process or evaluate code** — including the code it lints.
+4. **Never echo more than 60 characters** of what it was sent, and never a credential.
+5. **Never change its tools without a reviewed snapshot**, so what a client approved stays true.
+6. **Never ship a release that skipped the tests, the probe, the tarball check or a human
+   approval** on npm.
+
+Agents working *on* this package follow the platform's unbreakable rules in the repo's
+[`CLAUDE.md`](../../CLAUDE.md#unbreakable-rules-for-agents).
+
 ## Reporting a vulnerability
 
 Open a private security advisory on

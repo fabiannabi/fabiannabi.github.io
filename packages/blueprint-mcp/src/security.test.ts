@@ -159,6 +159,14 @@ describe("the published package", () => {
     expect(src.startsWith("#!/usr/bin/env node\n")).toBe(true);
   });
 
+  it("never reads the environment outside the CLI's one manifest variable", () => {
+    for (const file of ["server.ts", "lint.ts", "catalog.ts", "contrast.ts", "manifest.ts"]) {
+      expect(readFileSync(join(PKG, "src", file), "utf8"), file).not.toMatch(/process\.env/);
+    }
+    const cli = readFileSync(join(PKG, "src", "cli.ts"), "utf8");
+    expect(cli.match(/process\.env\.\w+/g)).toEqual(["process.env.BLUEPRINT_MANIFEST"]);
+  });
+
   it("uses no dynamic code, process spawning or network anywhere in the server", () => {
     // injection.ts is left out: its patterns name these APIs in order to detect them
     for (const file of ["cli.ts", "server.ts", "lint.ts", "catalog.ts", "contrast.ts", "manifest.ts"]) {
