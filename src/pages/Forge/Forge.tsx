@@ -174,8 +174,26 @@ export function Forge() {
             <span id="how">How a ticket moves</span>
           </Heading>
           <Text tone="muted" measure>
-            Agents do the work. I decide at the marked steps.
+            Agents do the work. Four steps are mine: nothing moves on until I act.
           </Text>
+          <ul className={styles.legend} aria-label="Legend">
+            <li>
+              <Badge tone="accent" shape="pill">
+                I decide
+              </Badge>
+              <Text as="span" size="sm" tone="muted">
+                a step only I can take
+              </Text>
+            </li>
+            <li>
+              <Badge tone="neutral" shape="pill">
+                Agent
+              </Badge>
+              <Text as="span" size="sm" tone="muted">
+                an AI agent, or Forge itself, does it
+              </Text>
+            </li>
+          </ul>
           <div className={styles.flow}>
             {PHASES.map((phase) => (
               <section key={phase.name} className={styles.phase} aria-label={`${phase.name} phase`}>
@@ -186,9 +204,9 @@ export function Forge() {
                   {phase.steps.map((s) => (
                     <li key={s.title} className={s.human ? styles.decide : styles.agent}>
                       <span className={styles.who}>
-                        <Label size="xs" caps tone={s.human ? "accent" : "subtle"} as="span">
-                          {s.human ? "You decide" : s.who}
-                        </Label>
+                        <Badge tone={s.human ? "accent" : "neutral"} shape="pill">
+                          {s.human ? "I decide" : s.who === "Forge" ? "Forge" : `Agent · ${s.who}`}
+                        </Badge>
                       </span>
                       <Text as="span" size="md" weight="medium">
                         {s.title}
