@@ -44,7 +44,8 @@ test.describe("Forge showcase", () => {
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto("/forge/showcase/");
     await expect(page.getByRole("link", { name: "How it works" })).toBeVisible();
-    await expect(page.getByText("Snapshot", { exact: true })).toBeVisible();
+    // The header badge is hidden on phones; the footer says it at every width.
+    await expect(page.getByText(/^Snapshot: dev loop runs are real/)).toBeVisible();
     expect(errors).toEqual([]);
   });
 

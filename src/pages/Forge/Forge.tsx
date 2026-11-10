@@ -69,6 +69,28 @@ export function Forge() {
               Blueprint MCP →
             </Link>
           </nav>
+          <figure className={styles.demo}>
+            {/* No sound: the captions are part of the picture, so it never autoplays and needs no track. */}
+            <video
+              controls
+              muted
+              playsInline
+              preload="none"
+              poster="/forge/media/forge-demo-poster.jpg"
+              width={1280}
+              height={720}
+              aria-describedby="demo-caption"
+            >
+              <source src="/forge/media/forge-demo.mp4" type="video/mp4" />
+            </video>
+            <figcaption id="demo-caption">
+              <Text size="sm" tone="muted">
+                One ticket, start to finish, in 70 seconds and with no sound: an idea in Obsidian,
+                the Planner's ticket, the GitHub issue, the build in a sealed container, the
+                reviewed pull request, the lessons and the cost.
+              </Text>
+            </figcaption>
+          </figure>
         </section>
 
         <section className={styles.overview} aria-labelledby="overview" {...region("Overview")}>
