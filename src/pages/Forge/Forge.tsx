@@ -8,7 +8,7 @@ import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { useThemeAttribute } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
-import { BOUNDARY, FRONTSCAN, LESSON, LIMITS, LINKS, PHASES, REAL_RUN, RULES, STACK, STATS, TICKETS } from "./forge.data";
+import { BOUNDARY, FOUND, FRONTSCAN, LESSON, LINKS, NEXT, OVERVIEW, PHASES, REAL_RUN, RULES, STATS, TICKETS } from "./forge.data";
 import styles from "./Forge.module.css";
 
 /**
@@ -65,6 +65,52 @@ export function Forge() {
               Blueprint MCP →
             </Link>
           </nav>
+        </section>
+
+        <section className={styles.overview} aria-labelledby="overview" {...region("Overview")}>
+          <h2 id="overview" className={styles.srOnly}>
+            Overview
+          </h2>
+          <dl className={styles.overviewGrid}>
+            <div>
+              <dt>
+                <Label size="sm" caps tone="subtle" as="span">
+                  My role
+                </Label>
+              </dt>
+              <dd>
+                <Text size="md">{OVERVIEW.role}</Text>
+              </dd>
+            </div>
+            <div>
+              <dt>
+                <Label size="sm" caps tone="subtle" as="span">
+                  Outcome
+                </Label>
+              </dt>
+              <dd>
+                <Text size="md">{OVERVIEW.outcome}</Text>
+              </dd>
+            </div>
+            <div className={styles.overviewWide}>
+              <dt>
+                <Label size="sm" caps tone="subtle" as="span">
+                  Built with
+                </Label>
+              </dt>
+              <dd>
+                <ul className={styles.chips}>
+                  {OVERVIEW.stack.map((s) => (
+                    <li key={s}>
+                      <Badge tone="neutral" shape="pill">
+                        {s}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          </dl>
         </section>
 
         <section className={styles.section} aria-labelledby="results" {...region("Results")}>
@@ -268,34 +314,42 @@ export function Forge() {
           </ol>
         </section>
 
-        <section className={styles.section} aria-labelledby="built" {...region("Stack")}>
+        <section className={styles.section} aria-labelledby="found" {...region("Iteration")}>
           <Heading level={2} size="lg">
-            <span id="built">Made of</span>
+            <span id="found">What went wrong, and what&rsquo;s next</span>
           </Heading>
-          <ul className={styles.chips} aria-label="Stack">
-            {STACK.map((s) => (
-              <li key={s}>
-                <Badge tone="neutral" shape="pill">
-                  {s}
-                </Badge>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className={styles.section} aria-labelledby="limits" {...region("Limits")}>
-          <Heading level={2} size="lg">
-            <span id="limits">What it is not, yet</span>
-          </Heading>
-          <ul className={styles.list}>
-            {LIMITS.map((l) => (
-              <li key={l}>
-                <Text size="sm" tone="muted">
-                  {l}
-                </Text>
-              </li>
-            ))}
-          </ul>
+          <div className={styles.twoCol}>
+            <div>
+              <Label size="sm" caps tone="subtle" as="h3">
+                Found in real runs
+              </Label>
+              <ul className={styles.found}>
+                {FOUND.map((f) => (
+                  <li key={f.problem}>
+                    <Text size="md">{f.problem}</Text>
+                    <Text size="md" tone="muted">
+                      → {f.fix}
+                    </Text>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <Label size="sm" caps tone="subtle" as="h3">
+                Next
+              </Label>
+              <ul className={styles.found}>
+                {NEXT.map((n) => (
+                  <li key={n}>
+                    <Text size="md">{n}</Text>
+                  </li>
+                ))}
+              </ul>
+              <Text size="sm" tone="muted" measure>
+                Forge is a personal project: one real repo, one maintainer, one machine.
+              </Text>
+            </div>
+          </div>
         </section>
 
         <footer className={styles.footer} {...region("Colophon")}>

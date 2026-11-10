@@ -308,3 +308,81 @@
   padding: 0;
   list-style: none;
 }
+
+/* ---- The first minute: role, outcome, stack, right under the title ---- */
+.overview {
+  padding: var(--ds-space-6);
+  margin-block-end: var(--ds-space-7);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
+}
+
+.overviewGrid {
+  display: grid;
+  gap: var(--ds-space-6);
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .overviewGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.overviewGrid > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.overviewGrid dd {
+  margin: 0;
+}
+
+.overviewWide {
+  grid-column: 1 / -1;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- What went wrong, and what is next ---- */
+.twoCol {
+  display: grid;
+  gap: var(--ds-space-7);
+}
+
+@media (min-width: 820px) {
+  .twoCol {
+    grid-template-columns: 1.3fr 1fr;
+  }
+}
+
+.twoCol > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+.found {
+  display: grid;
+  gap: var(--ds-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.found li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding-inline-start: var(--ds-space-4);
+  border-inline-start: 3px solid var(--ds-border);
+}

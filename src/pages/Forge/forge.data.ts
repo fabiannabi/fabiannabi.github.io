@@ -116,14 +116,39 @@ export const REAL_RUN = {
   found: "177 colours written by hand outside its token files, and 478 uses of its Button, 200 of them passed a className on top.",
 } as const;
 
-/** What it is made of, as labels: what does what is in the boundary diagram. */
-export const STACK: readonly string[] = [
-  "Python", "FastAPI", "SQLite", "Docker", "Claude Code", "GitHub", "Obsidian", "React", "Blueprint",
+/**
+ * The overview a reader gets in the first minute, before anything else: what I
+ * did, with what, and what came of it. Recruiters often decide in about that long.
+ */
+export const OVERVIEW = {
+  role: "I designed Forge and built it with Claude Code, on my own time. Its agents wrote frontscan; I planned every ticket and merged every pull request.",
+  outcome: "9 merged pull requests on a public repo, about $1.07 each, none sent back by me.",
+  stack: ["Python", "FastAPI", "SQLite", "Docker", "Claude Code", "GitHub", "Obsidian", "React", "Blueprint"],
+} as const;
+
+/**
+ * What real runs broke, and what changed because of it. Said plainly: the
+ * iteration is the interesting part, and a case study that only lists wins is
+ * an advert.
+ */
+export const FOUND: readonly { readonly problem: string; readonly fix: string }[] = [
+  {
+    problem: "An agent wrote tests it could not run: its container and the setup container had different Node and system libraries.",
+    fix: "Both now start from the same image, and the agent runs the repo's checks itself before it hands over.",
+  },
+  {
+    problem: "Agents wrote what they learned straight into memory, and one note stayed wrong long after the fix.",
+    fix: "A Retro agent proposes lessons and nothing reaches a prompt until I approve it.",
+  },
+  {
+    problem: "The first plans left open questions for me to answer on every issue.",
+    fix: "A Planner proposes a default for every decision, so I only change the ones I disagree with.",
+  },
 ];
 
-/** Said plainly, because a case study that only lists wins is an advert. */
-export const LIMITS: readonly string[] = [
-  "A personal project: one real repo, one maintainer.",
-  "The dev loop's own agents have no eval suite yet. That is next.",
-  "One machine, polling GitHub every minute. Not a hosted service.",
+/** What comes next. */
+export const NEXT: readonly string[] = [
+  "An eval suite for the dev loop's own agents, so a prompt or model change that makes them worse is caught before a ticket.",
+  "A live trace of every step an agent takes, for the observability a production harness needs.",
+  "Running as a service that resumes after a restart, instead of a loop on one machine.",
 ];
