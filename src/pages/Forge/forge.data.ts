@@ -12,6 +12,7 @@ export const FRONTSCAN = "https://github.com/fabiannabi/frontscan";
 export const LINKS = {
   frontscan: FRONTSCAN,
   showcase: "/forge/showcase/",
+  design: "/design/",
   mcp: "/mcp/",
   profile: "/profile/",
 } as const;
@@ -21,8 +22,43 @@ export const STATS: readonly { readonly value: string; readonly label: string }[
   { value: "9 of 9", label: "frontscan pull requests merged" },
   { value: "$1.07", label: "average cost per ticket, plan to merge" },
   { value: "9 of 9", label: "passed the repo's checks on the agent's first try" },
-  { value: "0", label: "times I had to ask an agent for changes" },
+  { value: "0", label: "tickets I sent back after the Reviewer agent's pass" },
 ];
+
+/**
+ * The calls I made, each with what I did not do and what it costs. This is the
+ * part an agent did not decide: the platform's shape is mine.
+ */
+export const DECISIONS: readonly { readonly choice: string; readonly instead: string; readonly why: string; readonly cost: string }[] = [
+  {
+    choice: "A fresh container for every step",
+    instead: "One long-running agent session per ticket",
+    why: "Each step gets only the access and budget it needs, and nothing it did leaks into the next.",
+    cost: "No memory between steps: every prompt carries the issue, the plan and my answers explicitly.",
+  },
+  {
+    choice: "The key outside the container, added by a proxy",
+    instead: "Passing the API key to the agent",
+    why: "An agent tricked into printing its environment finds a placeholder.",
+    cost: "One more service to run, and every model call goes through it.",
+  },
+  {
+    choice: "My own orchestration in Python",
+    instead: "An agent framework",
+    why: "Steps that touch GitHub or the vault are plain code, not a model's choice, and I control every boundary.",
+    cost: "More code to maintain than wiring up a framework.",
+  },
+  {
+    choice: "Polling GitHub every minute",
+    instead: "Webhooks",
+    why: "My machine is never reachable from the internet.",
+    cost: "Up to a minute before Forge notices a label or a comment.",
+  },
+];
+
+/** Why frontscan, of all things: it is the design-systems problem I work on. */
+export const WHY_FRONTSCAN =
+  "frontscan measures how a team adopts its design system: colours that skip the tokens, which components and props get used. That is the problem I work on in design systems, so it was the repo I wanted agents to build.";
 
 /**
  * How a ticket moves, in three phases. Each step is a few words, because people
@@ -122,7 +158,7 @@ export const REAL_RUN = {
  */
 export const OVERVIEW = {
   role: "I designed Forge and built it with Claude Code, on my own time. Its agents wrote frontscan; I planned every ticket and merged every pull request.",
-  outcome: "9 merged pull requests on a public repo, about $1.07 each, none sent back by me.",
+  outcome: "9 merged pull requests on a public repo, about $1.07 each, every one reviewed by an agent and then by me.",
   stack: ["Python", "FastAPI", "SQLite", "Docker", "Claude Code", "GitHub", "Obsidian", "React", "Blueprint"],
 } as const;
 

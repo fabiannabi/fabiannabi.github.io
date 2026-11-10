@@ -8,7 +8,7 @@ import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { useThemeAttribute } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
-import { BOUNDARY, FOUND, FRONTSCAN, LESSON, LINKS, NEXT, OVERVIEW, PHASES, REAL_RUN, RULES, STATS, TICKETS } from "./forge.data";
+import { BOUNDARY, DECISIONS, FOUND, FRONTSCAN, LESSON, LINKS, NEXT, OVERVIEW, PHASES, REAL_RUN, RULES, STATS, TICKETS, WHY_FRONTSCAN } from "./forge.data";
 import styles from "./Forge.module.css";
 
 /** Every step numbered in the order a ticket moves, so the two lanes keep the sequence. */
@@ -171,6 +171,17 @@ export function Forge() {
             Pointed at {REAL_RUN.repo}, frontscan read {REAL_RUN.files} files in {REAL_RUN.time} and
             found {REAL_RUN.found}
           </Text>
+          <Text tone="muted" measure>
+            {WHY_FRONTSCAN}{" "}
+            <Link href={LINKS.design} size="md">
+              Blueprint
+            </Link>
+            , the design system, and its{" "}
+            <Link href={LINKS.mcp} size="md">
+              MCP server for coding agents
+            </Link>{" "}
+            are on this site too.
+          </Text>
         </section>
 
         <section className={styles.section} aria-labelledby="how" {...region("How it works")}>
@@ -301,6 +312,30 @@ export function Forge() {
                 </Text>
                 <Text as="span" size="sm" tone="muted">
                   {r.detail}
+                </Text>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className={styles.section} aria-labelledby="decisions" {...region("Decisions")}>
+          <Heading level={2} size="lg">
+            <span id="decisions">Decisions I made, and what they cost</span>
+          </Heading>
+          <ul className={styles.decisions}>
+            {DECISIONS.map((d) => (
+              <li key={d.choice}>
+                <Text size="md" weight="medium">
+                  {d.choice}
+                </Text>
+                <Text size="sm" tone="subtle">
+                  Instead of: {d.instead}
+                </Text>
+                <Text size="sm" tone="muted">
+                  <strong>Why.</strong> {d.why}
+                </Text>
+                <Text size="sm" tone="muted">
+                  <strong>Cost.</strong> {d.cost}
                 </Text>
               </li>
             ))}
