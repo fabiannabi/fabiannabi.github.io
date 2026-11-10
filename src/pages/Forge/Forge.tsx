@@ -48,11 +48,11 @@ export function Forge() {
             <span id="title">Forge: agent teams that turn tickets into reviewed pull requests</span>
           </Heading>
           <Text size="lg" tone="muted" measure>
-            I wanted the workflow I use at work, where an agent picks up a ticket and opens a pull
-            request, with the parts I would not trust left out: no keys inside the agent, no network
-            but the model, a budget per ticket, and a person deciding every merge. Forge is that
-            platform. Every line of code in frontscan, a public frontend auditor, was written by
-            its agents and reviewed and merged by me.
+            Coding agents can now take a ticket and open a pull request. I built Forge to find out
+            what it takes to let them do that safely: no keys inside the agent, no network but the
+            model, a budget per ticket, and a person deciding every merge. Every line of code in
+            frontscan, a public frontend auditor, was written by its agents and reviewed and merged
+            by me.
           </Text>
           <nav className={styles.links} aria-label="Forge links">
             <Link href={FRONTSCAN} font="mono" size="sm">
