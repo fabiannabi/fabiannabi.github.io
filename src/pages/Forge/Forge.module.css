@@ -146,34 +146,167 @@
   margin: 0;
 }
 
-.steps {
+
+/* ---- How a ticket moves: three phases, the steps where I decide stand out ---- */
+.flow {
   display: grid;
+  gap: var(--ds-space-5);
+}
+
+@media (min-width: 820px) {
+  .flow {
+    grid-template-columns: 4fr 4fr 2.4fr;
+  }
+}
+
+.phase {
+  display: flex;
+  flex-direction: column;
   gap: var(--ds-space-3);
-  padding-inline-start: var(--ds-space-6);
+  min-width: 0;
 }
 
-.steps li {
-  display: grid;
-  gap: var(--ds-space-1);
-  padding-inline-start: var(--ds-space-2);
-}
-
-/* The three points where a person decides. */
-.human {
-  border-inline-start: 2px solid var(--ds-accent);
-  padding-inline-start: var(--ds-space-3);
-}
-
-.lesson {
+.phaseSteps {
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-2);
-  padding: var(--ds-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agent,
+.decide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding: var(--ds-space-3) var(--ds-space-4);
   border: 1px solid var(--ds-border);
   border-radius: var(--ds-radius-md);
   background: var(--ds-surface-raised);
 }
 
-.lesson h3:not(:first-child) {
-  margin-block-start: var(--ds-space-3);
+.decide {
+  border-color: var(--ds-accent-border);
+  border-inline-start: 3px solid var(--ds-accent);
+  background: var(--ds-accent-surface);
+}
+
+/* ---- The container boundary ---- */
+.boundary {
+  display: grid;
+  gap: var(--ds-space-3);
+  align-items: center;
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .boundary {
+    grid-template-columns: 1.4fr auto 1fr auto 1fr;
+  }
+  .host,
+  .boundary figcaption {
+    grid-column: 1 / -1;
+  }
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  height: 100%;
+  padding: var(--ds-space-4);
+  border: 1px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-raised);
+}
+
+.box ul {
+  display: grid;
+  gap: var(--ds-space-1);
+  margin: 0;
+  padding-inline-start: var(--ds-space-5);
+}
+
+/* The first box is the container: drawn as a dashed boundary, the thing that seals it. */
+.boundary > .box:first-child {
+  border: 2px dashed var(--ds-accent);
+}
+
+.host {
+  border-style: dashed;
+}
+
+.arrow {
+  justify-self: center;
+  color: var(--ds-text-muted);
+  font-size: var(--ds-text-lg);
+}
+
+@media (max-width: 719px) {
+  .arrow {
+    transform: rotate(90deg);
+  }
+}
+
+.rules {
+  display: grid;
+  gap: var(--ds-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .rules {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.rule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+}
+
+/* ---- One lesson: what happened → the lesson → the next ticket ---- */
+.lessonFlow {
+  display: grid;
+  gap: var(--ds-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .lessonFlow {
+    grid-template-columns: 1fr 1.2fr 1fr;
+  }
+}
+
+.lessonStep {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-4);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-raised);
+}
+
+.lessonMain {
+  border-color: var(--ds-accent-border);
+  background: var(--ds-accent-surface);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

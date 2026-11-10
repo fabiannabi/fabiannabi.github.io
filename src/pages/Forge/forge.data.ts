@@ -24,34 +24,64 @@ export const STATS: readonly { readonly value: string; readonly label: string }[
   { value: "0", label: "times I had to ask an agent for changes" },
 ];
 
-/** Who does what, in the order a ticket moves. "You" is the maintainer. */
-export const STEPS: readonly { readonly who: string; readonly what: string }[] = [
-  { who: "You", what: "Write an idea in an Obsidian note, one line is enough, and mark it draft." },
-  { who: "Planner", what: "Reads the repo and rewrites the note as a ticket: goal, files to touch, acceptance criteria, tests, and a default for every decision." },
-  { who: "You", what: "Edit the plan in Obsidian and mark it ready." },
-  { who: "Advisor", what: "Opens the GitHub issue. Any comment you leave on it gets the plan rewritten, until you add the build label." },
-  { who: "Implementer", what: "Works on its own branch in a throwaway container until the repo's own checks pass." },
-  { who: "Forge", what: "Pushes, opens the pull request and scans the diff for secrets on the way out." },
-  { who: "Reviewer", what: "Reviews the pull request against the issue and the repo's rules, and can send it back." },
-  { who: "You", what: "Review and merge, or don't. Forge never merges." },
-  { who: "Retro", what: "Reads everything that went round and proposes at most three lessons. Only the ones you approve reach a prompt." },
+/**
+ * How a ticket moves, in three phases. Each step is a few words, because people
+ * scan a flow rather than read it; `human` marks the three points where a person
+ * decides. "You" is the maintainer.
+ */
+export type Step = { readonly who: string; readonly title: string; readonly detail: string; readonly human?: boolean };
+export const PHASES: readonly { readonly name: string; readonly steps: readonly Step[] }[] = [
+  {
+    name: "Plan",
+    steps: [
+      { who: "You", title: "Write an idea", detail: "One line in an Obsidian note.", human: true },
+      { who: "Planner", title: "Writes the ticket", detail: "Files, criteria, tests, a default for every decision." },
+      { who: "You", title: "Approve the plan", detail: "Edit it, mark it ready.", human: true },
+      { who: "Advisor", title: "Opens the issue", detail: "Your comments rewrite the plan." },
+    ],
+  },
+  {
+    name: "Build",
+    steps: [
+      { who: "Implementer", title: "Writes the code", detail: "Sealed container, until the checks pass." },
+      { who: "Forge", title: "Opens the PR", detail: "Scans the diff for secrets first." },
+      { who: "Reviewer", title: "Reviews it", detail: "Can send it back." },
+      { who: "You", title: "Merge, or don't", detail: "Forge never merges.", human: true },
+    ],
+  },
+  {
+    name: "Learn",
+    steps: [
+      { who: "Retro", title: "Proposes lessons", detail: "At most three, from what went round." },
+      { who: "You", title: "Approve them", detail: "Only approved lessons reach a prompt.", human: true },
+    ],
+  },
 ];
 
-/** What keeps an agent that is wrong, or manipulated, from doing damage. */
-export const SAFETY: readonly string[] = [
-  "The API key never enters an agent's container. A proxy outside it adds the key; the agent holds a placeholder, so there is nothing to print or commit.",
-  "The container's only way out is the model API. Installs run once, before the workspace is sealed, through a proxy that reaches the package registry and nothing else.",
-  "Platform rules every agent reads first (never print the environment, never push or publish, never read outside the worktree), and a list of forbidden commands handed to Claude Code as tools it may not use.",
-  "Only a maintainer's issue and a maintainer's label start a build. Text in issues, pull requests and code is data, never instructions.",
-  "Every ticket has a budget. Going over it stops the work.",
-  "Everything Forge posts on GitHub is scrubbed of credentials and mentions first.",
+/**
+ * The container boundary, drawn as a diagram: what is inside with the agent, the
+ * one way out, and what never comes in.
+ */
+export const BOUNDARY = {
+  inside: ["The agent (Claude Code)", "The ticket's worktree", "A placeholder instead of the key"],
+  proxy: "Adds the real key on the way out",
+  out: "Model API",
+  host: ["The API key", "git and the push", "GitHub"],
+} as const;
+
+/** The other rules, one short line each. */
+export const RULES: readonly { readonly title: string; readonly detail: string }[] = [
+  { title: "Maintainers only", detail: "Only my issue and my label start a build. Text in issues and code is data, not instructions." },
+  { title: "Forbidden commands", detail: "No printing the environment, no push, no publish: rules first in every prompt, and tools Claude Code may not use." },
+  { title: "A budget per ticket", detail: "Going over it stops the work." },
+  { title: "Scrubbed output", detail: "Credentials and mentions are removed before anything reaches GitHub." },
 ];
 
 /** One real lesson, from start to finish. */
 export const LESSON = {
-  what: "Make every test in this repo assert the exact output objects with toEqual, never just a count or a subset of fields.",
-  why: "On the CSS index ticket the Reviewer sent the pull request back once, because some tests only checked how many results came back.",
-  after: "The next ticket's plan already asked for exact objects in every test, and its pull request went through review on the first round.",
+  problem: "On the CSS index ticket the Reviewer sent the pull request back: some tests only counted results.",
+  lesson: "Every test asserts the exact output objects with toEqual, never just a count.",
+  result: "The next ticket's plan asked for exact objects, and its PR passed review on the first round.",
 } as const;
 
 /**
@@ -86,17 +116,14 @@ export const REAL_RUN = {
   found: "177 colours written by hand outside its token files, and 478 uses of its Button, 200 of them passed a className on top.",
 } as const;
 
+/** What it is made of, as labels: what does what is in the boundary diagram. */
 export const STACK: readonly string[] = [
-  "Python, FastAPI and SQLite for the orchestrator",
-  "Claude Code in Docker, one container per step",
-  "GitHub issues, labels and reviews as the interface",
-  "Obsidian for planning and lessons",
-  "React and Blueprint for the dashboard",
+  "Python", "FastAPI", "SQLite", "Docker", "Claude Code", "GitHub", "Obsidian", "React", "Blueprint",
 ];
 
 /** Said plainly, because a case study that only lists wins is an advert. */
 export const LIMITS: readonly string[] = [
-  "It is a personal project. It has built one real repo, by one maintainer, not a team's backlog.",
-  "Its evals cover other agent teams; the dev loop's own agents do not have an eval suite yet. That is the next piece.",
-  "It runs on one machine and polls GitHub every minute. It is not a hosted service.",
+  "A personal project: one real repo, one maintainer.",
+  "The dev loop's own agents have no eval suite yet. That is next.",
+  "One machine, polling GitHub every minute. Not a hosted service.",
 ];

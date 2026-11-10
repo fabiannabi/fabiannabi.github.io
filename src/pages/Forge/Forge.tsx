@@ -1,5 +1,4 @@
 import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
-import { Code } from "@fabiannabi/blueprint/components/Code/Code";
 import { Display } from "@fabiannabi/blueprint/components/Display/Display";
 import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
 import { Label } from "@fabiannabi/blueprint/components/Label/Label";
@@ -9,7 +8,7 @@ import { Text } from "@fabiannabi/blueprint/components/Text/Text";
 import { useThemeAttribute } from "@fabiannabi/blueprint/hooks/useThemeAttribute";
 import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
-import { FRONTSCAN, LESSON, LIMITS, LINKS, REAL_RUN, SAFETY, STACK, STATS, STEPS, TICKETS } from "./forge.data";
+import { BOUNDARY, FRONTSCAN, LESSON, LIMITS, LINKS, PHASES, REAL_RUN, RULES, STACK, STATS, TICKETS } from "./forge.data";
 import styles from "./Forge.module.css";
 
 /**
@@ -129,20 +128,34 @@ export function Forge() {
             <span id="how">How a ticket moves</span>
           </Heading>
           <Text tone="muted" measure>
-            Agents do the work; a person decides at three points: the plan, the build, the merge.
+            Agents do the work. I decide at the marked steps.
           </Text>
-          <ol className={styles.steps}>
-            {STEPS.map((s, i) => (
-              <li key={i} className={s.who === "You" ? styles.human : undefined}>
-                <Label size="sm" caps tone={s.who === "You" ? "accent" : "subtle"} as="span">
-                  {s.who}
+          <div className={styles.flow}>
+            {PHASES.map((phase) => (
+              <section key={phase.name} className={styles.phase} aria-label={`${phase.name} phase`}>
+                <Label size="sm" caps tone="subtle" as="h3">
+                  {phase.name}
                 </Label>
-                <Text size="sm" tone="muted">
-                  {s.what}
-                </Text>
-              </li>
+                <ol className={styles.phaseSteps}>
+                  {phase.steps.map((s) => (
+                    <li key={s.title} className={s.human ? styles.decide : styles.agent}>
+                      <span className={styles.who}>
+                        <Label size="xs" caps tone={s.human ? "accent" : "subtle"} as="span">
+                          {s.human ? "You decide" : s.who}
+                        </Label>
+                      </span>
+                      <Text as="span" size="sm" weight="medium">
+                        {s.title}
+                      </Text>
+                      <Text as="span" size="xs" tone="muted">
+                        {s.detail}
+                      </Text>
+                    </li>
+                  ))}
+                </ol>
+              </section>
             ))}
-          </ol>
+          </div>
         </section>
 
         <section className={styles.section} aria-labelledby="safety" {...region("Safety")}>
@@ -150,14 +163,69 @@ export function Forge() {
             <span id="safety">What keeps an agent from doing damage</span>
           </Heading>
           <Text tone="muted" measure>
-            An agent that reads issues, code and pull requests can be told to do things by any of
-            them. Forge assumes that will happen and makes it cost nothing.
+            Anything an agent reads can try to give it orders. Forge assumes it will, and leaves
+            nothing worth stealing within reach.
           </Text>
-          <ul className={styles.list}>
-            {SAFETY.map((s) => (
-              <li key={s}>
-                <Text size="sm" tone="muted">
-                  {s}
+          <figure className={styles.boundary} aria-labelledby="boundary-caption">
+            <div className={styles.box}>
+              <Label size="xs" caps tone="subtle" as="span">
+                Sealed container
+              </Label>
+              <ul>
+                {BOUNDARY.inside.map((x) => (
+                  <li key={x}>
+                    <Text as="span" size="sm">
+                      {x}
+                    </Text>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <span className={styles.arrow} aria-hidden="true">
+              →
+            </span>
+            <div className={styles.box}>
+              <Label size="xs" caps tone="subtle" as="span">
+                Proxy
+              </Label>
+              <Text as="span" size="sm">
+                {BOUNDARY.proxy}
+              </Text>
+            </div>
+            <span className={styles.arrow} aria-hidden="true">
+              →
+            </span>
+            <div className={styles.box}>
+              <Label size="xs" caps tone="subtle" as="span">
+                The only way out
+              </Label>
+              <Text as="span" size="sm">
+                {BOUNDARY.out}
+              </Text>
+            </div>
+            <div className={`${styles.box} ${styles.host}`}>
+              <Label size="xs" caps tone="subtle" as="span">
+                Stays on the host, never inside
+              </Label>
+              <Text as="span" size="sm">
+                {BOUNDARY.host.join(" · ")}
+              </Text>
+            </div>
+            <figcaption id="boundary-caption">
+              <Text size="xs" tone="muted">
+                The agent holds a placeholder, so there is no key to print or commit. Installs run
+                once, before the seal, through a proxy that reaches only the package registry.
+              </Text>
+            </figcaption>
+          </figure>
+          <ul className={styles.rules}>
+            {RULES.map((r) => (
+              <li key={r.title} className={styles.rule}>
+                <Text as="span" size="sm" weight="medium">
+                  {r.title}
+                </Text>
+                <Text as="span" size="xs" tone="muted">
+                  {r.detail}
                 </Text>
               </li>
             ))}
@@ -169,47 +237,50 @@ export function Forge() {
             <span id="learns">How it gets better</span>
           </Heading>
           <Text tone="muted" measure>
-            Agents used to write what they learned straight into a shared memory, and one of those
-            notes stayed wrong long after the problem was fixed. Now a Retro agent proposes lessons
-            after each ticket, and a lesson reaches a prompt only once I approve it. One of them:
+            After each ticket a Retro agent proposes lessons. They reach a prompt only once I approve
+            them. One real one:
           </Text>
-          <div className={styles.lesson}>
-            <Label size="sm" caps tone="subtle" as="h3">
-              The lesson
-            </Label>
-            <Text size="sm">{LESSON.what}</Text>
-            <Label size="sm" caps tone="subtle" as="h3">
-              Where it came from
-            </Label>
-            <Text size="sm" tone="muted">
-              {LESSON.why}
-            </Text>
-            <Label size="sm" caps tone="subtle" as="h3">
-              What changed
-            </Label>
-            <Text size="sm" tone="muted">
-              {LESSON.after}
-            </Text>
-          </div>
+          <ol className={styles.lessonFlow}>
+            <li className={styles.lessonStep}>
+              <Label size="xs" caps tone="subtle" as="span">
+                What happened
+              </Label>
+              <Text as="span" size="sm" tone="muted">
+                {LESSON.problem}
+              </Text>
+            </li>
+            <li className={`${styles.lessonStep} ${styles.lessonMain}`}>
+              <Label size="xs" caps tone="accent" as="span">
+                The lesson
+              </Label>
+              <Text as="span" size="sm" weight="medium">
+                {LESSON.lesson}
+              </Text>
+            </li>
+            <li className={styles.lessonStep}>
+              <Label size="xs" caps tone="subtle" as="span">
+                The next ticket
+              </Label>
+              <Text as="span" size="sm" tone="muted">
+                {LESSON.result}
+              </Text>
+            </li>
+          </ol>
         </section>
 
         <section className={styles.section} aria-labelledby="built" {...region("Stack")}>
           <Heading level={2} size="lg">
-            <span id="built">What it is made of</span>
+            <span id="built">Made of</span>
           </Heading>
-          <ul className={styles.list}>
+          <ul className={styles.chips} aria-label="Stack">
             {STACK.map((s) => (
               <li key={s}>
-                <Text size="sm" tone="muted">
+                <Badge tone="neutral" shape="pill">
                   {s}
-                </Text>
+                </Badge>
               </li>
             ))}
           </ul>
-          <Text size="sm" tone="muted" measure>
-            Agents run as <Code>claude -p</Code> in a container per step, with the worktree mounted
-            and its <Code>.git</Code> read-only; git, GitHub and the key stay on the host.
-          </Text>
         </section>
 
         <section className={styles.section} aria-labelledby="limits" {...region("Limits")}>
