@@ -85,7 +85,7 @@ export function Forge() {
             </video>
             <figcaption id="demo-caption">
               <Text size="sm" tone="muted">
-                One ticket, start to finish, in 70 seconds and with no sound: an idea in Obsidian,
+                One ticket, start to finish, in about a minute and with no sound: an idea in Obsidian,
                 the Planner's ticket, the GitHub issue, the build in a sealed container, the
                 reviewed pull request, the lessons and the cost.
               </Text>
