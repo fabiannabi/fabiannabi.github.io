@@ -149,46 +149,11 @@
 
 /* ---- How a ticket moves: three phases. One neutral card style; the accent is
    only the line that marks a step where I decide, so colour means one thing. ---- */
-.flow {
-  display: grid;
-  gap: var(--ds-space-6);
-  margin-block-start: var(--ds-space-6);
-}
 
-@media (min-width: 820px) {
-  .flow {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
 
-.phase {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-3);
-  min-width: 0;
-}
 
-.phaseSteps {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
 
-.agent,
-.decide {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-1);
-  padding: var(--ds-space-3) var(--ds-space-4);
-  border-inline-start: 3px solid var(--ds-border);
-}
 
-.decide {
-  border-inline-start-color: var(--ds-accent);
-}
 
 /* ---- The container boundary: neutral boxes sized to their content ---- */
 .boundary {
@@ -387,21 +352,85 @@
   border-inline-start: 3px solid var(--ds-border);
 }
 
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--ds-space-3) var(--ds-space-6);
-  margin: var(--ds-space-4) 0 0;
+
+
+
+/* ---- How a ticket moves: two lanes (me, agents) across three phases.
+   Where a step sits says who takes it, so no step needs a label. ---- */
+.lanesWrap {
+  margin-block-start: var(--ds-space-6);
+  overflow-x: auto;
+}
+
+.lanes {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.lanes th,
+.lanes td {
+  padding: var(--ds-space-4);
+  vertical-align: top;
+  text-align: start;
+}
+
+.lanes thead th {
+  padding-block: 0 var(--ds-space-3);
+  border-block-end: 1px solid var(--ds-border);
+}
+
+.lanes tbody th {
+  width: 7rem;
+  white-space: nowrap;
+}
+
+.laneMe th,
+.laneMe td {
+  background: var(--ds-surface-raised);
+}
+
+.laneMe th {
+  border-start-start-radius: var(--ds-radius-md);
+  border-end-start-radius: var(--ds-radius-md);
+  border-inline-start: 3px solid var(--ds-accent);
+}
+
+.laneMe td:last-child {
+  border-start-end-radius: var(--ds-radius-md);
+  border-end-end-radius: var(--ds-radius-md);
+}
+
+.laneAgents th,
+.laneAgents td {
+  padding-block-start: var(--ds-space-5);
+}
+
+.laneSteps {
+  display: grid;
+  gap: var(--ds-space-4);
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.legend li {
+.laneSteps li {
   display: flex;
-  align-items: center;
-  gap: var(--ds-space-2);
+  gap: var(--ds-space-3);
+  align-items: baseline;
 }
 
-.who {
-  margin-block-end: var(--ds-space-1);
+.stepNo {
+  flex: none;
+  min-width: 1.5rem;
+  color: var(--ds-text-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
 }

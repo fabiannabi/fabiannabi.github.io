@@ -11,6 +11,10 @@ import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { BOUNDARY, FOUND, FRONTSCAN, LESSON, LINKS, NEXT, OVERVIEW, PHASES, REAL_RUN, RULES, STATS, TICKETS } from "./forge.data";
 import styles from "./Forge.module.css";
 
+/** Every step numbered in the order a ticket moves, so the two lanes keep the sequence. */
+const ORDER = PHASES.flatMap((p) => p.steps.map((s) => ({ ...s, phase: p.name })));
+const numbered = (phase: string) => ORDER.map((s, i) => ({ ...s, n: i + 1 })).filter((s) => s.phase === phase);
+
 /**
  * Forge's case study. Forge is a private repo; this page says what it does, how it
  * keeps agents safe, and what it has built, with numbers that can be checked
@@ -174,51 +178,58 @@ export function Forge() {
             <span id="how">How a ticket moves</span>
           </Heading>
           <Text tone="muted" measure>
-            Agents do the work. Four steps are mine: nothing moves on until I act.
+            Agents do the work in the lower lane. Nothing moves on until I act in the upper one.
           </Text>
-          <ul className={styles.legend} aria-label="Legend">
-            <li>
-              <Badge tone="accent" shape="pill">
-                I decide
-              </Badge>
-              <Text as="span" size="sm" tone="muted">
-                a step only I can take
-              </Text>
-            </li>
-            <li>
-              <Badge tone="neutral" shape="pill">
-                Agent
-              </Badge>
-              <Text as="span" size="sm" tone="muted">
-                an AI agent, or Forge itself, does it
-              </Text>
-            </li>
-          </ul>
-          <div className={styles.flow}>
-            {PHASES.map((phase) => (
-              <section key={phase.name} className={styles.phase} aria-label={`${phase.name} phase`}>
-                <Label size="sm" caps tone="subtle" as="h3">
-                  {phase.name}
-                </Label>
-                <ol className={styles.phaseSteps}>
-                  {phase.steps.map((s) => (
-                    <li key={s.title} className={s.human ? styles.decide : styles.agent}>
-                      <span className={styles.who}>
-                        <Badge tone={s.human ? "accent" : "neutral"} shape="pill">
-                          {s.human ? "I decide" : s.who === "Forge" ? "Forge" : `Agent · ${s.who}`}
-                        </Badge>
-                      </span>
-                      <Text as="span" size="md" weight="medium">
-                        {s.title}
-                      </Text>
-                      <Text as="span" size="sm" tone="muted">
-                        {s.detail}
-                      </Text>
-                    </li>
+          <div className={styles.lanesWrap} tabIndex={0} role="region" aria-label="How a ticket moves, by lane">
+            <table className={styles.lanes}>
+              <caption className={styles.srOnly}>Who does each step of a ticket, by phase</caption>
+              <thead>
+                <tr>
+                  <td />
+                  {PHASES.map((p) => (
+                    <th key={p.name} scope="col">
+                      <Label size="sm" caps tone="subtle" as="span">
+                        {p.name}
+                      </Label>
+                    </th>
                   ))}
-                </ol>
-              </section>
-            ))}
+                </tr>
+              </thead>
+              <tbody>
+                {([["Me", true], ["Agents", false]] as const).map(([lane, human]) => (
+                  <tr key={lane} className={human ? styles.laneMe : styles.laneAgents}>
+                    <th scope="row">
+                      <Text as="span" size="md" weight="medium">
+                        {lane}
+                      </Text>
+                    </th>
+                    {PHASES.map((p) => (
+                      <td key={p.name}>
+                        <ul className={styles.laneSteps}>
+                          {numbered(p.name)
+                            .filter((s) => Boolean(s.human) === human)
+                            .map((s) => (
+                              <li key={s.title}>
+                                <span className={styles.stepNo} aria-label={`Step ${s.n}`}>
+                                  {s.n}
+                                </span>
+                                <span className={styles.stepText}>
+                                  <Text as="span" size="md" weight="medium">
+                                    {s.title}
+                                  </Text>
+                                  <Text as="span" size="sm" tone="muted">
+                                    {human ? s.detail : `${s.who}: ${s.detail}`}
+                                  </Text>
+                                </span>
+                              </li>
+                            ))}
+                        </ul>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
 
