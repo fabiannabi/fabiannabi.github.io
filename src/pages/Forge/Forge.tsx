@@ -144,10 +144,10 @@ export function Forge() {
                           {s.human ? "You decide" : s.who}
                         </Label>
                       </span>
-                      <Text as="span" size="sm" weight="medium">
+                      <Text as="span" size="md" weight="medium">
                         {s.title}
                       </Text>
-                      <Text as="span" size="xs" tone="muted">
+                      <Text as="span" size="sm" tone="muted">
                         {s.detail}
                       </Text>
                     </li>
@@ -174,7 +174,7 @@ export function Forge() {
               <ul>
                 {BOUNDARY.inside.map((x) => (
                   <li key={x}>
-                    <Text as="span" size="sm">
+                    <Text as="span" size="md">
                       {x}
                     </Text>
                   </li>
@@ -188,7 +188,7 @@ export function Forge() {
               <Label size="xs" caps tone="subtle" as="span">
                 Proxy
               </Label>
-              <Text as="span" size="sm">
+              <Text as="span" size="md">
                 {BOUNDARY.proxy}
               </Text>
             </div>
@@ -199,7 +199,7 @@ export function Forge() {
               <Label size="xs" caps tone="subtle" as="span">
                 The only way out
               </Label>
-              <Text as="span" size="sm">
+              <Text as="span" size="md">
                 {BOUNDARY.out}
               </Text>
             </div>
@@ -207,12 +207,12 @@ export function Forge() {
               <Label size="xs" caps tone="subtle" as="span">
                 Stays on the host, never inside
               </Label>
-              <Text as="span" size="sm">
+              <Text as="span" size="md">
                 {BOUNDARY.host.join(" · ")}
               </Text>
             </div>
             <figcaption id="boundary-caption">
-              <Text size="xs" tone="muted">
+              <Text size="sm" tone="muted" measure>
                 The agent holds a placeholder, so there is no key to print or commit. Installs run
                 once, before the seal, through a proxy that reaches only the package registry.
               </Text>
@@ -221,10 +221,10 @@ export function Forge() {
           <ul className={styles.rules}>
             {RULES.map((r) => (
               <li key={r.title} className={styles.rule}>
-                <Text as="span" size="sm" weight="medium">
+                <Text as="span" size="md" weight="medium">
                   {r.title}
                 </Text>
-                <Text as="span" size="xs" tone="muted">
+                <Text as="span" size="sm" tone="muted">
                   {r.detail}
                 </Text>
               </li>
@@ -253,7 +253,7 @@ export function Forge() {
               <Label size="xs" caps tone="accent" as="span">
                 The lesson
               </Label>
-              <Text as="span" size="sm" weight="medium">
+              <Text as="span" size="md" weight="medium">
                 {LESSON.lesson}
               </Text>
             </li>

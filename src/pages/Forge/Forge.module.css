@@ -147,15 +147,17 @@
 }
 
 
-/* ---- How a ticket moves: three phases, the steps where I decide stand out ---- */
+/* ---- How a ticket moves: three phases. One neutral card style; the accent is
+   only the line that marks a step where I decide, so colour means one thing. ---- */
 .flow {
   display: grid;
-  gap: var(--ds-space-5);
+  gap: var(--ds-space-6);
+  margin-block-start: var(--ds-space-6);
 }
 
 @media (min-width: 820px) {
   .flow {
-    grid-template-columns: 4fr 4fr 2.4fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
@@ -169,7 +171,7 @@
 .phaseSteps {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-space-2);
+  gap: var(--ds-space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -181,28 +183,25 @@
   flex-direction: column;
   gap: var(--ds-space-1);
   padding: var(--ds-space-3) var(--ds-space-4);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-surface-raised);
+  border-inline-start: 3px solid var(--ds-border);
 }
 
 .decide {
-  border-color: var(--ds-accent-border);
-  border-inline-start: 3px solid var(--ds-accent);
-  background: var(--ds-accent-surface);
+  border-inline-start-color: var(--ds-accent);
 }
 
-/* ---- The container boundary ---- */
+/* ---- The container boundary: neutral boxes sized to their content ---- */
 .boundary {
   display: grid;
-  gap: var(--ds-space-3);
-  align-items: center;
-  margin: 0;
+  gap: var(--ds-space-4);
+  align-items: start;
+  margin: var(--ds-space-6) 0 0;
 }
 
 @media (min-width: 720px) {
   .boundary {
-    grid-template-columns: 1.4fr auto 1fr auto 1fr;
+    grid-template-columns: 1.5fr auto 1fr auto 1fr;
+    align-items: center;
   }
   .host,
   .boundary figcaption {
@@ -214,11 +213,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-2);
-  height: 100%;
-  padding: var(--ds-space-4);
-  border: 1px solid var(--ds-border-strong);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border: 1px solid var(--ds-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-surface-raised);
 }
 
 .box ul {
@@ -228,18 +225,24 @@
   padding-inline-start: var(--ds-space-5);
 }
 
-/* The first box is the container: drawn as a dashed boundary, the thing that seals it. */
+/* The container is the boundary itself: drawn dashed, in the same neutral ink. */
 .boundary > .box:first-child {
-  border: 2px dashed var(--ds-accent);
+  border: 1px dashed var(--ds-border-strong);
 }
 
 .host {
-  border-style: dashed;
+  margin-block-start: var(--ds-space-2);
+  background: var(--ds-surface-raised);
+  border-color: transparent;
+}
+
+.boundary figcaption {
+  margin-block-start: var(--ds-space-2);
 }
 
 .arrow {
   justify-self: center;
-  color: var(--ds-text-muted);
+  color: var(--ds-text-subtle);
   font-size: var(--ds-text-lg);
 }
 
@@ -249,10 +252,11 @@
   }
 }
 
+/* The other rules: a plain list with room around it, not more boxes. */
 .rules {
   display: grid;
-  gap: var(--ds-space-3);
-  margin: 0;
+  gap: var(--ds-space-5) var(--ds-space-7);
+  margin: var(--ds-space-7) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -267,16 +271,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-1);
-  padding: var(--ds-space-3) var(--ds-space-4);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-md);
 }
 
 /* ---- One lesson: what happened → the lesson → the next ticket ---- */
 .lessonFlow {
   display: grid;
-  gap: var(--ds-space-3);
-  margin: 0;
+  gap: var(--ds-space-5);
+  margin: var(--ds-space-6) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -291,15 +292,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-2);
-  padding: var(--ds-space-4);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-surface-raised);
+  padding: var(--ds-space-1) var(--ds-space-4);
+  border-inline-start: 3px solid var(--ds-border);
 }
 
 .lessonMain {
-  border-color: var(--ds-accent-border);
-  background: var(--ds-accent-surface);
+  border-inline-start-color: var(--ds-accent);
 }
 
 .chips {
