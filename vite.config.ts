@@ -32,6 +32,7 @@ export default defineConfig({
         profile: resolve(here, "profile/index.html"),
         design: resolve(here, "design/index.html"),
         mcp: resolve(here, "mcp/index.html"),
+        forge: resolve(here, "forge/index.html"),
       },
     },
   },
