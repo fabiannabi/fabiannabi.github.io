@@ -9,7 +9,7 @@ import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 // The same layout as the Forge case study, so the two pages read as one story.
 import layout from "../Forge/Forge.module.css";
-import { BUILT, FINDS, LINKS, ROADMAP, RUN_SOON, RUN_TODAY, RUNS, SAMPLE } from "./frontscan.data";
+import { BUILT, FINDS, LINKS, NPM, ROADMAP, RUN, RUNS, SAMPLE } from "./frontscan.data";
 import styles from "./Frontscan.module.css";
 
 /** /frontscan/: what the tool does, how to run it, and what it found on real open-source repos. */
@@ -37,7 +37,7 @@ export function Frontscan() {
         <section className={layout.hero} aria-labelledby="title" {...region("Intro")}>
           <div className={layout.heroText}>
             <Badge tone="accent" shape="pill" dot>
-              Open source · command-line tool
+              Open source · on npm
             </Badge>
             <Heading level={1} size="xl">
               <span id="title">frontscan: how your team really uses its design system</span>
@@ -65,7 +65,7 @@ export function Frontscan() {
             <pre>
               <code>
                 <span className={styles.prompt}>$ </span>
-                {"pnpm frontscan ../cal.com\n\n"}
+                {"npx frontscan ../cal.com\n\n"}
                 {SAMPLE}
               </code>
             </pre>
@@ -140,13 +140,16 @@ export function Frontscan() {
             <span id="try">Try it</span>
           </Heading>
           <Text tone="muted" measure>
-            It needs Node 24 and pnpm. Point it at any folder with a frontend in it.
+            It needs Node 24. Run it at the root of any frontend repo; nothing to install first.
           </Text>
           <pre className={styles.command}>
-            <code>{RUN_TODAY.join("\n")}</code>
+            <code>{RUN.join("\n")}</code>
           </pre>
           <Text tone="muted" measure>
-            Coming to npm, so it will be one line: <code className={styles.inline}>{RUN_SOON}</code>
+            <Link href={NPM} size="md">
+              frontscan on npm
+            </Link>{" "}
+            · MIT licensed
           </Text>
         </section>
 
