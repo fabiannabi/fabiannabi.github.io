@@ -22,7 +22,7 @@ test.describe("Forge case study", () => {
   test("links every ticket to its public issue and pull request", async ({ page }) => {
     await page.goto("/forge/");
     const table = page.getByRole("table", { name: "Every frontscan ticket Forge built" });
-    await expect(table.getByRole("row")).toHaveCount(10); // header + 9 tickets
+    await expect(table.getByRole("row")).toHaveCount(19); // header + 18 tickets
     const issue = table.getByRole("link", { name: /^#1 / });
     await expect(issue).toHaveAttribute("href", "https://github.com/fabiannabi/frontscan/issues/1");
     await expect(table.getByRole("link", { name: "#2", exact: true })).toHaveAttribute(

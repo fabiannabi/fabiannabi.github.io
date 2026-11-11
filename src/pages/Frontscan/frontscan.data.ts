@@ -155,5 +155,5 @@ export const ROADMAP: readonly Stage[] = [
 
 /** How it was built: the part that makes it a portfolio piece. */
 export const BUILT = {
-  line: "Every line of frontscan was written by agents in Forge, my agent platform: 9 pull requests, about $1.07 each, each one reviewed by an agent and then by me.",
+  line: "Every line of frontscan was written by agents in Forge, my agent platform: 18 pull requests, about $1.17 each, each one reviewed by an agent and then by me.",
 } as const;
