@@ -2,7 +2,7 @@
  * What the /frontscan/ page says, kept out of the JSX.
  *
  * Every figure comes from running frontscan's own CLI (`pnpm frontscan <path>`,
- * main at 166b211) on 10 November 2026 against the commit of each repo named
+ * main at 166b211, and checked again with `npx frontscan@0.1.0`) on 10 November 2026 against the commit of each repo named
  * below, on the author's laptop. Re-run before changing a number: never round a
  * count or a time to look better.
  */
@@ -15,13 +15,13 @@ export const LINKS = {
   design: "/design/",
 } as const;
 
-/** How to run it today. The npm package is in the dev loop; until it ships, the honest command is a clone. */
-export const RUN_TODAY = [
-  "git clone https://github.com/fabiannabi/frontscan",
-  "cd frontscan && pnpm install",
-  "pnpm frontscan ../your-app",
+/** How to run it: on npm since 0.1.0 (11 November 2026), nothing to install first. */
+export const NPM = "https://www.npmjs.com/package/frontscan";
+export const RUN = [
+  "npx frontscan .                       # the readable summary",
+  "npx frontscan . --html report.html    # one file with everything, to share",
+  "npx frontscan . --json                # every finding, for scripts and CI",
 ] as const;
-export const RUN_SOON = "npx frontscan .";
 
 /** What one scan reports. */
 export const FINDS: readonly { readonly title: string; readonly detail: string }[] = [
@@ -109,19 +109,20 @@ Button (478 uses)
 export type Stage = { readonly name: string; readonly goal: string; readonly items: readonly string[] };
 export const ROADMAP: readonly Stage[] = [
   {
-    name: "Now",
+    name: "Shipped",
     goal: "Easy to run, and right",
     items: [
       "On npm: npx frontscan . with nothing to clone",
-      "Colours with transparency never matched to a solid token",
       "A shareable HTML report, nothing cut",
+      "Colours with transparency matched only at the same opacity",
+      "Every JSX element tagged design system, local, external or HTML, from its imports",
     ],
   },
   {
-    name: "Next",
+    name: "Now",
     goal: "Measure adoption",
     items: [
-      "Tell design-system components from local ones by their imports, with an adoption score",
+      "An adoption score: how much of the interactive UI uses the design system",
       "Design-system components forced with className or style",
       "Plain HTML where the system has a component",
       "Hand-written spacing, type, radii and shadows, and Tailwind arbitrary values",
