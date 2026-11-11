@@ -31,6 +31,19 @@ test.describe("Forge case study", () => {
     );
   });
 
+  test("plays the silent walkthrough on its own, except under reduced motion", async ({ page }) => {
+    const reduce = await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches);
+    await page.goto("/forge/");
+    const video = page.locator("video");
+    await expect(video).toHaveAttribute("controls", ""); // always pausable
+    if (reduce) {
+      await page.waitForTimeout(1000);
+      expect(await video.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+    } else {
+      await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.muted)).toBe(true);
+    }
+  });
+
   test("leads to the live dashboard", async ({ page }) => {
     await page.goto("/forge/");
     await page.getByRole("link", { name: "Live dashboard →" }).click();

@@ -61,6 +61,37 @@
   gap: var(--ds-space-3);
 }
 
+.heroText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-space-5);
+}
+
+/*
+ * On a wide screen the hero breaks out of the 960px column so the video sits
+ * beside the text at a size where its captions still read (~680px).
+ */
+@media (min-width: 1100px) {
+  .top {
+    max-width: calc(1240px + 2 * var(--ds-space-6));
+  }
+
+  .hero {
+    --hero-w: min(1240px, calc(100vw - 2 * var(--ds-space-6)));
+    inline-size: var(--hero-w);
+    margin-inline: calc((100% - var(--hero-w)) / 2);
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: var(--ds-space-7);
+  }
+
+  .hero .demo {
+    margin: 0;
+  }
+}
+
 .demo video {
   display: block;
   inline-size: 100%;
