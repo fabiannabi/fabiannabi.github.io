@@ -103,7 +103,7 @@ export type Stat = { readonly value: string; readonly label: string };
 
 export const stats: readonly Stat[] = [
   { value: "6 years", label: "in software" },
-  { value: "1 MCP server", label: "published on npm" },
+  { value: "2 tools", label: "published on npm" },
   { value: "WCAG 2.2", label: "baseline I own" },
 ] as const;
 
@@ -232,7 +232,7 @@ export const experience: readonly Entry[] = [
     when: "2018 — 2020",
     title: "Self-directed study",
     description:
-      "Two years of it, after six months of lab work out of the degree: JavaScript, then React, then the parts nobody puts in a tutorial. Nobody paid me for this period and it is the reason every line above it exists.",
+      "Two years of JavaScript, then React, after lab work. Unpaid, and the reason every line above it exists.",
   },
   {
     when: "2013 — 2017",
@@ -242,6 +242,20 @@ export const experience: readonly Entry[] = [
 ];
 
 export const work: readonly Entry[] = [
+  {
+    when: "Personal project",
+    title: "Forge",
+    href: "/forge/",
+    description: "Agent teams that safely turn tickets into reviewed pull requests.",
+    tags: ["Python", "Docker", "Claude Code", "Agent guardrails"],
+  },
+  {
+    when: "Open source",
+    title: "frontscan",
+    href: "/frontscan/",
+    description: "A CLI on npm that measures design-system adoption, built by Forge's agents.",
+    tags: ["TypeScript", "npm", "Design systems", "Static analysis"],
+  },
   {
     when: "Open source",
     title: "Blueprint MCP",

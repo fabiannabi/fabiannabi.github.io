@@ -20,9 +20,9 @@ export const LINKS = {
 
 /** The headline figures. Each one is computed from TICKETS below. */
 export const STATS: readonly { readonly value: string; readonly label: string }[] = [
-  { value: "9 of 9", label: "frontscan pull requests merged" },
-  { value: "$1.07", label: "average cost per ticket, plan to merge" },
-  { value: "9 of 9", label: "passed the repo's checks on the agent's first try" },
+  { value: "18", label: "frontscan pull requests merged, now on npm" },
+  { value: "$1.17", label: "average cost per ticket, plan to merge" },
+  { value: "17 of 18", label: "passed the repo's checks on the agent's first try" },
   { value: "0", label: "tickets I sent back after the Reviewer agent's pass" },
 ];
 
@@ -143,6 +143,15 @@ export const TICKETS: readonly {
   { issue: 13, pr: 14, title: "Colours that bypass the design tokens", plan: 0, review: 1, cost: "$1.12" },
   { issue: 15, pr: 16, title: "The command, with terminal and JSON reports", plan: 0, review: 1, cost: "$0.99" },
   { issue: 17, pr: 18, title: "A terminal report a person can read", plan: 0, review: 2, cost: "$1.68" },
+  { issue: 19, pr: 21, title: "A README that says what it does today", plan: 0, review: 1, cost: "$0.79" },
+  { issue: 20, pr: 24, title: "Package it for npm", plan: 0, review: 2, cost: "$2.60" },
+  { issue: 22, pr: 23, title: "Translucent colours matched only at the same opacity", plan: 0, review: 1, cost: "$1.04" },
+  { issue: 25, pr: 27, title: "A shareable HTML report", plan: 0, review: 2, cost: "$1.56" },
+  { issue: 26, pr: 28, title: "Where each element comes from: design system, local, external, HTML", plan: 0, review: 2, cost: "$1.35" },
+  { issue: 29, pr: 30, title: "Keep the command when npm publishes", plan: 0, review: 1, cost: "$0.65" },
+  { issue: 31, pr: 32, title: "Run it with npm, pnpm or Yarn", plan: 0, review: 1, cost: "$0.77" },
+  { issue: 34, pr: 36, title: "Find the design system through workspaces and tsconfig aliases", plan: 0, review: 1, cost: "$1.55" },
+  { issue: 33, pr: 37, title: "A design-system adoption score", plan: 0, review: 1, cost: "$1.13" },
 ];
 
 /** What frontscan, built this way, did on a real open-source repo. */
@@ -150,7 +159,7 @@ export const REAL_RUN = {
   repo: "Cal.com",
   files: "6,211",
   time: "2.8 s",
-  found: "177 colours written by hand outside its token files, and 478 uses of its Button, 200 of them passed a className on top.",
+  found: "177 colours written by hand outside its token files, 478 uses of its Button with 200 of them passed a className on top, and a design-system adoption of 84% of its interactive elements.",
 } as const;
 
 /**
@@ -159,7 +168,7 @@ export const REAL_RUN = {
  */
 export const OVERVIEW = {
   role: "I designed Forge and built it with Claude Code, on my own time. Its agents wrote frontscan; I planned every ticket and merged every pull request.",
-  outcome: "9 merged pull requests on a public repo, about $1.07 each, every one reviewed by an agent and then by me.",
+  outcome: "18 merged pull requests on a public repo, about $1.17 each, every one reviewed by an agent and then by me. The result is on npm: npx frontscan .",
   stack: ["Python", "FastAPI", "SQLite", "Docker", "Claude Code", "GitHub", "Obsidian", "React", "Blueprint"],
 } as const;
 
@@ -181,11 +190,15 @@ export const FOUND: readonly { readonly problem: string; readonly fix: string }[
     problem: "The first plans left open questions for me to answer on every issue.",
     fix: "A Planner proposes a default for every decision, so I only change the ones I disagree with.",
   },
+  {
+    problem: "Packaging frontscan for npm moved a dependency, and every sealed check failed: with no network, pnpm could not reinstall, and the agent was not allowed to.",
+    fix: "Forge itself now resyncs dependencies offline from what setup downloaded, before the checks. It took three builds to find where pnpm 11 keeps its store and metadata.",
+  },
 ];
 
 /** What comes next. */
 export const NEXT: readonly string[] = [
   "An eval suite for the dev loop's own agents, so a prompt or model change that makes them worse is caught before a ticket.",
   "A live trace of every step an agent takes, for the observability a production harness needs.",
-  "Running as a service that resumes after a restart, instead of a loop on one machine.",
+  "Running as a service that resumes after a restart, instead of a loop on one machine, with tickets that touch different files built in parallel.",
 ];
