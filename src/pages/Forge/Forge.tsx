@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Badge } from "@fabiannabi/blueprint/components/Badge/Badge";
 import { Display } from "@fabiannabi/blueprint/components/Display/Display";
 import { Heading } from "@fabiannabi/blueprint/components/Heading/Heading";
@@ -10,6 +11,40 @@ import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 import { BOUNDARY, DECISIONS, FOUND, FRONTSCAN, LESSON, LINKS, NEXT, OVERVIEW, PHASES, REAL_RUN, RULES, STATS, TICKETS, WHY_FRONTSCAN } from "./forge.data";
 import styles from "./Forge.module.css";
+
+/**
+ * The walkthrough plays on its own, muted and looping: it has no sound (the
+ * captions are in the picture), so there is nothing to startle anyone, and it
+ * keeps its controls for pausing (WCAG 2.2.2). Under reduced motion it waits
+ * on its poster for a click.
+ */
+function DemoVideo() {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = ref.current;
+    if (!video || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    video.muted = true;
+    video.play().catch(() => {
+      /* The browser refused autoplay: the poster and controls stay. */
+    });
+  }, []);
+  return (
+    <video
+      ref={ref}
+      controls
+      muted
+      loop
+      playsInline
+      preload="none"
+      poster="/forge/media/forge-demo-poster.jpg"
+      width={1280}
+      height={720}
+      aria-describedby="demo-caption"
+    >
+      <source src="/forge/media/forge-demo.mp4" type="video/mp4" />
+    </video>
+  );
+}
 
 /** Every step numbered in the order a ticket moves, so the two lanes keep the sequence. */
 const ORDER = PHASES.flatMap((p) => p.steps.map((s) => ({ ...s, phase: p.name })));
@@ -45,44 +80,34 @@ export function Forge() {
 
       <main id="main" className={styles.main}>
         <section className={styles.hero} aria-labelledby="title" {...region("Intro")}>
-          <Badge tone="accent" shape="pill" dot>
-            Case study · agent platform
-          </Badge>
-          <Heading level={1} size="xl">
-            <span id="title">Forge: agent teams that turn tickets into reviewed pull requests</span>
-          </Heading>
-          <Text size="lg" tone="muted" measure>
-            Coding agents can now take a ticket and open a pull request. I built Forge to find out
-            what it takes to let them do that safely: no keys inside the agent, no network but the
-            model, a budget per ticket, and a person deciding every merge. Every line of code in
-            frontscan, a public frontend auditor, was written by its agents and reviewed and merged
-            by me.
-          </Text>
-          <nav className={styles.links} aria-label="Forge links">
-            <Link href={FRONTSCAN} font="mono" size="sm">
-              frontscan on GitHub →
-            </Link>
-            <Link href={LINKS.showcase} font="mono" size="sm">
-              Live dashboard →
-            </Link>
-            <Link href={LINKS.mcp} font="mono" size="sm">
-              Blueprint MCP →
-            </Link>
-          </nav>
+          <div className={styles.heroText}>
+            <Badge tone="accent" shape="pill" dot>
+              Case study · agent platform
+            </Badge>
+            <Heading level={1} size="xl">
+              <span id="title">Forge: agent teams that turn tickets into reviewed pull requests</span>
+            </Heading>
+            <Text size="lg" tone="muted" measure>
+              Coding agents can now take a ticket and open a pull request. I built Forge to find out
+              what it takes to let them do that safely: no keys inside the agent, no network but the
+              model, a budget per ticket, and a person deciding every merge. Every line of code in
+              frontscan, a public frontend auditor, was written by its agents and reviewed and merged
+              by me.
+            </Text>
+            <nav className={styles.links} aria-label="Forge links">
+              <Link href={FRONTSCAN} font="mono" size="sm">
+                frontscan on GitHub →
+              </Link>
+              <Link href={LINKS.showcase} font="mono" size="sm">
+                Live dashboard →
+              </Link>
+              <Link href={LINKS.mcp} font="mono" size="sm">
+                Blueprint MCP →
+              </Link>
+            </nav>
+          </div>
           <figure className={styles.demo}>
-            {/* No sound: the captions are part of the picture, so it never autoplays and needs no track. */}
-            <video
-              controls
-              muted
-              playsInline
-              preload="none"
-              poster="/forge/media/forge-demo-poster.jpg"
-              width={1280}
-              height={720}
-              aria-describedby="demo-caption"
-            >
-              <source src="/forge/media/forge-demo.mp4" type="video/mp4" />
-            </video>
+            <DemoVideo />
             <figcaption id="demo-caption">
               <Text size="sm" tone="muted">
                 One ticket, start to finish, in about a minute and with no sound: an idea in Obsidian,
