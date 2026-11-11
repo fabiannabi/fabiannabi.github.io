@@ -11,6 +11,7 @@ export const FRONTSCAN = "https://github.com/fabiannabi/frontscan";
 
 export const LINKS = {
   frontscan: FRONTSCAN,
+  frontscanPage: "/frontscan/",
   showcase: "/forge/showcase/",
   design: "/design/",
   mcp: "/mcp/",

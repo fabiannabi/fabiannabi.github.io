@@ -33,6 +33,7 @@ export default defineConfig({
         design: resolve(here, "design/index.html"),
         mcp: resolve(here, "mcp/index.html"),
         forge: resolve(here, "forge/index.html"),
+        frontscan: resolve(here, "frontscan/index.html"),
       },
     },
   },
