@@ -145,12 +145,12 @@ export const TICKETS: readonly {
   { issue: 17, pr: 18, title: "A terminal report a person can read", plan: 0, review: 2, cost: "$1.68" },
   { issue: 19, pr: 21, title: "A README that says what it does today", plan: 0, review: 1, cost: "$0.79" },
   { issue: 20, pr: 24, title: "Package it for npm", plan: 0, review: 2, cost: "$2.60" },
-  { issue: 22, pr: 23, title: "Translucent colours matched only at the same opacity", plan: 0, review: 1, cost: "$1.04" },
+  { issue: 22, pr: 23, title: "Translucent colours at the right opacity", plan: 0, review: 1, cost: "$1.04" },
   { issue: 25, pr: 27, title: "A shareable HTML report", plan: 0, review: 2, cost: "$1.56" },
-  { issue: 26, pr: 28, title: "Where each element comes from: design system, local, external, HTML", plan: 0, review: 2, cost: "$1.35" },
+  { issue: 26, pr: 28, title: "Where each element comes from", plan: 0, review: 2, cost: "$1.35" },
   { issue: 29, pr: 30, title: "Keep the command when npm publishes", plan: 0, review: 1, cost: "$0.65" },
   { issue: 31, pr: 32, title: "Run it with npm, pnpm or Yarn", plan: 0, review: 1, cost: "$0.77" },
-  { issue: 34, pr: 36, title: "Find the design system through workspaces and tsconfig aliases", plan: 0, review: 1, cost: "$1.55" },
+  { issue: 34, pr: 36, title: "Design system through tsconfig aliases", plan: 0, review: 1, cost: "$1.55" },
   { issue: 33, pr: 37, title: "A design-system adoption score", plan: 0, review: 1, cost: "$1.13" },
 ];
 
