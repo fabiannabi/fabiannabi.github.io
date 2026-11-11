@@ -95,14 +95,14 @@ export function Forge() {
               by me.
             </Text>
             <nav className={styles.links} aria-label="Forge links">
+              <Link href={LINKS.frontscanPage} font="mono" size="sm">
+                What frontscan does →
+              </Link>
               <Link href={FRONTSCAN} font="mono" size="sm">
                 frontscan on GitHub →
               </Link>
               <Link href={LINKS.showcase} font="mono" size="sm">
                 Live dashboard →
-              </Link>
-              <Link href={LINKS.mcp} font="mono" size="sm">
-                Blueprint MCP →
               </Link>
             </nav>
           </div>
