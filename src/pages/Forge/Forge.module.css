@@ -1,0 +1,475 @@
+/* Layout only: every piece of type and colour comes from the components. */
+.skip {
+  position: absolute;
+  inset-inline-start: var(--ds-space-5);
+  inset-block-start: -80px;
+  z-index: 99;
+  padding: var(--ds-space-3) var(--ds-space-5);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-accent);
+  color: var(--ds-accent-contrast);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-bold);
+  transition: inset-block-start var(--ds-duration-fast) var(--ds-ease);
+}
+
+.skip:focus {
+  inset-block-start: var(--ds-space-5);
+}
+
+.top,
+.main {
+  max-width: 960px;
+  margin-inline: auto;
+  padding-inline: var(--ds-space-6);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+  padding-block: var(--ds-space-6);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-5);
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-space-5);
+  padding-block: var(--ds-space-7) var(--ds-space-8);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-5);
+}
+
+.demo {
+  margin: var(--ds-space-4) 0 0;
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+
+.demo video {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-border);
+}
+
+.section {
+  padding-block: var(--ds-space-8);
+  border-block-start: 1px solid var(--ds-border);
+}
+
+.section > * + * {
+  margin-block-start: var(--ds-space-5);
+}
+
+.list {
+  display: grid;
+  gap: var(--ds-space-3);
+  padding-inline-start: var(--ds-space-5);
+}
+
+/* One column on purpose: lint output and import paths are long lines, and
+   side by side they scroll inside half a page. */
+.compare {
+  display: grid;
+  gap: var(--ds-space-6);
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  min-width: 0;
+}
+
+.cards {
+  display: grid;
+  gap: var(--ds-space-5);
+}
+
+@media (min-width: 720px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-raised);
+}
+
+.install {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+
+.install h3:not(:first-child) {
+  margin-block-start: var(--ds-space-3);
+}
+
+.footer {
+  padding-block: var(--ds-space-7);
+  border-block-start: 1px solid var(--ds-border);
+}
+
+/* ---- the case study's own pieces ---- */
+.stats {
+  display: grid;
+  gap: var(--ds-space-4);
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-raised);
+}
+
+.stat dd {
+  margin: 0;
+}
+
+
+/* ---- How a ticket moves: three phases. One neutral card style; the accent is
+   only the line that marks a step where I decide, so colour means one thing. ---- */
+
+
+
+
+
+
+/* ---- The container boundary: neutral boxes sized to their content ---- */
+.boundary {
+  display: grid;
+  gap: var(--ds-space-4);
+  align-items: start;
+  margin: var(--ds-space-6) 0 0;
+}
+
+@media (min-width: 720px) {
+  .boundary {
+    grid-template-columns: 1.5fr auto 1fr auto 1fr;
+    align-items: center;
+  }
+  .host,
+  .boundary figcaption {
+    grid-column: 1 / -1;
+  }
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+}
+
+.box ul {
+  display: grid;
+  gap: var(--ds-space-1);
+  margin: 0;
+  padding-inline-start: var(--ds-space-5);
+}
+
+/* The container is the boundary itself: drawn dashed, in the same neutral ink. */
+.boundary > .box:first-child {
+  border: 1px dashed var(--ds-border-strong);
+}
+
+.host {
+  margin-block-start: var(--ds-space-2);
+  background: var(--ds-surface-raised);
+  border-color: transparent;
+}
+
+.boundary figcaption {
+  margin-block-start: var(--ds-space-2);
+}
+
+.arrow {
+  justify-self: center;
+  color: var(--ds-text-subtle);
+  font-size: var(--ds-text-lg);
+}
+
+@media (max-width: 719px) {
+  .arrow {
+    transform: rotate(90deg);
+  }
+}
+
+/* The other rules: a plain list with room around it, not more boxes. */
+.rules {
+  display: grid;
+  gap: var(--ds-space-5) var(--ds-space-7);
+  margin: var(--ds-space-7) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .rules {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.rule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+/* ---- One lesson: what happened → the lesson → the next ticket ---- */
+.lessonFlow {
+  display: grid;
+  gap: var(--ds-space-5);
+  margin: var(--ds-space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .lessonFlow {
+    grid-template-columns: 1fr 1.2fr 1fr;
+  }
+}
+
+.lessonStep {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-1) var(--ds-space-4);
+  border-inline-start: 3px solid var(--ds-border);
+}
+
+.lessonMain {
+  border-inline-start-color: var(--ds-accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---- The first minute: role, outcome, stack, right under the title ---- */
+.overview {
+  padding: var(--ds-space-6);
+  margin-block-end: var(--ds-space-7);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-raised);
+}
+
+.overviewGrid {
+  display: grid;
+  gap: var(--ds-space-6);
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .overviewGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.overviewGrid > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.overviewGrid dd {
+  margin: 0;
+}
+
+.overviewWide {
+  grid-column: 1 / -1;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- What went wrong, and what is next ---- */
+.twoCol {
+  display: grid;
+  gap: var(--ds-space-7);
+}
+
+@media (min-width: 820px) {
+  .twoCol {
+    grid-template-columns: 1.3fr 1fr;
+  }
+}
+
+.twoCol > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+.found {
+  display: grid;
+  gap: var(--ds-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.found li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding-inline-start: var(--ds-space-4);
+  border-inline-start: 3px solid var(--ds-border);
+}
+
+
+
+
+/* ---- How a ticket moves: two lanes (me, agents) across three phases.
+   Where a step sits says who takes it, so no step needs a label. ---- */
+.lanesWrap {
+  margin-block-start: var(--ds-space-6);
+  overflow-x: auto;
+}
+
+.lanes {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.lanes th,
+.lanes td {
+  padding: var(--ds-space-4);
+  vertical-align: top;
+  text-align: start;
+}
+
+.lanes thead th {
+  padding-block: 0 var(--ds-space-3);
+  border-block-end: 1px solid var(--ds-border);
+}
+
+.lanes tbody th {
+  width: 7rem;
+  white-space: nowrap;
+}
+
+.laneMe th,
+.laneMe td {
+  background: var(--ds-surface-raised);
+}
+
+.laneMe th {
+  border-start-start-radius: var(--ds-radius-md);
+  border-end-start-radius: var(--ds-radius-md);
+  border-inline-start: 3px solid var(--ds-accent);
+}
+
+.laneMe td:last-child {
+  border-start-end-radius: var(--ds-radius-md);
+  border-end-end-radius: var(--ds-radius-md);
+}
+
+.laneAgents th,
+.laneAgents td {
+  padding-block-start: var(--ds-space-5);
+}
+
+.laneSteps {
+  display: grid;
+  gap: var(--ds-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.laneSteps li {
+  display: flex;
+  gap: var(--ds-space-3);
+  align-items: baseline;
+}
+
+.stepNo {
+  flex: none;
+  min-width: 1.5rem;
+  color: var(--ds-text-subtle);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+/* ---- Decisions: one per block, the choice first ---- */
+.decisions {
+  display: grid;
+  gap: var(--ds-space-6) var(--ds-space-7);
+  margin: var(--ds-space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .decisions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.decisions li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  padding-inline-start: var(--ds-space-4);
+  border-inline-start: 3px solid var(--ds-border);
+}
