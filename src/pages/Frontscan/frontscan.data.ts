@@ -101,12 +101,55 @@ Button (478 uses)
   color       342  "secondary" (173), "minimal" (82), "primary" (64)
   className   200  "me-2 ms-2" (8), "justify-center" (6), …`;
 
-/** What comes next, in the order it is planned. */
-export const NEXT: readonly string[] = [
-  "On npm, so it runs with npx frontscan . and nothing to clone.",
-  "A self-contained HTML report to share with a team or attach to a pull request.",
-  "A CI mode with a baseline, so a pull request fails only on what it adds.",
-  "More lenses on the same scan: accessibility, internationalisation, readiness for coding agents and security.",
+/**
+ * The roadmap, in four stages. Each item is an idea note in the Forge vault
+ * (`Tickets/P1 …` to `Tickets/P5 …`); a stage is a priority band, so nothing
+ * here has a date. When one ships, it leaves this list.
+ */
+export type Stage = { readonly name: string; readonly goal: string; readonly items: readonly string[] };
+export const ROADMAP: readonly Stage[] = [
+  {
+    name: "Now",
+    goal: "Easy to run, and right",
+    items: [
+      "On npm: npx frontscan . with nothing to clone",
+      "Colours with transparency never matched to a solid token",
+      "A shareable HTML report, nothing cut",
+    ],
+  },
+  {
+    name: "Next",
+    goal: "Measure adoption",
+    items: [
+      "Tell design-system components from local ones by their imports, with an adoption score",
+      "Design-system components forced with className or style",
+      "Plain HTML where the system has a component",
+      "Hand-written spacing, type, radii and shadows, and Tailwind arbitrary values",
+      "A CI mode with a baseline: a pull request fails only on what it adds",
+    ],
+  },
+  {
+    name: "Later",
+    goal: "Suggest the fix",
+    items: [
+      "A token scale proposed from the loose values: these 23 greys are 5",
+      "API changes from real usage: a default, a variant nobody uses",
+      "Near-duplicate components, and repeated markup that wants to be one",
+      "Patches to review, never applied on their own",
+      "A score and its trend, sprint to sprint",
+    ],
+  },
+  {
+    name: "Beyond",
+    goal: "Where teams already work",
+    items: [
+      "A GitHub Action that comments on each pull request",
+      "An MCP server, so coding agents check their own UI",
+      "One report across all of an organisation's repos",
+      "Findings turned into tickets for Forge's agents",
+      "More lenses: accessibility, internationalisation, agent readiness, security, performance",
+    ],
+  },
 ];
 
 /** How it was built: the part that makes it a portfolio piece. */

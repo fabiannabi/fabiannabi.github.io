@@ -9,7 +9,7 @@ import { region } from "@fabiannabi/blueprint/xray/instrument";
 import { ThemeToggle } from "../../components/ThemeToggle/ThemeToggle";
 // The same layout as the Forge case study, so the two pages read as one story.
 import layout from "../Forge/Forge.module.css";
-import { BUILT, FINDS, LINKS, NEXT, RUN_SOON, RUN_TODAY, RUNS, SAMPLE } from "./frontscan.data";
+import { BUILT, FINDS, LINKS, ROADMAP, RUN_SOON, RUN_TODAY, RUNS, SAMPLE } from "./frontscan.data";
 import styles from "./Frontscan.module.css";
 
 /** /frontscan/: what the tool does, how to run it, and what it found on real open-source repos. */
@@ -152,15 +152,31 @@ export function Frontscan() {
 
         <section className={layout.section} aria-labelledby="next" {...region("Next")}>
           <Heading level={2} size="lg">
-            <span id="next">What comes next</span>
+            <span id="next">Roadmap</span>
           </Heading>
-          <ul className={layout.list}>
-            {NEXT.map((n) => (
-              <li key={n}>
-                <Text>{n}</Text>
+          <Text tone="muted" measure>
+            From reporting what is there to suggesting the fix, then to wherever a team already works.
+            Stages are priorities, not dates.
+          </Text>
+          <ol className={styles.roadmap}>
+            {ROADMAP.map((stage) => (
+              <li key={stage.name}>
+                <Label size="sm" caps tone="subtle" as="p">
+                  {stage.name}
+                </Label>
+                <Heading level={3} size="sm">
+                  {stage.goal}
+                </Heading>
+                <ul>
+                  {stage.items.map((item) => (
+                    <li key={item}>
+                      <Text size="sm">{item}</Text>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
-          </ul>
+          </ol>
         </section>
 
         <section className={layout.section} aria-labelledby="built" {...region("How it was built")}>
