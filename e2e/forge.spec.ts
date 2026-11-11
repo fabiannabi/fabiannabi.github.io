@@ -44,6 +44,18 @@ test.describe("Forge case study", () => {
     }
   });
 
+  test("fits the ticket table without a sideways scroll on a desktop", async ({ page }) => {
+    // A long ticket title once made it 82px wider than its column.
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/forge/");
+    const table = page.getByRole("table", { name: "Every frontscan ticket Forge built" });
+    const [scroll, client] = await table.evaluate((t) => {
+      const box = t.parentElement as HTMLElement;
+      return [box.scrollWidth, box.clientWidth];
+    });
+    expect(scroll).toBeLessThanOrEqual(client);
+  });
+
   test("leads to the live dashboard", async ({ page }) => {
     await page.goto("/forge/");
     await page.getByRole("link", { name: "Live dashboard →" }).click();
