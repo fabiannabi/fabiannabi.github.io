@@ -56,22 +56,22 @@ describe("Cover", () => {
   it("keeps the cover to one screen's worth of claims", () => {
     render(<Cover />);
 
-    // Three stats, three projects, one action and three ways to reach me. Adding
-    // a fourth of anything is a design decision, not a content edit, so it should
-    // break a test. The redesign that set these numbers took six buttons down to
-    // one and put the work — Blueprint, its MCP, Forge — where a simulator was.
-    expect(screen.getAllByRole("listitem")).toHaveLength(6);
-    expect(screen.getAllByRole("link")).toHaveLength(7);
+    // Three stats, four projects, one action and three ways to reach me. Adding
+    // another of anything is a design decision, not a content edit, so it should
+    // break a test. frontscan became the fourth project when it shipped on npm,
+    // paid for in words by a shorter subtitle and Forge line.
+    expect(screen.getAllByRole("listitem")).toHaveLength(7);
+    expect(screen.getAllByRole("link")).toHaveLength(8);
   });
 
-  it("shows the three projects, each one link to its page", () => {
+  it("shows the four projects, each one link to its page", () => {
     render(<Cover />);
 
     for (const project of projects) {
       const card = screen.getByRole("link", { name: (name) => name.includes(project.title) && name.includes(project.line) });
       expect(card).toHaveAttribute("href", project.href);
     }
-    expect(projects.map((p) => p.href)).toEqual(["/design/", "/mcp/", "/forge/"]);
+    expect(projects.map((p) => p.href)).toEqual(["/design/", "/mcp/", "/forge/", "/frontscan/"]);
   });
 
   it("carries no instrument: the simulator lives on /design/ now", () => {

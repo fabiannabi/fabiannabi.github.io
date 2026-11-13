@@ -15,8 +15,8 @@ export const identity = {
   company: "Salesloft",
   location: "Aguascalientes, MX",
   coverRole: "Senior User Interface Engineer · Salesloft · Aguascalientes, MX",
-  status: "Open for work",
-  statusWithLocation: "Open for work · Aguascalientes, MX",
+  status: "Open to remote work",
+  statusWithLocation: "Open to remote work · Aguascalientes, MX",
   tagline: "I build design systems other teams actually adopt — accessible, localized, documented.",
 } as const;
 
@@ -28,11 +28,12 @@ export const links = {
   design: "/design/",
   mcp: "/mcp/",
   forge: "/forge/",
+  frontscan: "/frontscan/",
   cover: "/",
 } as const;
 
 /**
- * The cover's three projects. Each is one line, because the cover's word ceiling
+ * The cover's four projects. Each is one line, because the cover's word ceiling
  * counts them: a project that needs a paragraph to make sense belongs on the
  * profile. The kicker says what kind of thing it is; the line says why it exists.
  */
@@ -41,7 +42,8 @@ export type Project = { readonly kicker: string; readonly title: string; readonl
 export const projects: readonly Project[] = [
   { kicker: "Design system", title: "Blueprint", line: "Accessible React components, documented live.", href: links.design },
   { kicker: "npm · MCP server", title: "Blueprint MCP", line: "Lets coding agents build on-system UI.", href: links.mcp },
-  { kicker: "Agent platform", title: "Forge", line: "Agent teams that turn tickets into reviewed PRs.", href: links.forge },
+  { kicker: "Agent platform", title: "Forge", line: "Tickets in, reviewed pull requests out.", href: links.forge },
+  { kicker: "npm · CLI", title: "frontscan", line: "Measures any repo's design-system adoption.", href: links.frontscan },
 ];
 
 /* ---------------------------------------------------------------- cover ---- */
@@ -57,14 +59,14 @@ export const projects: readonly Project[] = [
 export const headline = {
   before: "I build",
   after: "teams can trust.",
-  rotating: ["design systems", "AI automation", "expert agents", "agent guardrails", "MCP servers"],
-  sentence: "I build design systems, AI automation, expert agents, agent guardrails and MCP servers teams can trust.",
+  rotating: ["design systems", "AI automation", "AI agents", "agent guardrails", "MCP servers"],
+  sentence: "I build design systems, AI automation, AI agents, agent guardrails and MCP servers teams can trust.",
 } as const;
 
 export const coverSub = {
   lead: "Six years in software, shipping accessible component libraries other teams adopt.",
   emphasis: "On my own, Forge: agent teams that turn tickets into reviewed pull requests",
-  tail: "— in throwaway containers, under a budget, and a human merges every one.",
+  tail: "— sandboxed, on a budget, and a human merges every one.",
 } as const;
 
 /**
@@ -102,7 +104,7 @@ export const claims = {
 export type Stat = { readonly value: string; readonly label: string };
 
 export const stats: readonly Stat[] = [
-  { value: "6 years", label: "in software" },
+  { value: "18 PRs", label: "shipped by agents" },
   { value: "2 tools", label: "published on npm" },
   { value: "WCAG 2.2", label: "baseline I own" },
 ] as const;
